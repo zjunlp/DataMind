@@ -173,7 +173,7 @@ def save_final_messages(messages, sample_dir, question, answer, question_index, 
 
 def load_samples(data_root, dataset_name):
     if dataset_name == "QRData":
-        data_path = os.path.join(data_root, "QRData/benchmark", "QRData.json")
+        data_path = os.path.join(data_root, "QRData", "QRData.json")
         with open(data_path, "r") as f:
             samples = json.load(f)
         return samples, data_path

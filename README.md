@@ -142,18 +142,24 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 llama-factory-cli train datamind_sft.yaml
 > - If you have more questions, feel free to open an issue with us.
 > - If you need to use local model, you need to deploy it according to **(Optional)`local_model.sh`**.
 
-**Step 1: Prepare the parameter configuration**
-
+**Step 1: Download the evaluation datasets and our sft models**
 The evaluation datasets we used are in [QRData](https://github.com/xxxiaol/QRData) and [DiscoveryBench](https://github.com/allenai/discoverybench).  The script expects data to be at `data/QRData/benchmark/data/*.csv` and `data/DiscoveryBench/*.csv`.
 
  You can also download our sft models directly from Hugging Face:  [DataMind-Qwen2.5-7B](https://huggingface.co/zjunlp/DataMind-Qwen2.5-7B) ,[DataMind-Qwen2.5-14B ](https://huggingface.co/zjunlp/DataMind-Qwen2.5-14B).
+
+You can use the following `bash` script to download the dataset:
+```bash
+bash download_eval_data.sh
+```
+
+**Step 2: Prepare the parameter configuration**
 
 Here is the example:
 **`config.yaml`**
 
 ```yaml
 api_key: your_api_key # your API key for the model with API service. No need for open-source models.
-data_root: /path/to/your/project/DataMind/eval/data # Root directory for data. (absolute path)
+data_root: /path/to/your/project/DataMind/eval/data # Root directory for data. (absolute path !!!)
 ```
 
 **`run_eval.sh`**
@@ -183,7 +189,7 @@ CUDA_VISIBLE_DEVICES=$i python -m vllm.entrypoints.openai.api_server \
   --port $port # API port number, which is consistent with the `api_port` above.
 ```
 
-**Step 2: Run the shell script**
+**Step 3: Run the shell script**
 
 **(Optional)** Deploy the local model if you need.
 

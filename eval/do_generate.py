@@ -82,7 +82,7 @@ def run_analysis(
     code_runner = CodeRunner()
 
     if dataset_name == "QRData":
-        table_folder = os.path.join(data_root, "QRData/benchmark/data")
+        table_folder = os.path.join(data_root, "QRData/data")
     elif dataset_name == "DiscoveryBench":
         table_folder = os.path.join(data_root, "DiscoveryBench/tables")
 
