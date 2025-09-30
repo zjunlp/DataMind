@@ -174,9 +174,7 @@ Our RL training framework is modified from the [verl](https://github.com/volceng
 The training data will be released soon.
 
 ##### 2. Training Configuration
-The configuration for RL training is available in `DataMind/train/RL/verl/multi.sh`. You should modify the parameters in this file according to your own environment.
-
-It is worth noting that you should modify the path in "agent/async_interpreter.py", "verl/utils/reward_score/sql.py", "verl/workers/rollout/sglang_rollout/sglang_rollout.py" to adapt to your own environment.
+The training code will be released soon.
 
 ## 🧐 Evaluation
 ### Scaling Generalist Data-Analytic Agents
