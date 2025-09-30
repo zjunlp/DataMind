@@ -153,7 +153,7 @@ Our model training was completed using the powerful and user-friendly **[LLaMA-F
 
 ##### 1. Training Data
 
-The training dataset `datamind_12k` in *Scaling Generalist Data-Analytic Agents* is available in `train/SFT/LLaMA-Factory/data/datamind/datamind_12k.json`
+The training dataset `datamind_12k` in *Scaling Generalist Data-Analytic Agents* is available in huggingface [datamind-12k](https://huggingface.co/datasets/zjunlp/DataMind-12K/tree/main). You can download it and put it in `train/SFT/LLaMA-Factory/data/datamind/datamind_12k.json`.
 
 The training dataset `datamind-da-dataset` in *Why Do Open-Source LLMs Struggle with Data Analysis? A Systematic Empirical Study* is available in `train/SFT/LLaMA-Factory/data/datamind/datamind-da-dataset.json`
 
