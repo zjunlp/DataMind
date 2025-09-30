@@ -1,0 +1,2 @@
+api_key: your_api_key # your API key for the model with API service. No need for open-source models.
+data_root: /path/to/your/project/DataMind/eval/DataMind-Qwen2.5/data # Root directory for data. (absolute path)
