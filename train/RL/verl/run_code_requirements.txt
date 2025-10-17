@@ -1,0 +1,16 @@
+ipython==8.12.3
+scikit-learn==1.7.2
+kaggle==1.7.4.5
+multiprocess==0.70.18
+numpy==2.2.6
+openai==1.79.0
+pandas==2.2.3
+pebble==5.1.1
+pyarrow==20.0.0
+python_dateutil==2.9.0.post0
+regex==2024.11.6
+Requests==2.32.3
+tiktoken==0.9.0
+timeout_decorator==0.5.0
+tqdm==4.67.1
+anthropic==0.51.0

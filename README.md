@@ -19,7 +19,6 @@
 ## Table of Contents
 
 - 🔔 [News](#news)
-- 📑 [Todo-List](#todo-list)
 - 👀 [Overview](#overview)
 - 🔧 [Installation](#installation)
 - 💻 [Training](#training)
@@ -34,9 +33,6 @@
 
 - **[2025-06]** We release a new paper: "[Why Do Open-Source LLMs Struggle with Data Analysis? A Systematic Empirical Study](https://arxiv.org/pdf/2506.19794)".
 
-## 📑 Todo-List
-- [ ] RL training code will be released soon.
-- [ ] RL and Evaluation Data will be released soon.
 
 ## 👀 Overview
 
@@ -151,17 +147,17 @@ pip install -r requirements.txt
 ### SFT training
 Our model training was completed using the powerful and user-friendly **[LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)** framework (0.9.4.dev0), which provided us with an efficient fine-tuning workflow.
 
-##### 1. Training Data
+#### 1. Training Data
 
 The training dataset `datamind_12k` in *Scaling Generalist Data-Analytic Agents* is available in huggingface [datamind-12k](https://huggingface.co/datasets/zjunlp/DataMind-12K/tree/main). You can download it and put it in `train/SFT/LLaMA-Factory/data/datamind/datamind_12k.json`.
 
 The training dataset `datamind-da-dataset` in *Why Do Open-Source LLMs Struggle with Data Analysis? A Systematic Empirical Study* is available in `train/SFT/LLaMA-Factory/data/datamind/datamind-da-dataset.json`
 
-##### 2. Training Configuration
+#### 2. Training Configuration
 
 We provide our configuration for full-parameter fine-tuning using DeepSpeed ZeRO-3 in yaml file. You can find it in `train/SFT/LLaMA-Factory/examples/train_full/datamind_12k_full_sft.yaml` and `train/SFT/LLaMA-Factory/examples/train_full/datamind_da_dataset_full_sft.yaml`.
 
-##### 3. Launch Training
+#### 3. Launch Training
 You can use the following command to start training. Here we take `datamind_12k_full_sft.yaml` as an example. Or you can use the shell script `train/SFT/LLaMA-Factory/train.sh`.
 ```
 CUDA_VISIBLE_DEVICES=0,1,2,3 llamafactory-cli train examples/train_full/datamind_12k_full_sft.yaml
@@ -170,16 +166,29 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 llamafactory-cli train examples/train_full/datamind
 ### RL training
 Our RL training framework is modified from the [verl](https://github.com/volcengine/verl) (v0.4.0) framework, which is a flexible, efficient and production-ready RL training library for large language models (LLMs).
 
-##### 1. Training Data
-The training data will be released soon.
+#### 1. Data
+The data in *Scaling Generalist Data-Analytic Agents* is available in huggingface [DataMind-Data](https://huggingface.co/datasets/zjunlp/DataMind-Data). You can find the RL data in the `rl` directory.
+- train.parquet: training data for RL.
+- test.parquet: evaluation data for RL.
+- gold_csv_results: the directory storing the golden CSV answers for SQL data.
+- train_files: the directory storing the csv, excel and sqlite files.
+- db_schema.json: the file recording the database schema for SQL data.
 
-##### 2. Training Configuration
-The training code will be released soon.
+#### 2. Training Configuration
+You should modify the following configurations to ensure the stable operation of the framework.
+- train/RL/verl/multi.sh: modify the environment variables and paths within the sh file.
+- train/RL/verl/agent/async_interpreter.py: modify the conda path to your own conda path (we use another independent conda environment with Python 3.10 to run the code, and the relevant packages can be found in the run_code_requirements.txt file).
+
+#### 3. Launch Training
+You can run the `multi.sh` script to start training.
+```bash
+bash multi.sh
+```
 
 ## 🧐 Evaluation
 ### Scaling Generalist Data-Analytic Agents
 ### 1. Evaluation Data
-The evaluation data will be released soon.
+The data in *Scaling Generalist Data-Analytic Agents* is available in huggingface [DataMind-Data](https://huggingface.co/datasets/zjunlp/DataMind-Data). You can find the Evaluation data in the `eval` directory.
 You should unzip the zip files and place them in the corresponding folders.
 ```
 ├── model.sh
@@ -333,15 +342,11 @@ We deeply appreciate the collaborative efforts of everyone involved. We will con
 If you find our work helpful, please use the following citations.
 
 ```
-
-@misc{qiao2025scalinggeneralistdataanalyticagents,
-      title={Scaling Generalist Data-Analytic Agents}, 
-      author={Shuofei Qiao and Yanqiu Zhao and Zhisong Qiu and Xiaobin Wang and Jintian Zhang and Zhao Bin and Ningyu Zhang and Yong Jiang and Pengjun Xie and Fei Huang and Huajun Chen},
-      year={2025},
-      eprint={2509.25084},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2509.25084}, 
+@article{qiao2025scaling,
+  title={Scaling Generalist Data-Analytic Agents},
+  author={Qiao, Shuofei and Zhao, Yanqiu and Qiu, Zhisong and Wang, Xiaobin and Zhang, Jintian and Bin, Zhao and Zhang, Ningyu and Jiang, Yong and Xie, Pengjun and Huang, Fei and others},
+  journal={arXiv preprint arXiv:2509.25084},
+  year={2025}
 }
 
 @article{zhu2025open,

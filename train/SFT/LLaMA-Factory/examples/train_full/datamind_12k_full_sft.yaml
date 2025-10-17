@@ -30,7 +30,6 @@ report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 ### train
 per_device_train_batch_size: 1
 gradient_accumulation_steps: 4
-# batch_size = per_device_train_batch_size * gradient_accumulation_steps * gpu_num
 learning_rate: 1.0e-5
 num_train_epochs: 3.0
 lr_scheduler_type: cosine
