@@ -97,7 +97,7 @@ Conda virtual environments offer a light and flexible setup. For different proje
 
 - Eval
     ```bash
-    cd eval/DataMind-Qwen2.5
+    cd eval/DataMind-Analysis
     pip install -r requirements.txt
     ```
 
