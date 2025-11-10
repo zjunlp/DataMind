@@ -29,7 +29,7 @@
 ---
 
 ## 🔔 News
-- **[2025-11]** Our paper "Why Do Open-Source LLMs Struggle with Data Analysis? A Systematic Empirical Study" has been accepted for an oral presentation at AAAI 2026.
+- **[2025-11]** Our paper "Why Do Open-Source LLMs Struggle with Data Analysis? A Systematic Empirical Study" has been accepted to AAAI 2026.
 
 - **[2025-09]** We release a new paper: "[Scaling Generalist Data-Analytic Agents](https://arxiv.org/abs/2509.25084)".
 
