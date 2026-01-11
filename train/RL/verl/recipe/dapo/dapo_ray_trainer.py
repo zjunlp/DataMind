@@ -172,7 +172,7 @@ class RayDAPOTrainer(RayPPOTrainer):
 
                 gen_batch.meta_info = {
                     "max_turns": self.config.data.get("max_turns", 10),
-                    "response_length": self.config.data.get("max_response_length", 8096),
+                    "response_length": self.config.data.get("max_response_length", 8192),
                 }
                 print(f"gen_batch meta info: {gen_batch.meta_info}")
 

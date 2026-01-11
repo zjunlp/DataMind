@@ -90,25 +90,40 @@ class DAPORewardManager:
             pred_csv_result_dir_parent_lst.append(pred_csv_result_dir_parent)
             gold_csv_results_dir_lst.append(gold_csv_results_dir)
 
-        results = []
-        with ProcessPoolExecutor(max_workers=min(48, os.cpu_count())) as executor:
-            futures = [executor.submit(process_single_item, sequences, ground_truth, extra_info, data_source, valid_res_len, pred, gold) for (sequences, ground_truth, extra_info, data_source, valid_res_len, pred, gold) in zip(sequences_str_lst, ground_truth_lst, extra_info_lst, data_source_lst, valid_response_len_lst, pred_csv_result_dir_parent_lst, gold_csv_results_dir_lst)]
-            for i, future in enumerate(as_completed(futures)):
+        results = [None] * len(sequences_str_lst)
+        with ProcessPoolExecutor(max_workers=min(32, os.cpu_count())) as executor:
+            future_to_idx = {}
+            for idx, (sequences, ground_truth, extra_info, data_source, valid_res_len) in enumerate(
+                zip(sequences_str_lst, ground_truth_lst, extra_info_lst, data_source_lst, valid_response_len_lst)
+            ):
+                future = executor.submit(
+                    process_single_item, sequences, ground_truth, extra_info, data_source, valid_res_len
+                )
+                future_to_idx[future] = idx
+            
+            for future in as_completed(future_to_idx):
+                idx = future_to_idx[future]
                 try:
                     result = future.result(timeout=60)
-                    results.append(result)
+                    results[idx] = result
                 except Exception as e:
                     result = {
                         "total_score": -0.1,
                         "answer_score": -1.0,
                         "template_score": -1.0,
                         "accuracy": 0.0,
-                        "valid_response_length": valid_response_length,
+                        "valid_response_length": valid_response_len_lst[idx],
                         "tool_score": 0.0,
+                        "prm_score": 0.0,
+                        "reason": f"Worker {idx} failed: {e}"
                     }
-                    print(f"[ERROR] Worker {i} failed: {e}")
+                    results[idx] = result
+                    print(f"[ERROR] Worker {idx} failed: {e}")
 
         for i, result in enumerate(results):
+            if result is None:
+                raise ValueError(f"Result for item {i} is None, indicating a processing error.")
+
             valid_response_length  = result["valid_response_length"]
             score = result["total_score"]
             # Store the information including original reward

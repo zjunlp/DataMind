@@ -661,7 +661,7 @@ class RayPPOTrainer:
                 "do_sample": self.config.actor_rollout_ref.rollout.val_kwargs.do_sample,
                 "validate": True,
                 "max_turns": 10,
-                "response_length": 2048,
+                "response_length": 8192,
             }
             print(f"test_gen_batch meta info: {test_gen_batch.meta_info}")
 

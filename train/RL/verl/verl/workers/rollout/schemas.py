@@ -204,6 +204,14 @@ class AsyncRolloutRequest(BaseModel):
         self.state = AsyncRolloutRequestStateEnum.COMPLETED
         self.reward_scores = reward_scores
         if self.enable_tokenization_sanity_check:
+            for msg in self.messages:
+                if getattr(msg, "tool_calls", None) is None:
+                    msg.tool_calls = []
+
+            # print(self.tool_schemas)
+            if len(self.tool_schemas) > 1:
+                self.tool_schemas = [self.tool_schemas[0]]
+
             full_tokens = tokenizer.apply_chat_template([msg.model_dump() for msg in self.messages], tools=([tool.model_dump() for tool in self.tool_schemas] if self.tool_schemas else None), add_generation_prompt=False, tokenize=True)
             if self.input_ids != full_tokens:
                 logger.warning("Inconsistent training and inference tokenization detected. This may lead to unexpected behavior during training. Please review your chat template to determine if this is intentional. For more information, refer to the multiturn README.md.")
