@@ -8,11 +8,11 @@
 </p>
 
 <div align="center">
- 
+
 [![Awesome](https://awesome.re/badge.svg)](https://github.com/zjunlp/DataMind) 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![](https://img.shields.io/github/last-commit/zjunlp/DataMind?color=green) 
- 
+
 </div>
 
 
@@ -29,6 +29,8 @@
 ---
 
 ## 🔔 News
+- **[2026-01]** Our paper "Scaling Generalist Data-Analytic Agents" has been accepted to ICLR 2026.
+
 - **[2025-11]** Our paper "Why Do Open-Source LLMs Struggle with Data Analysis? A Systematic Empirical Study" has been accepted to AAAI 2026.
 
 - **[2025-09]** We release a new paper: "[Scaling Generalist Data-Analytic Agents](https://arxiv.org/abs/2509.25084)".
