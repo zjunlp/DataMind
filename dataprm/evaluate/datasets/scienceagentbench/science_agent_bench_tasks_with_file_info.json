@@ -1,0 +1,1507 @@
+[
+    {
+        "task_id": 4,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Statistical Analysis, Data Visualization",
+        "task_inst": "Analyze and visualize Elk movements in the given dataset. Estimate home ranges and assess habitat preferences using spatial analysis techniques. Identify the spatial clusters of Elk movements. Document the findings with maps and visualizations. Save the figure as \"pred_results/Elk_Analysis.png\".",
+        "domain_knowledge": "\"Home range\" can be defined as the area within which an animal normally lives and finds what it needs for survival. Basically, the home range is the area that an animal travels for its normal daily activities. \"Minimum Bounding Geometry\" creates a feature class containing polygons which represent a specified minimum bounding geometry enclosing each input feature or each group of input features. \"Convex hull\" is the smallest convex polygon that can enclose a group of objects, such as a group of points.",
+        "file_info": "File 1:\n{\n    \"name\": \"Elk_in_Southwestern_Alberta_2009.geojson\",\n    \"size\": \"86678.1KB\"\n}",
+        "file_list": [
+            "ElkMovement/Elk_in_Southwestern_Alberta_2009.geojson"
+        ],
+        "gold_program_name": "elk_new.py",
+        "output_fname": "pred_results/Elk_Analysis.png",
+        "eval_script_name": "eval_elk_analysis.py"
+    },
+    {
+        "task_id": 6,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "Given the DKPES dataset, visualize the distribution of signal inhibition values and also visualize their relationship with the tanimoto similarity score. Save the figure as \"pred_results/dkpes_molecular_analysis_pred.png\".",
+        "domain_knowledge": "The TanimotoCombo column presents the sum of the volumetric and chemical similarity components, where an exact match (two identical molecules in the same conformation) will result in a maximum score of 1 for each, summing to a maximum score of 2. ",
+        "file_info": "File 1:\n{\n    \"name\": \"dkpes_test.csv\",\n    \"size\": \"1.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"dkpes_train.csv\",\n    \"size\": \"6.3KB\"\n}",
+        "file_list": [
+            "dkpes/dkpes_test.csv",
+            "dkpes/dkpes_train.csv"
+        ],
+        "gold_program_name": "dkpes_visualization_1.py",
+        "output_fname": "pred_results/dkpes_molecular_analysis_pred.png",
+        "eval_script_name": "eval_dkpes_visualization_1.py"
+    },
+    {
+        "task_id": 7,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "Visualize the distribution of functional groups for the 10 most and 10 least active molecules in the DKPES dataset. Save the figure as \"pred_results/dkpes_molecular_activity_analysis_pred.png\".",
+        "domain_knowledge": "1. *On functional groups and activity*: In cheminformatics, functional groups like hydroxyl, keto, and amino substructures play a crucial role in determining molecular properties, including biological activity. The interaction between small molecules with receptors (e.g., proteins) or enzymes depends on the presence of these groups, affecting inhibitory activity. Therefore, visualizing the presence or absence of functional groups in the top and least active molecules can reveal structure-activity relationships (SAR).\n\n2. *On signal inhibition as a measure of activity*: Signal inhibition is a standard metric (e.g., IC50, Kd) used to quantify how effectively a molecule can suppress or inhibit biological signals. In this dataset, molecules with the highest and lowest values in the `Signal-inhibition` column represent the most and least active molecules, respectively. The next 11 columns represent the count of specific functional groups.",
+        "file_info": "File 1:\n{\n    \"name\": \"dkpes_test.csv\",\n    \"size\": \"1.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"dkpes_train.csv\",\n    \"size\": \"6.3KB\"\n}",
+        "file_list": [
+            "dkpes/dkpes_test.csv",
+            "dkpes/dkpes_train.csv"
+        ],
+        "gold_program_name": "dkpes_visualization_2.py",
+        "output_fname": "pred_results/dkpes_molecular_activity_analysis_pred.png",
+        "eval_script_name": "eval_dkpes_visualization_2.py"
+    },
+    {
+        "task_id": 8,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Feature Selection, Data Visualization",
+        "task_inst": "Perform backward feature selection using logistic regression to identify the most relevant chemical features for predicting signal inhibition from the DKPES dataset. Binarize the signal inhibition values using appropriate threshold. Visualize the accuracy as a function of the number of selected features. Save the plot as \"pred_results/dkpes_feature_selection_analysis_pred.png\".",
+        "domain_knowledge": "Backward feature selection is a feature selection technique where all available features are initially included in the fitted model. Then, features are sequentially removed based on their significance, with the least predictive feature being removed and a new model being fitted with the remaining features at each step. This process continues until the model's performance starts to decline or until some termination condition is met. To perform the backward feature selection, one can use SFS function from `mlxtend` library with appropriate arguments (e.g., set 'forward' to False).",
+        "file_info": "File 1:\n{\n    \"name\": \"dkpes_test.csv\",\n    \"size\": \"1.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"dkpes_train.csv\",\n    \"size\": \"6.3KB\"\n}",
+        "file_list": [
+            "dkpes/dkpes_test.csv",
+            "dkpes/dkpes_train.csv"
+        ],
+        "gold_program_name": "dkpes_visualization_3.py",
+        "output_fname": "pred_results/dkpes_feature_selection_analysis_pred.png",
+        "eval_script_name": "eval_dkpes_visualization_3.py"
+    },
+    {
+        "task_id": 9,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Statistical Analysis, Data Visualization",
+        "task_inst": "Compute the correlations of FACTORS tasks and save the results. Load the FACTORS dataset, compute the Pearson correlation coefficient between each task and every other task. Save the computed results as a histogram to \"./pred_results/Factors_correlations.png\".",
+        "domain_knowledge": NaN,
+        "file_info": "File 1:\n{\n    \"name\": \"FACTORS_training_disguised_combined_full.csv\",\n    \"size\": \"39569.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"FACTORS_test1_disguised_combined.csv\",\n    \"size\": \"6400.8KB\"\n}\n\nFile 3:\n{\n    \"name\": \"FACTORS_test2_disguised_combined.csv\",\n    \"size\": \"6523.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"FACTORS_features.py\",\n    \"size\": \"153.6KB\"\n}\n\nFile 5:\n{\n    \"name\": \"FACTORS_datasets.py\",\n    \"size\": \"4.3KB\"\n}",
+        "file_list": [
+            "FACTORS/FACTORS_training_disguised_combined_full.csv",
+            "FACTORS/FACTORS_test1_disguised_combined.csv",
+            "FACTORS/FACTORS_test2_disguised_combined.csv",
+            "FACTORS/scripts/FACTORS_features.py",
+            "FACTORS/scripts/FACTORS_datasets.py"
+        ],
+        "gold_program_name": "FACTORS_correlations.py",
+        "output_fname": "pred_results/Factors_correlations.png",
+        "eval_script_name": "FACTORS_correlations_eval.py"
+    },
+    {
+        "task_id": 10,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Map Visualization",
+        "task_inst": "Analyze Toronto fire stations and their service coverage. Visualize the results to identify coverage gaps. Save the figure as \"pred_results/Fire_Service_Analysis.png\".",
+        "domain_knowledge": "\"Service Area\" or \"Service Coverage\" is a region that encompasses all accessible locations within the study area. It is usually used to identify how much land, how many people, or how much of anything else is within the neighborhood or a region and served by certain facilities. The Overlay toolset contains tools to overlay multiple feature classes to combine, erase, modify, or update spatial features, resulting in a new feature class. The \"overlay\" function manipulations two feature layers using the language of sets \u2013 intersection, union, difference and symmetrical difference.",
+        "file_info": "File 1:\n{\n    \"name\": \"etobicoke.geojson\",\n    \"size\": \"230.6KB\"\n}\n\nFile 2:\n{\n    \"name\": \"fire_station.geojson\",\n    \"size\": \"21.1KB\"\n}",
+        "file_list": [
+            "Toronto_fire/etobicoke.geojson",
+            "Toronto_fire/fire_station.geojson"
+        ],
+        "gold_program_name": "toronto_new.py",
+        "output_fname": "pred_results/Fire_Service_Analysis.png",
+        "eval_script_name": "eval_toronto_fire.py"
+    },
+    {
+        "task_id": 14,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Map Visualization",
+        "task_inst": "Analyze the impact of land subsidence on flooding based on future elevation data of the study area. Identify flood-prone areas and estimate potential building damage to support urban planning and mitigation strategies. Save the results to \"pred_results/flooding_analysis.png\".",
+        "domain_knowledge": "Estimate potential building damage based on factors such as flood depth, building type, flood risk classification and economic cost/loss.",
+        "file_info": "File 1:\n{\n    \"name\": \"StudyAreaBuildings.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 2:\n{\n    \"name\": \"Elevation_2050.tif.aux.xml\",\n    \"size\": \"1.9KB\"\n}\n\nFile 3:\n{\n    \"name\": \"Elevation_2050.tif\",\n    \"size\": \"4483.5KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Elevation_2050.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 5:\n{\n    \"name\": \"StudyAreaBuildings.dbf\",\n    \"size\": \"345.5KB\"\n}\n\nFile 6:\n{\n    \"name\": \"StudyAreaBuildings.prj\",\n    \"size\": \"0.4KB\"\n}\n\nFile 7:\n{\n    \"name\": \"StudyAreaBuildings.sbx\",\n    \"size\": \"4.1KB\"\n}\n\nFile 8:\n{\n    \"name\": \"StudyAreaBuildings.sbn\",\n    \"size\": \"89.3KB\"\n}\n\nFile 9:\n{\n    \"name\": \"StudyAreaBuildings.shx\",\n    \"size\": \"70.9KB\"\n}\n\nFile 10:\n{\n    \"name\": \"StudyAreaBuildings.shp.xml\",\n    \"size\": \"18.8KB\"\n}\n\nFile 11:\n{\n    \"name\": \"StudyAreaBuildings.shp\",\n    \"size\": \"3534.5KB\"\n}",
+        "file_list": [
+            "Flooding/StudyAreaBuildings.cpg",
+            "Flooding/Elevation_2050.tif.aux.xml",
+            "Flooding/Elevation_2050.tif",
+            "Flooding/Elevation_2050.tfw",
+            "Flooding/StudyAreaBuildings.dbf",
+            "Flooding/StudyAreaBuildings.prj",
+            "Flooding/StudyAreaBuildings.sbx",
+            "Flooding/StudyAreaBuildings.sbn",
+            "Flooding/StudyAreaBuildings.shx",
+            "Flooding/StudyAreaBuildings.shp.xml",
+            "Flooding/StudyAreaBuildings.shp"
+        ],
+        "gold_program_name": "flooding_gpd.py",
+        "output_fname": "pred_results/flooding_analysis.png",
+        "eval_script_name": "eval_flooding_gpd.py"
+    },
+    {
+        "task_id": 16,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Filter the compounds in \"hits.csv\" and save the SMILES representations of the left ones. Compounds to be kept should have no PAINS or Brenk filter substructures and have a maximum tanimoto similarity of less than 0.5 to any of the active compounds in \"train.csv\". Save the SMILES of left compounds to \"pred_results/compound_filter_results.txt\", with each one in a line.",
+        "domain_knowledge": "*On PAINS filter*: PAINS (Pan Assay Interference Compounds) filters are used in cheminformatics to identify and exclude compounds that are likely to produce false positives in biological assays. PAINS are substructures within molecules that often produce misleading or false positive results in high-throughput screening assays. These substructures tend to interfere with the assay readouts by mechanisms unrelated to the intended biological target, leading to unreliable data. One can use the `FilterCatalog` utilities from RDKit and add the PAINS filter using `AddCatalog`.\n*On BRENK filter*: The Brenk filters are a set of structural rules used to identify compounds with potential issues, such as toxicity, instability, or reactivity. The Brenk filters are often used in early-stage drug discovery to improve the quality and drug-likeness of hit compounds. One can use the `FilterCatalog` utilities from RDKit and add the BRENK filter using `AddCatalog`.\n*On Tanimoto similarity*: Tanimoto similarity is a metric used to measure the similarity between two molecular structures, which are commonly represented using Morgan fingerprints. Such fingerprints are binary vectors representing the presence or absence of specific substructures within a molecule. The Tanimoto similarity coefficient ranges from 0 to 1, where 1 indicates identical structures and 0 indicates no shared features. In this task, a maximum Tanimoto similarity of less than 0.5 ensures that the filtered compounds are structurally distinct from the active compounds in the training set.",
+        "file_info": "File 1:\n{\n    \"name\": \"hits.csv\",\n    \"size\": \"291.5KB\"\n}\n\nFile 2:\n{\n    \"name\": \"train.csv\",\n    \"size\": \"3081.2KB\"\n}",
+        "file_list": [
+            "compound_filter/hits.csv",
+            "compound_filter/train.csv"
+        ],
+        "gold_program_name": "compound_filter.py",
+        "output_fname": "pred_results/compound_filter_results.txt",
+        "eval_script_name": "antibioticsai_filter_eval.py"
+    },
+    {
+        "task_id": 17,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Feature Engineering, Statistical Analysis, Data Visualization",
+        "task_inst": "Given an input file containing the list of compounds with their SMILES and activity values against the A2A receptor, visualize the chemical space covered by such compounds. Use a 2D projection method to represent the chemical space and color the data points based on their activity. Save the resulting visualization as a PNG file titled \"pred_results/drugex_vis_pred.png\".",
+        "domain_knowledge": "\"1. *On chemical space and t-SNE visualization*: The term \"\"chemical space\"\" refers to the multi-dimensional space spanned by all possible molecules and chemical compounds adhering to a given set of construction principles and boundary conditions. t-SNE (t-Distributed Stochastic Neighbor Embedding) is commonly used to visualize such high-dimensional data in 2D or 3D.\n2. *On molecular fingerprints*: Morgan fingerprints can be used to represent chemical structures by encoding circular substructures around atoms. They are useful for computing similarity between compounds and are often used as input for visualization methods like t-SNE.\n3. *On activity value*: The input file provides several statistical summaries of activity values, presented in `pchembl_value_*` columns. The activity value typically represent the negative logarithm of affinity (such as IC50, Ki, or EC50), used in cheminformatics to assess the binding strength of a molecule to a target. Lower values imply higher binding strength or more active molecules. In this task, coloring the visualization by these activity values can help reveal clustering patterns in the chemical space related to binding activity towards the A2A receptor.\"",
+        "file_info": "File 1:\n{\n    \"name\": \"A2AR_LIGANDS.tsv\",\n    \"size\": \"2987.5KB\"\n}",
+        "file_list": [
+            "papyrus_vis/A2AR_LIGANDS.tsv"
+        ],
+        "gold_program_name": "drugex_vis.py",
+        "output_fname": "pred_results/drugex_vis_pred.png",
+        "eval_script_name": "drugex_vis_eval.py"
+    },
+    {
+        "task_id": 20,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Statistical Analysis, Data Visualization",
+        "task_inst": "Visualize the R\u00b2 results comparing single-task and multi-task performance for different datasets in TDC ADMET. Save the visualization as 'pred_results/tdc_results_visualization.png.'",
+        "domain_knowledge": "1. *On Visualization:* It can be helpful to add the standard deviation in the bar plots that represent the uncertainty in the metric (R\u00b2) across different datasets. Use separate colors to indicate single- and multi-task performance within the same plot. 2. *On tasks*: ADMET (absorption, distribution, metabolism, excretion, and toxicity) are most evaluated properties of drug molecules. Each can be used as a target variable in machine learning regression tasks. 2. *On library*: papyrus_scripts is a python package to handle the large bioactivity dataset called Papyrus. This package is recommended to use in this task to easily filter protein types and bioactivity properties. When this package is not available, one can also filter using pandas, but one needs to implement filtering functions oneself.",
+        "file_info": "File 1:\n{\n    \"name\": \"TDC_Single_Multi_Regression.csv\",\n    \"size\": \"2.0KB\"\n}",
+        "file_list": [
+            "TDC_ADMET/TDC_Single_Multi_Regression.csv"
+        ],
+        "gold_program_name": "tdc_visualization.py",
+        "output_fname": "pred_results/tdc_results_visualization.png",
+        "eval_script_name": "eval_tdc_visualization.py"
+    },
+    {
+        "task_id": 21,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis",
+        "task_inst": "Calculate the deforestation area percentage in the Brazilian state of Rond\u00f4nia within the buffer zone of 5.5km around road layers. Save the percentage result in a CSV file named \"pred_results/deforestation_rate.csv\" with a column title percentage_deforestation.",
+        "domain_knowledge": "Create buffer polygons around input geometry features to a specified distance. Clip points, lines, or polygon geometries to the mask extent.  \"Clip\" is used to cut out a piece of one map layer using one or more of the features in another layer. ",
+        "file_info": "File 1:\n{\n    \"name\": \"roads.geojson\",\n    \"size\": \"14609.2KB\"\n}\n\nFile 2:\n{\n    \"name\": \"deforestedArea.geojson\",\n    \"size\": \"20540.1KB\"\n}",
+        "file_list": [
+            "deforestation/roads.geojson",
+            "deforestation/deforestedArea.geojson"
+        ],
+        "gold_program_name": "deforestation.py",
+        "output_fname": "pred_results/deforestation_rate.csv",
+        "eval_script_name": "eval_deforestation.py"
+    },
+    {
+        "task_id": 22,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Data Selection",
+        "task_inst": "Filter the papyrus dataset in 'papyrus_unfiltered.pkl' according to the follwing standards: 1. only keep the data with quality 'medium' or above. 2. Filter out any protein not belong to two classes: 'Ligand-gated ion channels' and 'SLC superfamily of solute carriers'. 3. Only keep data with activity types of Ki or KD. 4. Only keep human and rat data. Protein information in 'papyrus_protein_set.pkl' may be required. Save the filtered dataset with the same column names to 'pred_results/papyrus_filtered.pkl'.",
+        "domain_knowledge": "1.  The 'classification' column in the file 'papyrus_protein_set.pkl' contains the entire hierarchy of protein classes for each target separated by '->'. Protein families are often arranged into hierarchies, with proteins that share a common ancestor subdivided into smaller, more closely related groups. Superfamily describe a large group of distantly related proteins and subfamily describes a small group of closely related proteins. For example, one set of proteins that comprise a superfamily are the G protein-coupled receptors (GPCRs). These are a large and diverse group of proteins that are involved in many biological processes, including photoreception, regulation of the immune system, and nervous system transmission.  2. ADMET (absorption, distribution, metabolism, excretion, and toxicity) are most evaluated properties of drug molecules. Each can be used as a target variable in machine learning regression tasks.",
+        "file_info": "File 1:\n{\n    \"name\": \"papyrus_unfiltered.pkl\",\n    \"size\": \"15439.4KB\"\n}\n\nFile 2:\n{\n    \"name\": \"papyrus_protein_set.pkl\",\n    \"size\": \"5213.3KB\"\n}",
+        "file_list": [
+            "papyrus/papyrus_unfiltered.pkl",
+            "papyrus/papyrus_protein_set.pkl"
+        ],
+        "gold_program_name": "papyrus_filtering.py",
+        "output_fname": "pred_results/papyrus_filtered.pkl",
+        "eval_script_name": "eval_papyrus.py"
+    },
+    {
+        "task_id": 23,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Map Visualization",
+        "task_inst": "Predict the effect of future proposed roads on the deforestation of in the Brazilian state of Rond\u00f4nia. A planned road network will be added to Rond\u00f4nia, create a buffer zone of 5.5km around the new roads. Visualize the change created by the roads with the planned roads, existing roads, deforested area, and protected forest along with the boundary of Rond\u00f4nia. Save the output as \"pred_results/predictedRiskyArea.png\".",
+        "domain_knowledge": "\"Buffer\" creates buffer polygons or zones around input geometry features to a specified distance. Clip points, lines, or polygon geometries to the mask extent.  \"Clip\" is used to cut out a piece of one map layer using one or more of the features in another layer. The Overlay toolset contains tools to overlay multiple feature classes to combine, erase, modify, or update spatial features, resulting in a new feature class. The \"overlay\" function manipulations two feature layers using the language of sets \u2013 intersection, union, difference and symmetrical difference.",
+        "file_info": "File 1:\n{\n    \"name\": \"roads.geojson\",\n    \"size\": \"14609.2KB\"\n}\n\nFile 2:\n{\n    \"name\": \"deforestedArea.geojson\",\n    \"size\": \"20540.1KB\"\n}\n\nFile 3:\n{\n    \"name\": \"planned_road.geojson\",\n    \"size\": \"6.4KB\"\n}\n\nFile 4:\n{\n    \"name\": \"protectedForest.geojson\",\n    \"size\": \"7076.4KB\"\n}",
+        "file_list": [
+            "PredictDeforestation/roads.geojson",
+            "PredictDeforestation/deforestedArea.geojson",
+            "PredictDeforestation/planned_road.geojson",
+            "PredictDeforestation/protectedForest.geojson"
+        ],
+        "gold_program_name": "deforestation_predict.py",
+        "output_fname": "pred_results/predictedRiskyArea.png",
+        "eval_script_name": "eval_deforestation_predict.py"
+    },
+    {
+        "task_id": 24,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Process and visualize the given ECG data by perform R peak detection and outlier correction. Plot an overview of the data and save the final figure as \"pred_results/ecg_processing_vis1_pred_result.png\".",
+        "domain_knowledge": "R peak refers to the theoretical peak performance of the system. You can use the biopsykit.signals.ecg module to perform R peak detection and plot the result.",
+        "file_info": "File 1:\n{\n    \"name\": \"ecg_data.pkl\",\n    \"size\": \"2458.5KB\"\n}\n\nFile 2:\n{\n    \"name\": \"sampling_rate.txt\",\n    \"size\": \"0.0KB\"\n}",
+        "file_list": [
+            "ecg_processing_data/ecg_data.pkl",
+            "ecg_processing_data/sampling_rate.txt"
+        ],
+        "gold_program_name": "ecg_processing_vis1.py",
+        "output_fname": "pred_results/ecg_processing_vis1_pred_result.png",
+        "eval_script_name": "eval_biopsykit_ecg_processing_vis1.py"
+    },
+    {
+        "task_id": 25,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Process the given ECG data and show heart rate variability (HRV) plot. After loading the ECG data, perform R peak detection and outlier correction. Then, you need to divide the data into two phases: the first phase is from 12:32 to 12:35, the second phase is from 12:35 to 12:38. Create a HRV plot for the second phase and save the final figure as \"pred_results/ecg_processing_vis2_pred_result.png\".",
+        "domain_knowledge": "Heart rate variability (HRV) is the physiological phenomenon of varying time intervals of consecutive heart beats, which is an important marker for the activity of the autonomic nervous system (ANS). The function EcgProcessor.hrv_process() in BioPsyKit computes HRV over the complete data. If you want to compute HRV over different subintervals, you need to split the data first.",
+        "file_info": "File 1:\n{\n    \"name\": \"ecg_data.pkl\",\n    \"size\": \"2458.5KB\"\n}\n\nFile 2:\n{\n    \"name\": \"sampling_rate.txt\",\n    \"size\": \"0.0KB\"\n}",
+        "file_list": [
+            "ecg_processing_data/ecg_data.pkl",
+            "ecg_processing_data/sampling_rate.txt"
+        ],
+        "gold_program_name": "ecg_processing_vis2.py",
+        "output_fname": "pred_results/ecg_processing_vis2_pred_result.png",
+        "eval_script_name": "eval_biopsykit_ecg_processing_vis2.py"
+    },
+    {
+        "task_id": 26,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Generate the interaction fingerprints between a selected ligand and protein for the first 10 trajectory frames. Combine the ligand, protein, type of interactions, and frame index into a name in the output CSV file pred_results/ligand_fingerprint_pred.csv. Additionally, save the status of the fingerprint under the column Y.",
+        "domain_knowledge": "MDAnalysis is a popular python package to analyze molecular dynamics (MD) trajectories. Selecting the ligand molecule by its residue name (\"resname\") is a common practice. The selection string \"protein\" can select all protein atoms. ProLIF is a python package built on MDAnalysis to analyze various  interactions between protein-protein or protein-ligand.",
+        "file_info": "File 1:\n{\n    \"name\": \"top.pdb\",\n    \"size\": \"500.6KB\"\n}\n\nFile 2:\n{\n    \"name\": \"traj.xtc\",\n    \"size\": \"4721.7KB\"\n}",
+        "file_list": [
+            "ligand_protein/top.pdb",
+            "ligand_protein/traj.xtc"
+        ],
+        "gold_program_name": "ligand_fingerprint.py",
+        "output_fname": "pred_results/ligand_fingerprint_pred.csv",
+        "eval_script_name": "eval_fingerprint.py"
+    },
+    {
+        "task_id": 27,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Use the given compound pairwise similarities in dili_visualization/tanimoto_similarities.txt and also the test split indices in dili_visualization/mcnc_ttsplits_te.pkl to plot the distribution of similarities of the test and train examples. For each test example, the similarity should be computed by the average of the similarities of the 5-nearest-neighbors within the corresponding training examples. Save the results to \"pred_results/similarity_plot.png\".",
+        "domain_knowledge": "Fingerprint tanimoto similarity is equivalent to (1-distance). Therefore, when using tanimoto similarity to choose nearest neighbors, reverse=True should be flagged during sort such that the first k chosen elements would be closest to the query.",
+        "file_info": "File 1:\n{\n    \"name\": \"result_loocv_svm_processed.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 2:\n{\n    \"name\": \"mcnc_ttsplits_te.pkl\",\n    \"size\": \"3.6KB\"\n}\n\nFile 3:\n{\n    \"name\": \"tanimoto_similarities.txt\",\n    \"size\": \"24396.0KB\"\n}\n\nFile 4:\n{\n    \"name\": \"standardized_compounds_excl_ambiguous.csv\",\n    \"size\": \"71.2KB\"\n}",
+        "file_list": [
+            "dili_visualization/result_loocv_svm_processed.csv",
+            "dili_visualization/mcnc_ttsplits_te.pkl",
+            "dili_visualization/tanimoto_similarities.txt",
+            "dili_visualization/standardized_compounds_excl_ambiguous.csv"
+        ],
+        "gold_program_name": "generate_plot_similarity.py",
+        "output_fname": "pred_results/similarity_plot.png",
+        "eval_script_name": "eval_plots_similarity.py"
+    },
+    {
+        "task_id": 28,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Calculate the charge density difference between two constituent systems (A and B) and their combined system (AB). Generate a charge density difference file and plot the planar averaged charge density along the z-axis. Save the plot as pred_results/charge_density_difference.png.",
+        "domain_knowledge": "CHGCAR file is a file format used in vasp to store 3D electron density data. In this task, The real space grid NX, NY, NZ should be the same for the constituent systems and the combined system.",
+        "file_info": "File 1:\n{\n    \"name\": \"F_CHGCAR\",\n    \"size\": \"6637.4KB\"\n}\n\nFile 2:\n{\n    \"name\": \"LiMoS2_F_CHGCAR\",\n    \"size\": \"6676.4KB\"\n}\n\nFile 3:\n{\n    \"name\": \"LiMoS2_CHGCAR\",\n    \"size\": \"6673.0KB\"\n}\n\nFile 4:\n{\n    \"name\": \"vasprun.dfpt.phonon.xml.gz\",\n    \"size\": \"182.9KB\"\n}",
+        "file_list": [
+            "materials_genomics/F_CHGCAR",
+            "materials_genomics/LiMoS2_F_CHGCAR",
+            "materials_genomics/LiMoS2_CHGCAR",
+            "materials_genomics/vasprun.dfpt.phonon.xml.gz"
+        ],
+        "gold_program_name": "charge_density_difference.py",
+        "output_fname": "pred_results/charge_density_difference.png",
+        "eval_script_name": "eval_pymatgen_charge_density_difference.py"
+    },
+    {
+        "task_id": 29,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Localize the events from the biosignals of one participant in \"ecg_1000hz.csv\". Analyze the event-related features (e.g., ECG Rate, SCR Peak, Respiratory Volume per Time). Save the results to \"pred_results/bio_eventrelated_100hz_analysis_pred.csv\" with the following four columns: \"Condition\", \"ECG_Rate_Mean\", \"RSP_Rate_Mean\", and \"EDA_Peak_Amplitude\".",
+        "domain_knowledge": "Electrocardiogram (ECG) is the recording of the heart's electrical activity through repeated cardiac cycles. The skin conductance response (SCR) is the phenomenon that the skin momentarily becomes a better conductor of electricity when either external or internal stimuli occur that are physiologically arousing. Respiratory Volume refers to the volume of gas in the lungs at a given time during the respiratory cycle. You may use NeuroKit2, a user-friendly package providing easy access to advanced biosignal processing routines.",
+        "file_info": "File 1:\n{\n    \"name\": \"bio_eventrelated_100hz.csv\",\n    \"size\": \"844.7KB\"\n}\n\nFile 2:\n{\n    \"name\": \"ecg_1000hz.csv\",\n    \"size\": \"598.5KB\"\n}\n\nFile 3:\n{\n    \"name\": \"eog_100hz.csv\",\n    \"size\": \"260.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"bio_resting_5min_100hz.csv\",\n    \"size\": \"1659.9KB\"\n}",
+        "file_list": [
+            "biosignals/bio_eventrelated_100hz.csv",
+            "biosignals/ecg_1000hz.csv",
+            "biosignals/eog_100hz.csv",
+            "biosignals/bio_resting_5min_100hz.csv"
+        ],
+        "gold_program_name": "bio_eventrelated_analyze.py",
+        "output_fname": "pred_results/bio_eventrelated_100hz_analysis_pred.csv",
+        "eval_script_name": "eval_bio_eventrelated_analyze.py"
+    },
+    {
+        "task_id": 30,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Calculate and plot the phonon band structure using the output from VASP DFPT calculations saved in \"vasprun.dfpt.phonon.xml.gz\". Save the plot as pred_results/phonon_bandstructure.png.",
+        "domain_knowledge": "The lattice parameters should be determined by crystals. For example, the silicon crystal is classified as diamond cubic and there are two silicon atoms in one primitive unit cell. The positions of these two Si atoms should be given throuh fractional coordinates. The default length unit used in phonopy is angstrom. One thing needed to note is that the primitive unit cell of Si is different from its conventional cubic unit. ",
+        "file_info": "File 1:\n{\n    \"name\": \"F_CHGCAR\",\n    \"size\": \"6637.4KB\"\n}\n\nFile 2:\n{\n    \"name\": \"LiMoS2_F_CHGCAR\",\n    \"size\": \"6676.4KB\"\n}\n\nFile 3:\n{\n    \"name\": \"LiMoS2_CHGCAR\",\n    \"size\": \"6673.0KB\"\n}\n\nFile 4:\n{\n    \"name\": \"vasprun.dfpt.phonon.xml.gz\",\n    \"size\": \"182.9KB\"\n}",
+        "file_list": [
+            "materials_genomics/F_CHGCAR",
+            "materials_genomics/LiMoS2_F_CHGCAR",
+            "materials_genomics/LiMoS2_CHGCAR",
+            "materials_genomics/vasprun.dfpt.phonon.xml.gz"
+        ],
+        "gold_program_name": "plot_phonon_band_structure.py",
+        "output_fname": "pred_results/phonon_bandstructure.png",
+        "eval_script_name": "eval_pymatgen_plot_phonon_band_structure.py"
+    },
+    {
+        "task_id": 31,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Calculate and plot the phonon density of states (DOS) using the output from VASP DFPT calculation results in \"vasprun.dfpt.phonon.xml.gz\". Save the plot as pred_results/phonon_dos.png.",
+        "domain_knowledge": "The crystal lattice can be written in two sets of coordinate system, the Cartesian coordinate system and the fractional coordinate system. Fractional coordinates considers the length of unit cell as 1, and can be transformed into coordinate system if the lattice vectors are known. In PhonopyAtoms class, the cell should be basis vectors in the matrix form in Cartesian coordinates, while scaled_positions are in the fractional coordinates. The lattice parameters (lattice type, lattice vectors, etc) are crystal-dependent.",
+        "file_info": "File 1:\n{\n    \"name\": \"F_CHGCAR\",\n    \"size\": \"6637.4KB\"\n}\n\nFile 2:\n{\n    \"name\": \"LiMoS2_F_CHGCAR\",\n    \"size\": \"6676.4KB\"\n}\n\nFile 3:\n{\n    \"name\": \"LiMoS2_CHGCAR\",\n    \"size\": \"6673.0KB\"\n}\n\nFile 4:\n{\n    \"name\": \"vasprun.dfpt.phonon.xml.gz\",\n    \"size\": \"182.9KB\"\n}",
+        "file_list": [
+            "materials_genomics/F_CHGCAR",
+            "materials_genomics/LiMoS2_F_CHGCAR",
+            "materials_genomics/LiMoS2_CHGCAR",
+            "materials_genomics/vasprun.dfpt.phonon.xml.gz"
+        ],
+        "gold_program_name": "plot_phonon_dos.py",
+        "output_fname": "pred_results/phonon_dos.png",
+        "eval_script_name": "eval_pymatgen_plot_phonon_dos.py"
+    },
+    {
+        "task_id": 32,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Perform raster analysis on the elevation and environmental factors influencing coral and sponge distribution at Catalina Island. Update the database with the slope and aspect analysis results. Use the updated database to visualize the mean slope and aspect distribution of each Coral and Sponge species in Catalina Island as \"pred_results/CoralandSponge.png\".",
+        "domain_knowledge": "The Slope tool identifies the steepness at each cell of a raster surface. The lower the slope value, the flatter the terrain; the higher the slope value, the steeper the terrain. The Aspect tool identifies the direction the downhill slope faces. The values of each cell in the output raster indicate the compass direction the surface faces at that location. It is measured clockwise in degrees from 0 (due north) to 360 (again due north), coming full circle. Flat areas having no downslope direction are given a value of -1.",
+        "file_info": "File 1:\n{\n    \"name\": \"CatalinaBathymetry.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"CatalinaBathymetry.tif.aux.xml\",\n    \"size\": \"2.0KB\"\n}\n\nFile 3:\n{\n    \"name\": \"CatalinaBathymetry.tif.vat.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 4:\n{\n    \"name\": \"CatalinaBathymetry.tif.vat.dbf\",\n    \"size\": \"59.0KB\"\n}\n\nFile 5:\n{\n    \"name\": \"CatalinaBathymetry.tif\",\n    \"size\": \"2691.0KB\"\n}\n\nFile 6:\n{\n    \"name\": \"CoralandSpongeCatalina.geojson\",\n    \"size\": \"6022.6KB\"\n}",
+        "file_list": [
+            "CoralSponge/CatalinaBathymetry.tfw",
+            "CoralSponge/CatalinaBathymetry.tif.aux.xml",
+            "CoralSponge/CatalinaBathymetry.tif.vat.cpg",
+            "CoralSponge/CatalinaBathymetry.tif.vat.dbf",
+            "CoralSponge/CatalinaBathymetry.tif",
+            "CoralSponge/CoralandSpongeCatalina.geojson"
+        ],
+        "gold_program_name": "coral_sponge.py",
+        "output_fname": "pred_results/CoralandSponge.png",
+        "eval_script_name": "coral_sponge_eval.py"
+    },
+    {
+        "task_id": 33,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Map Visualization",
+        "task_inst": "Perform analysis on public transit access in Hamilton County Tennessee. Map existing bus stops\u2018s service area with enriched map layers for different census blocks, including poverty, population density, and accessibility to a vehicle. Overlay and visualize the resulting data as \"pred_results/transit_access.png\".",
+        "domain_knowledge": "The Overlay toolset contains tools to overlay multiple feature classes to combine, erase, modify, or update spatial features, resulting in a new feature class. The \"overlay\" function manipulations two feature layers using the language of sets \u2013 intersection, union, difference and symmetrical difference. ",
+        "file_info": "File 1:\n{\n    \"name\": \"BusServiceArea.geojson\",\n    \"size\": \"287.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"HamiltonDemographics.geojson\",\n    \"size\": \"3842.7KB\"\n}",
+        "file_list": [
+            "TransitAccessDemographic/BusServiceArea.geojson",
+            "TransitAccessDemographic/HamiltonDemographics.geojson"
+        ],
+        "gold_program_name": "transit_access.py",
+        "output_fname": "pred_results/transit_access.png",
+        "eval_script_name": "transit_access_eval.py"
+    },
+    {
+        "task_id": 34,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Use the data in \"bio_eventrelated_100hz.csv\" and \"bio_resting_5min_100hz.csv\" to compute heart rate variability (HRV) indices in the time-, frequency-, and non-linear domain. Find the peaks of ECG signal and extract features from three domains (i.e., time-domain, frequency-domain and non-linear domain). Save the extracterd features from these three domains to 'pred_results/hrv_analysis_pred.csv'.",
+        "domain_knowledge": "You may use NeuroKit2, a user-friendly package providing easy access to advanced biosignal processing routines. The non-linear domain indices computing features corresponding to entropy or fractal dimension.",
+        "file_info": "File 1:\n{\n    \"name\": \"bio_eventrelated_100hz.csv\",\n    \"size\": \"844.7KB\"\n}\n\nFile 2:\n{\n    \"name\": \"ecg_1000hz.csv\",\n    \"size\": \"598.5KB\"\n}\n\nFile 3:\n{\n    \"name\": \"eog_100hz.csv\",\n    \"size\": \"260.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"bio_resting_5min_100hz.csv\",\n    \"size\": \"1659.9KB\"\n}",
+        "file_list": [
+            "biosignals/bio_eventrelated_100hz.csv",
+            "biosignals/ecg_1000hz.csv",
+            "biosignals/eog_100hz.csv",
+            "biosignals/bio_resting_5min_100hz.csv"
+        ],
+        "gold_program_name": "HRV_analyze.py",
+        "output_fname": "pred_results/hrv_analysis_pred.csv",
+        "eval_script_name": "eval_HRV_analyze.py"
+    },
+    {
+        "task_id": 35,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Perform RRV analysis on the given data. Clean the RSP signal and extract the inhalation peaks of the signal and the respiratory rate signal. Then use these features to analyze RRV, getting a variety of RRV indices including time domain, frequency domain, and nonlinear features. Save the results to 'pred_results/rrv_analysis_pred.csv'.",
+        "domain_knowledge": "Respiratory rate variability (RRV) is the term for variations in respiratory rhythm, or breathing rate. RSP refers to respiration. You may use NeuroKit2, a user-friendly package providing easy access to advanced biosignal processing routines.",
+        "file_info": "File 1:\n{\n    \"name\": \"bio_eventrelated_100hz.csv\",\n    \"size\": \"844.7KB\"\n}\n\nFile 2:\n{\n    \"name\": \"ecg_1000hz.csv\",\n    \"size\": \"598.5KB\"\n}\n\nFile 3:\n{\n    \"name\": \"eog_100hz.csv\",\n    \"size\": \"260.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"bio_resting_5min_100hz.csv\",\n    \"size\": \"1659.9KB\"\n}",
+        "file_list": [
+            "biosignals/bio_eventrelated_100hz.csv",
+            "biosignals/ecg_1000hz.csv",
+            "biosignals/eog_100hz.csv",
+            "biosignals/bio_resting_5min_100hz.csv"
+        ],
+        "gold_program_name": "RRV_analyze.py",
+        "output_fname": "pred_results/rrv_analysis_pred.csv",
+        "eval_script_name": "eval_RRV_analyze.py"
+    },
+    {
+        "task_id": 36,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Process the EEG data and plot the 20-point moving average of its EEG frequency band power. The output figure should be a line chart of the four functionally distinct frequency bands with respect to the timestamp. Save the figure as \"pred_results/eeg_processing_vis1_pred.png\".",
+        "domain_knowledge": "Electroencephalogram (EEG) is the test that measures electrical activity in the brain. You may use BioPsyKit for the analysis of biopsychological data.",
+        "file_info": "File 1:\n{\n    \"name\": \"eeg_muse_example.csv\",\n    \"size\": \"888.2KB\"\n}",
+        "file_list": [
+            "eeg_processing/eeg_muse_example.csv"
+        ],
+        "gold_program_name": "eeg_processing_vis1.py",
+        "output_fname": "pred_results/eeg_processing_vis1_pred.png",
+        "eval_script_name": "eval_biopsykit_eeg_processing_vis1.py"
+    },
+    {
+        "task_id": 37,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Load the heart rate data in the sheet \"MIST3\" and calculate several CFT parameters. The required parameters include baseline heart rate, onset heart rate, and onset heart rate percentage. Save the parameters in a JSON file \"pred_results/cft_pred_results.json\", where the keys for the three parameters should be \"baseline_hr\", \"onset_hr\", and \"onset_hr_percent\", respectively.",
+        "domain_knowledge": "You may use BioPsyKit to analyze the biopsychological data. The cold face test (CFT) is a noninvasive clinical test that involves applying a cooled mask to the face to activate the trigeminal brain stem cardiovagal and sympathetic pathways.",
+        "file_info": "File 1:\n{\n    \"name\": \"hr_sample_mist.xlsx\",\n    \"size\": \"168.6KB\"\n}",
+        "file_list": [
+            "mist_hr/hr_sample_mist.xlsx"
+        ],
+        "gold_program_name": "cft.py",
+        "output_fname": "pred_results/cft_pred_results.json",
+        "eval_script_name": "eval_biopsykit_cft.py"
+    },
+    {
+        "task_id": 38,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Plot the Tanimoto similarities of the fingerprint between the frames. Specifically, the interaction fingerprints between a selected ligand and protein for the first 10 trajectory frames. Save the png file into the pred_results/ligand_similarity_pred.png",
+        "domain_knowledge": "ProLIF is built upon MDAnalysis capable of analyzing protein-ligand interactions. Protein-ligand interaction fingerprint is a numerous vector (usually binary), with each bit indicating whether a specific interaction exists. The tanimoto similarity measures similarity of two fingerprints, usually defined as intersection divided by union. RDKit provides various similarity measurements of fingerprints.",
+        "file_info": "File 1:\n{\n    \"name\": \"top.pdb\",\n    \"size\": \"500.6KB\"\n}\n\nFile 2:\n{\n    \"name\": \"traj.xtc\",\n    \"size\": \"4721.7KB\"\n}",
+        "file_list": [
+            "ligand_protein/top.pdb",
+            "ligand_protein/traj.xtc"
+        ],
+        "gold_program_name": "fingerprint_similarity_vis.py",
+        "output_fname": "pred_results/ligand_similarity_pred.png",
+        "eval_script_name": "fingerprint_similarity_vis_eval.py"
+    },
+    {
+        "task_id": 39,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Plot the Tanimoto similarities of the fingerprint between the frames. Specifically, the interaction fingerprints between a selected small protein and large protein for the first 10 trajectory frames. Save the png file into the pred_results/protein_protein_similarity_pred.png",
+        "domain_knowledge": "ProLIF is built upon MDAnalysis capable of analyzing protein-protein interactions. Each molecular dynamics (MD) trajectory contains multiple frames of protein conformations. Tanimoto similarity calculation can be done using RDKit, and it measures whether the interactions of interest are preserved throughout the trajectory. ",
+        "file_info": "File 1:\n{\n    \"name\": \"top.pdb\",\n    \"size\": \"500.6KB\"\n}\n\nFile 2:\n{\n    \"name\": \"traj.xtc\",\n    \"size\": \"4721.7KB\"\n}",
+        "file_list": [
+            "protein_protein/top.pdb",
+            "protein_protein/traj.xtc"
+        ],
+        "gold_program_name": "protein_protein_fingerprint_similarity_vis.py",
+        "output_fname": "pred_results/protein_protein_similarity_pred.png",
+        "eval_script_name": "protein_protein_fingerprint_similarity_vis_eval.py"
+    },
+    {
+        "task_id": 42,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Extract ECG-derived respiration (EDR) from ECG signals and visuaize them. Extract the R peaks of the signal and compute the heart period. Compute EDR with 4 different methods and plot them in one figure to compare. Save the figure to 'pred_results/EDR_analyze_pred.png'.",
+        "domain_knowledge": "ECG-derived respiration (EDR) is the extraction of respiratory information from ECG and is a noninvasive method to monitor respiration activity under instances when respiratory signals are not recorded. In clinical settings, this presents convenience as it allows the monitoring of cardiac and respiratory signals simultaneously from a recorded ECG signal. You may use NeuroKit2, a user-friendly package providing easy access to advanced biosignal processing routines.",
+        "file_info": "File 1:\n{\n    \"name\": \"bio_eventrelated_100hz.csv\",\n    \"size\": \"844.7KB\"\n}\n\nFile 2:\n{\n    \"name\": \"ecg_1000hz.csv\",\n    \"size\": \"598.5KB\"\n}\n\nFile 3:\n{\n    \"name\": \"eog_100hz.csv\",\n    \"size\": \"260.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"bio_resting_5min_100hz.csv\",\n    \"size\": \"1659.9KB\"\n}",
+        "file_list": [
+            "biosignals/bio_eventrelated_100hz.csv",
+            "biosignals/ecg_1000hz.csv",
+            "biosignals/eog_100hz.csv",
+            "biosignals/bio_resting_5min_100hz.csv"
+        ],
+        "gold_program_name": "EDR_analyze.py",
+        "output_fname": "pred_results/EDR_analyze_pred.png",
+        "eval_script_name": "eval_EDR_analyze.py"
+    },
+    {
+        "task_id": 43,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Analyze Electrooculography (EOG). Filter the EOG signal to remove some noise and trends. Run a peak detection algorithm to detect peaks location of eye blinks. Save the visualization of eye blinks to 'pred_results/EOG_analyze_pred.png'.",
+        "domain_knowledge": "Use the function nk.eog_clean in NeuroKit2 to filter the signal to remove some noise and trends. Use the function nk.eog_findpeaks to run a peak detection algorithm to detect peaks location. NeuroKit2 is a user-friendly package providing easy access to advanced biosignal processing routines.",
+        "file_info": "File 1:\n{\n    \"name\": \"bio_eventrelated_100hz.csv\",\n    \"size\": \"844.7KB\"\n}\n\nFile 2:\n{\n    \"name\": \"ecg_1000hz.csv\",\n    \"size\": \"598.5KB\"\n}\n\nFile 3:\n{\n    \"name\": \"eog_100hz.csv\",\n    \"size\": \"260.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"bio_resting_5min_100hz.csv\",\n    \"size\": \"1659.9KB\"\n}",
+        "file_list": [
+            "biosignals/bio_eventrelated_100hz.csv",
+            "biosignals/ecg_1000hz.csv",
+            "biosignals/eog_100hz.csv",
+            "biosignals/bio_resting_5min_100hz.csv"
+        ],
+        "gold_program_name": "EOG_analyze.py",
+        "output_fname": "pred_results/EOG_analyze_pred.png",
+        "eval_script_name": "eval_EOG_analyze.py"
+    },
+    {
+        "task_id": 44,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Analyze the inertial measurement unit (IMU) data collected during sleep and compute sleep endpoints. Load the given data and compute the following sleep endpoints: time of falling asleep, time of awakening, and total duration spent sleeping. The three values should be saved in a JSON file \"pred_results/imu_pred.json\", and the keys for them are \"sleep_onset\", \"wake_onset\", and \"total_sleep_duration\", respectively.",
+        "domain_knowledge": "Using the function sleep_processing_pipeline.predict_pipeline_acceleration() in BioPsyKit to perform the sleep processing pipeline. BioPsyKit is a Python package for the analysis of biopsychological data.",
+        "file_info": "File 1:\n{\n    \"name\": \"sleep_data.pkl\",\n    \"size\": \"221394.3KB\"\n}",
+        "file_list": [
+            "sleep_imu_data/sleep_data.pkl"
+        ],
+        "gold_program_name": "imu.py",
+        "output_fname": "pred_results/imu_pred.json",
+        "eval_script_name": "biopsykit_imu_eval.py"
+    },
+    {
+        "task_id": 45,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Given the questionnaire data, compute perceived stress scale (PSS) score. The results should be stored as a csv file \"pred_results/questionnaire_pred.csv\", where the columns are subject of the data item, perceived helplessness, perceived self-efficacy, and the total PSS score, respectively, but do not save the header.",
+        "domain_knowledge": "The Perceived Stress Scale (PSS) is a questionnaire originally developed by Cohen et al. (1983) widely used to assess stress levels in young people and adults aged 12 and above. It evaluates the degree to which an individual has perceived life as unpredictable, uncontrollable and overloading over the previous month. You may use BioPsyKit for the analysis of biopsychological data.",
+        "file_info": "File 1:\n{\n    \"name\": \"questionnaire_data.pkl\",\n    \"size\": \"8.3KB\"\n}",
+        "file_list": [
+            "biopsykit_questionnaire_data/questionnaire_data.pkl"
+        ],
+        "gold_program_name": "questionnaire.py",
+        "output_fname": "pred_results/questionnaire_pred.csv",
+        "eval_script_name": "biopsykit_questionnaire_eval.py"
+    },
+    {
+        "task_id": 46,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Map Visualization",
+        "task_inst": "To evaluate mountain lion habitat suitability, calculate terrain ruggedness using elevation data. Visualize and save the outputs as \"pred_results/ruggedness.png\".",
+        "domain_knowledge": "Terrain Ruggedness Index (TRI) expresses the amount of elevation difference between adjacent cells of a DEM. The TRI function measures the difference in elevation values from a center cell and eight cells directly surrounding it. Then, the eight elevation differences are squared and averaged. The square root of this average results is a TRI measurement for the center cell. This calculation is then conducted on every cell of the DEM. The \"generic_filter\" function imported from the \"scipy.ndimage\" package can calculate a multidimensional filter using a given \"filter_range\" function.",
+        "file_info": "File 1:\n{\n    \"name\": \"Elevation.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"Elevation.tif\",\n    \"size\": \"30730.7KB\"\n}\n\nFile 3:\n{\n    \"name\": \"Elevation.tif.ovr\",\n    \"size\": \"4037.9KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Mountain_Lion_Habitat.geojson\",\n    \"size\": \"3.3KB\"\n}\n\nFile 5:\n{\n    \"name\": \"Elevation.tif.aux.xml\",\n    \"size\": \"8.2KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Protected_Status.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 7:\n{\n    \"name\": \"Protected_Status.tif.aux.xml\",\n    \"size\": \"1.4KB\"\n}\n\nFile 8:\n{\n    \"name\": \"Protected_Status.tif.ovr\",\n    \"size\": \"76.6KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Protected_Status.tif\",\n    \"size\": \"7692.0KB\"\n}\n\nFile 10:\n{\n    \"name\": \"Protected_Status.tif.vat.dbf\",\n    \"size\": \"1.2KB\"\n}\n\nFile 11:\n{\n    \"name\": \"distance.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 12:\n{\n    \"name\": \"Protected_Status.tif.vat.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 13:\n{\n    \"name\": \"landCover.tif.ovr\",\n    \"size\": \"538.8KB\"\n}\n\nFile 14:\n{\n    \"name\": \"landCover.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 15:\n{\n    \"name\": \"landCover.tif\",\n    \"size\": \"7692.1KB\"\n}\n\nFile 16:\n{\n    \"name\": \"landCover.tif.aux.xml\",\n    \"size\": \"1.5KB\"\n}\n\nFile 17:\n{\n    \"name\": \"landCover.tif.vat.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 18:\n{\n    \"name\": \"landCover.tif.vat.dbf\",\n    \"size\": \"2.2KB\"\n}\n\nFile 19:\n{\n    \"name\": \"protected_status_reclassified.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 20:\n{\n    \"name\": \"ruggedness.tif\",\n    \"size\": \"122884.1KB\"\n}\n\nFile 21:\n{\n    \"name\": \"landcover_reclassified.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 22:\n{\n    \"name\": \"road.geojson\",\n    \"size\": \"52058.0KB\"\n}",
+        "file_list": [
+            "MountainLionNew/Elevation.tfw",
+            "MountainLionNew/Elevation.tif",
+            "MountainLionNew/Elevation.tif.ovr",
+            "MountainLionNew/Mountain_Lion_Habitat.geojson",
+            "MountainLionNew/Elevation.tif.aux.xml",
+            "MountainLionNew/Protected_Status.tfw",
+            "MountainLionNew/Protected_Status.tif.aux.xml",
+            "MountainLionNew/Protected_Status.tif.ovr",
+            "MountainLionNew/Protected_Status.tif",
+            "MountainLionNew/Protected_Status.tif.vat.dbf",
+            "MountainLionNew/distance.tif",
+            "MountainLionNew/Protected_Status.tif.vat.cpg",
+            "MountainLionNew/landCover.tif.ovr",
+            "MountainLionNew/landCover.tfw",
+            "MountainLionNew/landCover.tif",
+            "MountainLionNew/landCover.tif.aux.xml",
+            "MountainLionNew/landCover.tif.vat.cpg",
+            "MountainLionNew/landCover.tif.vat.dbf",
+            "MountainLionNew/protected_status_reclassified.tif",
+            "MountainLionNew/ruggedness.tif",
+            "MountainLionNew/landcover_reclassified.tif",
+            "MountainLionNew/road.geojson"
+        ],
+        "gold_program_name": "mountainLion1.py",
+        "output_fname": "pred_results/ruggedness.png",
+        "eval_script_name": "mountainLion1_eval.py"
+    },
+    {
+        "task_id": 47,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Map Visualization",
+        "task_inst": "To evaluate mountain lion habitat suitability, calculate the distance from roads to habitats using vector road data. Then, compute the Euclidean distance from the nearest road to each cell. Visualize and save the output as \"pred_results/distance_to_habitat.png\".",
+        "domain_knowledge": "Distance analysis is fundamental to most GIS applications. A straight line is the shortest possible measure of the Euclidean distance between two locations. There is also a difference in distance measure if the calculations are done using a planar or a geodesic method. ",
+        "file_info": "File 1:\n{\n    \"name\": \"Elevation.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"Elevation.tif\",\n    \"size\": \"30730.7KB\"\n}\n\nFile 3:\n{\n    \"name\": \"Elevation.tif.ovr\",\n    \"size\": \"4037.9KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Mountain_Lion_Habitat.geojson\",\n    \"size\": \"3.3KB\"\n}\n\nFile 5:\n{\n    \"name\": \"Elevation.tif.aux.xml\",\n    \"size\": \"8.2KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Protected_Status.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 7:\n{\n    \"name\": \"Protected_Status.tif.aux.xml\",\n    \"size\": \"1.4KB\"\n}\n\nFile 8:\n{\n    \"name\": \"Protected_Status.tif.ovr\",\n    \"size\": \"76.6KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Protected_Status.tif\",\n    \"size\": \"7692.0KB\"\n}\n\nFile 10:\n{\n    \"name\": \"Protected_Status.tif.vat.dbf\",\n    \"size\": \"1.2KB\"\n}\n\nFile 11:\n{\n    \"name\": \"distance.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 12:\n{\n    \"name\": \"Protected_Status.tif.vat.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 13:\n{\n    \"name\": \"landCover.tif.ovr\",\n    \"size\": \"538.8KB\"\n}\n\nFile 14:\n{\n    \"name\": \"landCover.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 15:\n{\n    \"name\": \"landCover.tif\",\n    \"size\": \"7692.1KB\"\n}\n\nFile 16:\n{\n    \"name\": \"landCover.tif.aux.xml\",\n    \"size\": \"1.5KB\"\n}\n\nFile 17:\n{\n    \"name\": \"landCover.tif.vat.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 18:\n{\n    \"name\": \"landCover.tif.vat.dbf\",\n    \"size\": \"2.2KB\"\n}\n\nFile 19:\n{\n    \"name\": \"protected_status_reclassified.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 20:\n{\n    \"name\": \"ruggedness.tif\",\n    \"size\": \"122884.1KB\"\n}\n\nFile 21:\n{\n    \"name\": \"landcover_reclassified.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 22:\n{\n    \"name\": \"road.geojson\",\n    \"size\": \"52058.0KB\"\n}",
+        "file_list": [
+            "MountainLionNew/Elevation.tfw",
+            "MountainLionNew/Elevation.tif",
+            "MountainLionNew/Elevation.tif.ovr",
+            "MountainLionNew/Mountain_Lion_Habitat.geojson",
+            "MountainLionNew/Elevation.tif.aux.xml",
+            "MountainLionNew/Protected_Status.tfw",
+            "MountainLionNew/Protected_Status.tif.aux.xml",
+            "MountainLionNew/Protected_Status.tif.ovr",
+            "MountainLionNew/Protected_Status.tif",
+            "MountainLionNew/Protected_Status.tif.vat.dbf",
+            "MountainLionNew/distance.tif",
+            "MountainLionNew/Protected_Status.tif.vat.cpg",
+            "MountainLionNew/landCover.tif.ovr",
+            "MountainLionNew/landCover.tfw",
+            "MountainLionNew/landCover.tif",
+            "MountainLionNew/landCover.tif.aux.xml",
+            "MountainLionNew/landCover.tif.vat.cpg",
+            "MountainLionNew/landCover.tif.vat.dbf",
+            "MountainLionNew/protected_status_reclassified.tif",
+            "MountainLionNew/ruggedness.tif",
+            "MountainLionNew/landcover_reclassified.tif",
+            "MountainLionNew/road.geojson"
+        ],
+        "gold_program_name": "mountainLion2.py",
+        "output_fname": "pred_results/distance_to_habitat.png",
+        "eval_script_name": "mountainLion2_eval.py"
+    },
+    {
+        "task_id": 48,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Computational Analysis, Map Visualization",
+        "task_inst": "Compute and plot the leading Empirical Orthogonal Function (EOF) of sea surface temperature in the central and northern Pacific during winter time. Save the figure as 'pred_results/sst_visualization_pred.png'.",
+        "domain_knowledge": "In climate studies, Empirical Orthogonal Function (EOF) analysis is often used to study possible spatial modes (ie, patterns) of variability and how they change with time (e.g., the North Atlantic Oscilliation). Empirical orthogonal function (EOF) can be expressed as the correlation between the principal component time series (PCs) and the time series of the Eof input dataset at each grid point. As such, EOF analysis is sometimes classified as a multivariate statistical technique. NetCDF (Network Common Data Form) files are commonly used to store multi-dimensional scientific data such as temperature, humidity, wind speed, etc. ",
+        "file_info": "File 1:\n{\n    \"name\": \"sst_anom.nc\",\n    \"size\": \"214.2KB\"\n}",
+        "file_list": [
+            "sea_surface_temperature/sst_anom.nc"
+        ],
+        "gold_program_name": "sst_visualization.py",
+        "output_fname": "pred_results/sst_visualization_pred.png",
+        "eval_script_name": "eval_sst_visualization.py"
+    },
+    {
+        "task_id": 49,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Computational Analysis, Map Visualization",
+        "task_inst": "Compute and plot the leading EOF of geopotential height on the 500 hPa pressure surface over the European/Atlantic sector during winter time. Save the figure as 'pred_results/EOF_standard.png'.",
+        "domain_knowledge": "In climate studies, Empirical Orthogonal Function (EOF) analysis is often used to study possible spatial modes (ie, patterns) of variability and how they change with time (e.g., the North Atlantic Oscilliation). The EOF is also interchangeable with the geographically weighted principal components analysis in geophysics. Empirical orthogonal function (EOF) can be expressed as the correlation or covariance between the principal component time series (PCs) and the time series of the EOF input dataset at each grid point. NetCDF (Network Common Data Form) files are commonly used to store multi-dimensional scientific data such as temperature, humidity, wind speed, etc. ",
+        "file_info": "File 1:\n{\n    \"name\": \"hgt_djf.nc\",\n    \"size\": \"726.0KB\"\n}",
+        "file_list": [
+            "EOF_standard/hgt_djf.nc"
+        ],
+        "gold_program_name": "EOF_standard_hgt_plot.py",
+        "output_fname": "pred_results/EOF_standard.png",
+        "eval_script_name": "EOF_standard_hgt_plot_eval.py"
+    },
+    {
+        "task_id": 50,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Compute and plot the leading Empirical Orthogonal Function (EOF) of sea surface temperature in the central and northern Pacific during winter time. The associated time series shows large peaks and troughs for well-known El Nino and La Nina events. Save the figure as 'pred_results/EOF_xarray_sst.png'.",
+        "domain_knowledge": "In climate studies, Empirical Orthogonal Function (EOF) analysis is often used to study possible spatial modes (ie, patterns) of variability and how they change with time (e.g., the North Atlantic Oscilliation). The EOF is also interchangeable with the geographically weighted principal components analysis in geophysics. Empirical orthogonal function (EOF) can be expressed as the correlation or covariance between the principal component time series (PCs) and the time series of the EOF input dataset at each grid point. NetCDF (Network Common Data Form) files are commonly used to store multi-dimensional scientific data such as temperature, humidity, wind speed, etc. ",
+        "file_info": "File 1:\n{\n    \"name\": \"sst_ndjfm_anom.nc\",\n    \"size\": \"214.2KB\"\n}",
+        "file_list": [
+            "EOF_xarray_sst/sst_ndjfm_anom.nc"
+        ],
+        "gold_program_name": "EOF_xarray_sst_plot.py",
+        "output_fname": "pred_results/EOF_xarray_sst.png",
+        "eval_script_name": "EOF_xarray_sst_plot_eval.py"
+    },
+    {
+        "task_id": 53,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis",
+        "task_inst": "Standardize land cover and protected status datasets for consistency in analysis for mountain lion habitat. Reclassify these categorical datasets to a common scale using geospatial tools. Save the reclassified data as pred_results/landCover_reclassified.tif and pred_results/protected_status_reclassified.tif.",
+        "domain_knowledge": "Reclassify is to change the input cell values in a raster in the purpose of standardlization or regrouping different categories. There are several approaches to reclassifying data, such as Individual values (Lookup, Reclassify), Ranges of values (Reclass by ASCII File, Reclass by Table, Reclassify), Intervals (Slice), and continuous values using functions (Rescale by Function).",
+        "file_info": "File 1:\n{\n    \"name\": \"Elevation.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"Elevation.tif\",\n    \"size\": \"30730.7KB\"\n}\n\nFile 3:\n{\n    \"name\": \"Elevation.tif.ovr\",\n    \"size\": \"4037.9KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Mountain_Lion_Habitat.geojson\",\n    \"size\": \"3.3KB\"\n}\n\nFile 5:\n{\n    \"name\": \"Elevation.tif.aux.xml\",\n    \"size\": \"8.2KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Protected_Status.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 7:\n{\n    \"name\": \"Protected_Status.tif.aux.xml\",\n    \"size\": \"1.4KB\"\n}\n\nFile 8:\n{\n    \"name\": \"Protected_Status.tif.ovr\",\n    \"size\": \"76.6KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Protected_Status.tif\",\n    \"size\": \"7692.0KB\"\n}\n\nFile 10:\n{\n    \"name\": \"Protected_Status.tif.vat.dbf\",\n    \"size\": \"1.2KB\"\n}\n\nFile 11:\n{\n    \"name\": \"distance.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 12:\n{\n    \"name\": \"Protected_Status.tif.vat.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 13:\n{\n    \"name\": \"landCover.tif.ovr\",\n    \"size\": \"538.8KB\"\n}\n\nFile 14:\n{\n    \"name\": \"landCover.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 15:\n{\n    \"name\": \"landCover.tif\",\n    \"size\": \"7692.1KB\"\n}\n\nFile 16:\n{\n    \"name\": \"landCover.tif.aux.xml\",\n    \"size\": \"1.5KB\"\n}\n\nFile 17:\n{\n    \"name\": \"landCover.tif.vat.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 18:\n{\n    \"name\": \"landCover.tif.vat.dbf\",\n    \"size\": \"2.2KB\"\n}\n\nFile 19:\n{\n    \"name\": \"protected_status_reclassified.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 20:\n{\n    \"name\": \"ruggedness.tif\",\n    \"size\": \"122884.1KB\"\n}\n\nFile 21:\n{\n    \"name\": \"landcover_reclassified.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 22:\n{\n    \"name\": \"road.geojson\",\n    \"size\": \"52058.0KB\"\n}",
+        "file_list": [
+            "MountainLionNew/Elevation.tfw",
+            "MountainLionNew/Elevation.tif",
+            "MountainLionNew/Elevation.tif.ovr",
+            "MountainLionNew/Mountain_Lion_Habitat.geojson",
+            "MountainLionNew/Elevation.tif.aux.xml",
+            "MountainLionNew/Protected_Status.tfw",
+            "MountainLionNew/Protected_Status.tif.aux.xml",
+            "MountainLionNew/Protected_Status.tif.ovr",
+            "MountainLionNew/Protected_Status.tif",
+            "MountainLionNew/Protected_Status.tif.vat.dbf",
+            "MountainLionNew/distance.tif",
+            "MountainLionNew/Protected_Status.tif.vat.cpg",
+            "MountainLionNew/landCover.tif.ovr",
+            "MountainLionNew/landCover.tfw",
+            "MountainLionNew/landCover.tif",
+            "MountainLionNew/landCover.tif.aux.xml",
+            "MountainLionNew/landCover.tif.vat.cpg",
+            "MountainLionNew/landCover.tif.vat.dbf",
+            "MountainLionNew/protected_status_reclassified.tif",
+            "MountainLionNew/ruggedness.tif",
+            "MountainLionNew/landcover_reclassified.tif",
+            "MountainLionNew/road.geojson"
+        ],
+        "gold_program_name": "mountainLion3.py",
+        "output_fname": "pred_results/landCover_reclassified.tif",
+        "eval_script_name": "mountainLion3_eval.py"
+    },
+    {
+        "task_id": 54,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Map Visualization",
+        "task_inst": "Integrate ruggedness, road distance, land cover, and protected status into a single cost surface. Assign weights to each criterion to create a comprehensive habitat suitability map. Save the composite cost surface as \"pred_results/mountainLionCorridor.png\".",
+        "domain_knowledge": "The Raster Calculator tool allows you to create and run map algebra expressions in a tool.  The map algebra expressions allow users to enter mathematical (addition, division, and so on) and logical (greater than, equal to, and so on) operators in the expression to operate on raster layers. The general structure of a map algebra statement is an assignment operator (=), which is used to separate the action to its right from the name of the output (a raster object) to its left. The input raster layers need to have same size (col, row). ",
+        "file_info": "File 1:\n{\n    \"name\": \"Elevation.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"Elevation.tif\",\n    \"size\": \"30730.7KB\"\n}\n\nFile 3:\n{\n    \"name\": \"Elevation.tif.ovr\",\n    \"size\": \"4037.9KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Mountain_Lion_Habitat.geojson\",\n    \"size\": \"3.3KB\"\n}\n\nFile 5:\n{\n    \"name\": \"Elevation.tif.aux.xml\",\n    \"size\": \"8.2KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Protected_Status.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 7:\n{\n    \"name\": \"Protected_Status.tif.aux.xml\",\n    \"size\": \"1.4KB\"\n}\n\nFile 8:\n{\n    \"name\": \"Protected_Status.tif.ovr\",\n    \"size\": \"76.6KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Protected_Status.tif\",\n    \"size\": \"7692.0KB\"\n}\n\nFile 10:\n{\n    \"name\": \"Protected_Status.tif.vat.dbf\",\n    \"size\": \"1.2KB\"\n}\n\nFile 11:\n{\n    \"name\": \"distance.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 12:\n{\n    \"name\": \"Protected_Status.tif.vat.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 13:\n{\n    \"name\": \"landCover.tif.ovr\",\n    \"size\": \"538.8KB\"\n}\n\nFile 14:\n{\n    \"name\": \"landCover.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 15:\n{\n    \"name\": \"landCover.tif\",\n    \"size\": \"7692.1KB\"\n}\n\nFile 16:\n{\n    \"name\": \"landCover.tif.aux.xml\",\n    \"size\": \"1.5KB\"\n}\n\nFile 17:\n{\n    \"name\": \"landCover.tif.vat.cpg\",\n    \"size\": \"0.0KB\"\n}\n\nFile 18:\n{\n    \"name\": \"landCover.tif.vat.dbf\",\n    \"size\": \"2.2KB\"\n}\n\nFile 19:\n{\n    \"name\": \"protected_status_reclassified.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 20:\n{\n    \"name\": \"ruggedness.tif\",\n    \"size\": \"122884.1KB\"\n}\n\nFile 21:\n{\n    \"name\": \"landcover_reclassified.tif\",\n    \"size\": \"7683.2KB\"\n}\n\nFile 22:\n{\n    \"name\": \"road.geojson\",\n    \"size\": \"52058.0KB\"\n}",
+        "file_list": [
+            "MountainLionNew/Elevation.tfw",
+            "MountainLionNew/Elevation.tif",
+            "MountainLionNew/Elevation.tif.ovr",
+            "MountainLionNew/Mountain_Lion_Habitat.geojson",
+            "MountainLionNew/Elevation.tif.aux.xml",
+            "MountainLionNew/Protected_Status.tfw",
+            "MountainLionNew/Protected_Status.tif.aux.xml",
+            "MountainLionNew/Protected_Status.tif.ovr",
+            "MountainLionNew/Protected_Status.tif",
+            "MountainLionNew/Protected_Status.tif.vat.dbf",
+            "MountainLionNew/distance.tif",
+            "MountainLionNew/Protected_Status.tif.vat.cpg",
+            "MountainLionNew/landCover.tif.ovr",
+            "MountainLionNew/landCover.tfw",
+            "MountainLionNew/landCover.tif",
+            "MountainLionNew/landCover.tif.aux.xml",
+            "MountainLionNew/landCover.tif.vat.cpg",
+            "MountainLionNew/landCover.tif.vat.dbf",
+            "MountainLionNew/protected_status_reclassified.tif",
+            "MountainLionNew/ruggedness.tif",
+            "MountainLionNew/landcover_reclassified.tif",
+            "MountainLionNew/road.geojson"
+        ],
+        "gold_program_name": "mountainLionCorridor.py",
+        "output_fname": "pred_results/mountainLionCorridor.png",
+        "eval_script_name": "mountainLionCorridor_eval.py"
+    },
+    {
+        "task_id": 55,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Map Visualization",
+        "task_inst": "Use sea temperature and salinity data from the South Atlantic Ocean to calculate and plot a vertical temperature-salinity profile within a specified range of latitude, longitude, and depth. Save the figure as 'pred_results/ocean_profiles_vis.png'.",
+        "domain_knowledge": "iris.plot is a Iris-specific package extensions to matplotlib and for handling multi-dimensional data and associated metadata. Cubes can be pattern matched and filtered according to specific criteria. Constraints are the mechanism by which cubes can be pattern matched and filtered according to specific criteria. Once a constraint has been defined, it can be applied to cubes using the Constraint.extract() method. The iris.load() function automatically recognises the format of the given files and attempts to produce Iris multidimensional Cubes from their contents.",
+        "file_info": "File 1:\n{\n    \"name\": \"atlantic_profiles.nc\",\n    \"size\": \"34.0KB\"\n}",
+        "file_list": [
+            "ocean_profiles/atlantic_profiles.nc"
+        ],
+        "gold_program_name": "plot_ocean_profiles.py",
+        "output_fname": "pred_results/ocean_profiles_vis.png",
+        "eval_script_name": "eval_plot_ocean_profiles.py"
+    },
+    {
+        "task_id": 56,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Map Visualization",
+        "task_inst": "Use 240 years of annual average surface temperature data from North America to calculate and plot the number of occurrences where the temperature exceeds 280K for five consecutive years. Save the figure as 'pred_results/temperature_statistic_vis.png'.",
+        "domain_knowledge": "iris.plot is a Iris-specific package extensions to matplotlib and for handling multi-dimensional data and associated metadata.  Cubes can be pattern matched and filtered according to specific criteria. Constraints are the mechanism by which cubes can be pattern matched and filtered according to specific criteria. Once a constraint has been defined, it can be applied to cubes using the Constraint.extract() method. The iris.load() function automatically recognises the format of the given files and attempts to produce Iris multidimensional Cubes from their contents. cube.collapsed () function can collapse one or more dimensions over the cube given the coordinate/s and an aggregation.",
+        "file_info": "File 1:\n{\n    \"name\": \"E1_north_america.nc\",\n    \"size\": \"1781.3KB\"\n}",
+        "file_list": [
+            "temperature_statistic/E1_north_america.nc"
+        ],
+        "gold_program_name": "plot_temperature_statistic.py",
+        "output_fname": "pred_results/temperature_statistic_vis.png",
+        "eval_script_name": "eval_plot_temperature_statistic.py"
+    },
+    {
+        "task_id": 57,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "Generate a heatmap to visualize the number of persons associated with each model and rule using the data from ind_data_for_plot.csv. Save the resulting plot as indiv_table.png in the pred_results/ directory.",
+        "domain_knowledge": "Syllogistic reasoning is one of the core domains in human reasoning research. It is concerned with gaining insight intothe cognitive processes driving the inference mechanisms for categorical assertions featuring quanti\ufb01ers (\u201cAll,\u201d \u201cSome,\u201d \u201cSome. . . not,\u201d and \u201cNo\u201d) and terms which are interre-lated by two premises.  \u201cNo Valid Conclusion\u201d (NVC) is one of the most frequentlyselected responses and corresponds to the logically correct conclusion for 58% of the syllogisticproblem domain, which represents a major shortcoming of current models for human syllogistic reasoning. There are several theories proposed of syllogistic reasoning: The Conversion Hypothesis, The Mental Model Theory (MMT), The Psychology of Proof model (PSYCOP), Verbal Reasoner, The Atmosphere Hypothesis, The Matching Hypothesis, and The Proability Heuristics Model.",
+        "file_info": "File 1:\n{\n    \"name\": \"ind_data_for_plot.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"valid_syllogisms.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 3:\n{\n    \"name\": \"accuracies_data_for_plot.csv\",\n    \"size\": \"134.8KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Ragni2016.csv\",\n    \"size\": \"2472.5KB\"\n}\n\nFile 5:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 7:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 8:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 10:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 11:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 12:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 13:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 14:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 15:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 16:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 17:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 18:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 19:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 20:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 21:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 22:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 23:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 24:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 25:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 26:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 27:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 28:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 29:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 30:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 31:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 32:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 33:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 34:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 35:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 36:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 37:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 38:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 39:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}",
+        "file_list": [
+            "nvc/ind_data_for_plot.csv",
+            "nvc/valid_syllogisms.csv",
+            "nvc/accuracies_data_for_plot.csv",
+            "nvc/Ragni2016.csv",
+            "nvc/scripts/indiv_table/models/PSYCOP.csv",
+            "nvc/scripts/indiv_table/models/Matching.csv",
+            "nvc/scripts/indiv_table/models/VerbalModels.csv",
+            "nvc/scripts/indiv_table/models/MMT.csv",
+            "nvc/scripts/indiv_table/models/Conversion.csv",
+            "nvc/scripts/indiv_table/models/PHM.csv",
+            "nvc/scripts/indiv_table/models/Atmosphere.csv",
+            "nvc/scripts/indiv_table/rules/negativity.py",
+            "nvc/scripts/indiv_table/rules/figural.py",
+            "nvc/scripts/indiv_table/rules/__init__.py",
+            "nvc/scripts/indiv_table/rules/emptystart.py",
+            "nvc/scripts/indiv_table/rules/particularity.py",
+            "nvc/scripts/indiv_table/rules/atmosphere.py",
+            "nvc/scripts/indiv_table/rules/partneg.py",
+            "nvc/scripts/prediction_errors/models/PSYCOP.csv",
+            "nvc/scripts/prediction_errors/models/Matching.csv",
+            "nvc/scripts/prediction_errors/models/VerbalModels.csv",
+            "nvc/scripts/prediction_errors/models/MMT.csv",
+            "nvc/scripts/prediction_errors/models/Conversion.csv",
+            "nvc/scripts/prediction_errors/models/PHM.csv",
+            "nvc/scripts/prediction_errors/models/Atmosphere.csv",
+            "nvc/scripts/prediction_errors/rules/negativity.py",
+            "nvc/scripts/prediction_errors/rules/figural.py",
+            "nvc/scripts/prediction_errors/rules/__init__.py",
+            "nvc/scripts/prediction_errors/rules/emptystart.py",
+            "nvc/scripts/prediction_errors/rules/particularity.py",
+            "nvc/scripts/prediction_errors/rules/atmosphere.py",
+            "nvc/scripts/prediction_errors/rules/partneg.py",
+            "nvc/scripts/nvc_prediction/rules/negativity.py",
+            "nvc/scripts/nvc_prediction/rules/figural.py",
+            "nvc/scripts/nvc_prediction/rules/__init__.py",
+            "nvc/scripts/nvc_prediction/rules/emptystart.py",
+            "nvc/scripts/nvc_prediction/rules/particularity.py",
+            "nvc/scripts/nvc_prediction/rules/atmosphere.py",
+            "nvc/scripts/nvc_prediction/rules/partneg.py"
+        ],
+        "gold_program_name": "nvc_plot_ind.py",
+        "output_fname": "pred_results/indiv_table.png",
+        "eval_script_name": "eval_syllogistic_nvc_plot_ind.py"
+    },
+    {
+        "task_id": 58,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Generate a CSV file 'individuals.csv' containing the number of persons whose best-fit model-rule combination aligns with the models and rules from a set of given predictions. Each row in the CSV should represent a model-rule combination with the format: \"Model; Rule; Num persons\". Save this CSV file in the pred_results/ directory.",
+        "domain_knowledge": "Syllogistic reasoning is one of the core domains in human reasoning research. It is concerned with gaining insight intothe cognitive processes driving the inference mechanisms for categorical assertions featuring quanti\ufb01ers (\u201cAll,\u201d \u201cSome,\u201d \u201cSome. . . not,\u201d and \u201cNo\u201d) and terms which are interre-lated by two premises.  \u201cNo Valid Conclusion\u201d (NVC) is one of the most frequentlyselected responses and corresponds to the logically correct conclusion for 58% of the syllogisticproblem domain, which represents a major shortcoming of current models for human syllogistic reasoning. There are several theories proposed of syllogistic reasoning: The Conversion Hypothesis, The Mental Model Theory (MMT), The Psychology of Proof model (PSYCOP), Verbal Reasoner, The Atmosphere Hypothesis, The Matching Hypothesis, and The Proability Heuristics Model.",
+        "file_info": "File 1:\n{\n    \"name\": \"ind_data_for_plot.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"valid_syllogisms.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 3:\n{\n    \"name\": \"accuracies_data_for_plot.csv\",\n    \"size\": \"134.8KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Ragni2016.csv\",\n    \"size\": \"2472.5KB\"\n}\n\nFile 5:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 7:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 8:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 10:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 11:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 12:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 13:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 14:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 15:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 16:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 17:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 18:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 19:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 20:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 21:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 22:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 23:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 24:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 25:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 26:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 27:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 28:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 29:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 30:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 31:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 32:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 33:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 34:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 35:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 36:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 37:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 38:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 39:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}",
+        "file_list": [
+            "nvc/ind_data_for_plot.csv",
+            "nvc/valid_syllogisms.csv",
+            "nvc/accuracies_data_for_plot.csv",
+            "nvc/Ragni2016.csv",
+            "nvc/scripts/indiv_table/models/PSYCOP.csv",
+            "nvc/scripts/indiv_table/models/Matching.csv",
+            "nvc/scripts/indiv_table/models/VerbalModels.csv",
+            "nvc/scripts/indiv_table/models/MMT.csv",
+            "nvc/scripts/indiv_table/models/Conversion.csv",
+            "nvc/scripts/indiv_table/models/PHM.csv",
+            "nvc/scripts/indiv_table/models/Atmosphere.csv",
+            "nvc/scripts/indiv_table/rules/negativity.py",
+            "nvc/scripts/indiv_table/rules/figural.py",
+            "nvc/scripts/indiv_table/rules/__init__.py",
+            "nvc/scripts/indiv_table/rules/emptystart.py",
+            "nvc/scripts/indiv_table/rules/particularity.py",
+            "nvc/scripts/indiv_table/rules/atmosphere.py",
+            "nvc/scripts/indiv_table/rules/partneg.py",
+            "nvc/scripts/prediction_errors/models/PSYCOP.csv",
+            "nvc/scripts/prediction_errors/models/Matching.csv",
+            "nvc/scripts/prediction_errors/models/VerbalModels.csv",
+            "nvc/scripts/prediction_errors/models/MMT.csv",
+            "nvc/scripts/prediction_errors/models/Conversion.csv",
+            "nvc/scripts/prediction_errors/models/PHM.csv",
+            "nvc/scripts/prediction_errors/models/Atmosphere.csv",
+            "nvc/scripts/prediction_errors/rules/negativity.py",
+            "nvc/scripts/prediction_errors/rules/figural.py",
+            "nvc/scripts/prediction_errors/rules/__init__.py",
+            "nvc/scripts/prediction_errors/rules/emptystart.py",
+            "nvc/scripts/prediction_errors/rules/particularity.py",
+            "nvc/scripts/prediction_errors/rules/atmosphere.py",
+            "nvc/scripts/prediction_errors/rules/partneg.py",
+            "nvc/scripts/nvc_prediction/rules/negativity.py",
+            "nvc/scripts/nvc_prediction/rules/figural.py",
+            "nvc/scripts/nvc_prediction/rules/__init__.py",
+            "nvc/scripts/nvc_prediction/rules/emptystart.py",
+            "nvc/scripts/nvc_prediction/rules/particularity.py",
+            "nvc/scripts/nvc_prediction/rules/atmosphere.py",
+            "nvc/scripts/nvc_prediction/rules/partneg.py"
+        ],
+        "gold_program_name": "nvc_gen_ind.py",
+        "output_fname": "pred_results/individuals.csv",
+        "eval_script_name": "eval_syllogistic_nvc_gen_ind.py"
+    },
+    {
+        "task_id": 59,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Create a heatmap visualization for the NVC (No Valid Conclusion) predictions from various models and the Most Frequent Answer (MFA) for syllogistic reasoning tasks. Save the resulting plot as 'nvc_heatmap.png' in the 'pred_results/' directory.",
+        "domain_knowledge": "Syllogistic reasoning is one of the core domains in human reasoning research. It is concerned with gaining insight intothe cognitive processes driving the inference mechanisms for categorical assertions featuring quanti\ufb01ers (\u201cAll,\u201d \u201cSome,\u201d \u201cSome. . . not,\u201d and \u201cNo\u201d) and terms which are interre-lated by two premises.  \u201cNo Valid Conclusion\u201d (NVC) is one of the most frequentlyselected responses and corresponds to the logically correct conclusion for 58% of the syllogisticproblem domain, which represents a major shortcoming of current models for human syllogistic reasoning. There are several theories proposed of syllogistic reasoning: The Conversion Hypothesis, The Mental Model Theory (MMT), The Psychology of Proof model (PSYCOP), Verbal Reasoner, The Atmosphere Hypothesis, The Matching Hypothesis, and The Proability Heuristics Model.",
+        "file_info": "File 1:\n{\n    \"name\": \"ind_data_for_plot.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"valid_syllogisms.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 3:\n{\n    \"name\": \"accuracies_data_for_plot.csv\",\n    \"size\": \"134.8KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Ragni2016.csv\",\n    \"size\": \"2472.5KB\"\n}\n\nFile 5:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 7:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 8:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 10:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 11:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 12:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 13:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 14:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 15:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 16:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 17:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 18:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 19:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 20:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 21:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 22:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 23:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 24:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 25:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 26:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 27:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 28:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 29:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 30:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 31:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 32:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 33:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 34:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 35:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 36:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 37:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 38:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 39:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}",
+        "file_list": [
+            "nvc/ind_data_for_plot.csv",
+            "nvc/valid_syllogisms.csv",
+            "nvc/accuracies_data_for_plot.csv",
+            "nvc/Ragni2016.csv",
+            "nvc/scripts/indiv_table/models/PSYCOP.csv",
+            "nvc/scripts/indiv_table/models/Matching.csv",
+            "nvc/scripts/indiv_table/models/VerbalModels.csv",
+            "nvc/scripts/indiv_table/models/MMT.csv",
+            "nvc/scripts/indiv_table/models/Conversion.csv",
+            "nvc/scripts/indiv_table/models/PHM.csv",
+            "nvc/scripts/indiv_table/models/Atmosphere.csv",
+            "nvc/scripts/indiv_table/rules/negativity.py",
+            "nvc/scripts/indiv_table/rules/figural.py",
+            "nvc/scripts/indiv_table/rules/__init__.py",
+            "nvc/scripts/indiv_table/rules/emptystart.py",
+            "nvc/scripts/indiv_table/rules/particularity.py",
+            "nvc/scripts/indiv_table/rules/atmosphere.py",
+            "nvc/scripts/indiv_table/rules/partneg.py",
+            "nvc/scripts/prediction_errors/models/PSYCOP.csv",
+            "nvc/scripts/prediction_errors/models/Matching.csv",
+            "nvc/scripts/prediction_errors/models/VerbalModels.csv",
+            "nvc/scripts/prediction_errors/models/MMT.csv",
+            "nvc/scripts/prediction_errors/models/Conversion.csv",
+            "nvc/scripts/prediction_errors/models/PHM.csv",
+            "nvc/scripts/prediction_errors/models/Atmosphere.csv",
+            "nvc/scripts/prediction_errors/rules/negativity.py",
+            "nvc/scripts/prediction_errors/rules/figural.py",
+            "nvc/scripts/prediction_errors/rules/__init__.py",
+            "nvc/scripts/prediction_errors/rules/emptystart.py",
+            "nvc/scripts/prediction_errors/rules/particularity.py",
+            "nvc/scripts/prediction_errors/rules/atmosphere.py",
+            "nvc/scripts/prediction_errors/rules/partneg.py",
+            "nvc/scripts/nvc_prediction/rules/negativity.py",
+            "nvc/scripts/nvc_prediction/rules/figural.py",
+            "nvc/scripts/nvc_prediction/rules/__init__.py",
+            "nvc/scripts/nvc_prediction/rules/emptystart.py",
+            "nvc/scripts/nvc_prediction/rules/particularity.py",
+            "nvc/scripts/nvc_prediction/rules/atmosphere.py",
+            "nvc/scripts/nvc_prediction/rules/partneg.py"
+        ],
+        "gold_program_name": "nvc_heatmap.py",
+        "output_fname": "pred_results/nvc_heatmap.png",
+        "eval_script_name": "eval_syllogistic_nvc_heatmap.py"
+    },
+    {
+        "task_id": 60,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Evaluate the predictions made by various syllogistic reasoning models and NVC (No Valid Conclusion) rules against the MFA (most frequent answer) benchmark. The program should output a CSV file named accuracies.csv saved to pred_results/, detailing each model's predictions, the true answers, and the improvements achieved by the NVC rules.",
+        "domain_knowledge": "Syllogistic reasoning is one of the core domains in human reasoning research. It is concerned with gaining insight intothe cognitive processes driving the inference mechanisms for categorical assertions featuring quanti\ufb01ers (\u201cAll,\u201d \u201cSome,\u201d \u201cSome. . . not,\u201d and \u201cNo\u201d) and terms which are interre-lated by two premises.  \u201cNo Valid Conclusion\u201d (NVC) is one of the most frequentlyselected responses and corresponds to the logically correct conclusion for 58% of the syllogisticproblem domain, which represents a major shortcoming of current models for human syllogistic reasoning. There are several theories proposed of syllogistic reasoning: The Conversion Hypothesis, The Mental Model Theory (MMT), The Psychology of Proof model (PSYCOP), Verbal Reasoner, The Atmosphere Hypothesis, The Matching Hypothesis, and The Proability Heuristics Model.",
+        "file_info": "File 1:\n{\n    \"name\": \"ind_data_for_plot.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"valid_syllogisms.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 3:\n{\n    \"name\": \"accuracies_data_for_plot.csv\",\n    \"size\": \"134.8KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Ragni2016.csv\",\n    \"size\": \"2472.5KB\"\n}\n\nFile 5:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 7:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 8:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 10:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 11:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 12:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 13:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 14:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 15:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 16:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 17:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 18:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 19:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 20:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 21:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 22:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 23:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 24:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 25:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 26:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 27:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 28:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 29:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 30:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 31:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 32:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 33:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 34:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 35:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 36:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 37:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 38:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 39:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}",
+        "file_list": [
+            "nvc/ind_data_for_plot.csv",
+            "nvc/valid_syllogisms.csv",
+            "nvc/accuracies_data_for_plot.csv",
+            "nvc/Ragni2016.csv",
+            "nvc/scripts/indiv_table/models/PSYCOP.csv",
+            "nvc/scripts/indiv_table/models/Matching.csv",
+            "nvc/scripts/indiv_table/models/VerbalModels.csv",
+            "nvc/scripts/indiv_table/models/MMT.csv",
+            "nvc/scripts/indiv_table/models/Conversion.csv",
+            "nvc/scripts/indiv_table/models/PHM.csv",
+            "nvc/scripts/indiv_table/models/Atmosphere.csv",
+            "nvc/scripts/indiv_table/rules/negativity.py",
+            "nvc/scripts/indiv_table/rules/figural.py",
+            "nvc/scripts/indiv_table/rules/__init__.py",
+            "nvc/scripts/indiv_table/rules/emptystart.py",
+            "nvc/scripts/indiv_table/rules/particularity.py",
+            "nvc/scripts/indiv_table/rules/atmosphere.py",
+            "nvc/scripts/indiv_table/rules/partneg.py",
+            "nvc/scripts/prediction_errors/models/PSYCOP.csv",
+            "nvc/scripts/prediction_errors/models/Matching.csv",
+            "nvc/scripts/prediction_errors/models/VerbalModels.csv",
+            "nvc/scripts/prediction_errors/models/MMT.csv",
+            "nvc/scripts/prediction_errors/models/Conversion.csv",
+            "nvc/scripts/prediction_errors/models/PHM.csv",
+            "nvc/scripts/prediction_errors/models/Atmosphere.csv",
+            "nvc/scripts/prediction_errors/rules/negativity.py",
+            "nvc/scripts/prediction_errors/rules/figural.py",
+            "nvc/scripts/prediction_errors/rules/__init__.py",
+            "nvc/scripts/prediction_errors/rules/emptystart.py",
+            "nvc/scripts/prediction_errors/rules/particularity.py",
+            "nvc/scripts/prediction_errors/rules/atmosphere.py",
+            "nvc/scripts/prediction_errors/rules/partneg.py",
+            "nvc/scripts/nvc_prediction/rules/negativity.py",
+            "nvc/scripts/nvc_prediction/rules/figural.py",
+            "nvc/scripts/nvc_prediction/rules/__init__.py",
+            "nvc/scripts/nvc_prediction/rules/emptystart.py",
+            "nvc/scripts/nvc_prediction/rules/particularity.py",
+            "nvc/scripts/nvc_prediction/rules/atmosphere.py",
+            "nvc/scripts/nvc_prediction/rules/partneg.py"
+        ],
+        "gold_program_name": "nvc_accuracies.py",
+        "output_fname": "pred_results/accuracies.csv",
+        "eval_script_name": "eval_syllogistic_nvc_accuracies.py"
+    },
+    {
+        "task_id": 61,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Create a stacked bar plot visualizing the error metrics (misses, false alarms, total errors) for different models using the plain_prediction data. The dataset is available in the accuracies_data_for_plot.csv file. Save the resulting plot as stackedbar_plain_prediction.png in the pred_results/ directory.",
+        "domain_knowledge": "Syllogistic reasoning is one of the core domains in human reasoning research. It is concerned with gaining insight intothe cognitive processes driving the inference mechanisms for categorical assertions featuring quanti\ufb01ers (\u201cAll,\u201d \u201cSome,\u201d \u201cSome. . . not,\u201d and \u201cNo\u201d) and terms which are interre-lated by two premises.  \u201cNo Valid Conclusion\u201d (NVC) is one of the most frequentlyselected responses and corresponds to the logically correct conclusion for 58% of the syllogisticproblem domain, which represents a major shortcoming of current models for human syllogistic reasoning. There are several theories proposed of syllogistic reasoning: The Conversion Hypothesis, The Mental Model Theory (MMT), The Psychology of Proof model (PSYCOP), Verbal Reasoner, The Atmosphere Hypothesis, The Matching Hypothesis, and The Proability Heuristics Model.",
+        "file_info": "File 1:\n{\n    \"name\": \"ind_data_for_plot.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"valid_syllogisms.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 3:\n{\n    \"name\": \"accuracies_data_for_plot.csv\",\n    \"size\": \"134.8KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Ragni2016.csv\",\n    \"size\": \"2472.5KB\"\n}\n\nFile 5:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 7:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 8:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 10:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 11:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 12:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 13:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 14:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 15:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 16:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 17:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 18:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 19:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 20:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 21:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 22:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 23:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 24:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 25:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 26:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 27:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 28:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 29:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 30:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 31:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 32:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 33:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 34:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 35:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 36:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 37:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 38:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 39:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}",
+        "file_list": [
+            "nvc/ind_data_for_plot.csv",
+            "nvc/valid_syllogisms.csv",
+            "nvc/accuracies_data_for_plot.csv",
+            "nvc/Ragni2016.csv",
+            "nvc/scripts/indiv_table/models/PSYCOP.csv",
+            "nvc/scripts/indiv_table/models/Matching.csv",
+            "nvc/scripts/indiv_table/models/VerbalModels.csv",
+            "nvc/scripts/indiv_table/models/MMT.csv",
+            "nvc/scripts/indiv_table/models/Conversion.csv",
+            "nvc/scripts/indiv_table/models/PHM.csv",
+            "nvc/scripts/indiv_table/models/Atmosphere.csv",
+            "nvc/scripts/indiv_table/rules/negativity.py",
+            "nvc/scripts/indiv_table/rules/figural.py",
+            "nvc/scripts/indiv_table/rules/__init__.py",
+            "nvc/scripts/indiv_table/rules/emptystart.py",
+            "nvc/scripts/indiv_table/rules/particularity.py",
+            "nvc/scripts/indiv_table/rules/atmosphere.py",
+            "nvc/scripts/indiv_table/rules/partneg.py",
+            "nvc/scripts/prediction_errors/models/PSYCOP.csv",
+            "nvc/scripts/prediction_errors/models/Matching.csv",
+            "nvc/scripts/prediction_errors/models/VerbalModels.csv",
+            "nvc/scripts/prediction_errors/models/MMT.csv",
+            "nvc/scripts/prediction_errors/models/Conversion.csv",
+            "nvc/scripts/prediction_errors/models/PHM.csv",
+            "nvc/scripts/prediction_errors/models/Atmosphere.csv",
+            "nvc/scripts/prediction_errors/rules/negativity.py",
+            "nvc/scripts/prediction_errors/rules/figural.py",
+            "nvc/scripts/prediction_errors/rules/__init__.py",
+            "nvc/scripts/prediction_errors/rules/emptystart.py",
+            "nvc/scripts/prediction_errors/rules/particularity.py",
+            "nvc/scripts/prediction_errors/rules/atmosphere.py",
+            "nvc/scripts/prediction_errors/rules/partneg.py",
+            "nvc/scripts/nvc_prediction/rules/negativity.py",
+            "nvc/scripts/nvc_prediction/rules/figural.py",
+            "nvc/scripts/nvc_prediction/rules/__init__.py",
+            "nvc/scripts/nvc_prediction/rules/emptystart.py",
+            "nvc/scripts/nvc_prediction/rules/particularity.py",
+            "nvc/scripts/nvc_prediction/rules/atmosphere.py",
+            "nvc/scripts/nvc_prediction/rules/partneg.py"
+        ],
+        "gold_program_name": "nvc_stackbar_plain_prediction.py",
+        "output_fname": "pred_results/stackedbar_plain_prediction.png",
+        "eval_script_name": "eval_syllogistic_nvc_stackbar_plain_prediction.py"
+    },
+    {
+        "task_id": 62,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Generate a stacked bar plot illustrating the error metrics (misses, false alarms, total errors) for different models using the prediction data. The data is available in the accuracies_data_for_plot.csv file. Save the resulting plot as stackedbar_prediction.png in the pred_results/ directory.",
+        "domain_knowledge": "Syllogistic reasoning is one of the core domains in human reasoning research. It is concerned with gaining insight intothe cognitive processes driving the inference mechanisms for categorical assertions featuring quanti\ufb01ers (\u201cAll,\u201d \u201cSome,\u201d \u201cSome. . . not,\u201d and \u201cNo\u201d) and terms which are interre-lated by two premises.  \u201cNo Valid Conclusion\u201d (NVC) is one of the most frequentlyselected responses and corresponds to the logically correct conclusion for 58% of the syllogisticproblem domain, which represents a major shortcoming of current models for human syllogistic reasoning. There are several theories proposed of syllogistic reasoning: The Conversion Hypothesis, The Mental Model Theory (MMT), The Psychology of Proof model (PSYCOP), Verbal Reasoner, The Atmosphere Hypothesis, The Matching Hypothesis, and The Proability Heuristics Model.",
+        "file_info": "File 1:\n{\n    \"name\": \"ind_data_for_plot.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"valid_syllogisms.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 3:\n{\n    \"name\": \"accuracies_data_for_plot.csv\",\n    \"size\": \"134.8KB\"\n}\n\nFile 4:\n{\n    \"name\": \"Ragni2016.csv\",\n    \"size\": \"2472.5KB\"\n}\n\nFile 5:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 6:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 7:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 8:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 10:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 11:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 12:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 13:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 14:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 15:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 16:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 17:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 18:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 19:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 20:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 21:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 22:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 23:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 24:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 25:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 26:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 27:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 28:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 29:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 30:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 31:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 32:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}\n\nFile 33:\n{\n    \"name\": \"negativity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 34:\n{\n    \"name\": \"figural.py\",\n    \"size\": \"0.5KB\"\n}\n\nFile 35:\n{\n    \"name\": \"__init__.py\",\n    \"size\": \"0.0KB\"\n}\n\nFile 36:\n{\n    \"name\": \"emptystart.py\",\n    \"size\": \"0.9KB\"\n}\n\nFile 37:\n{\n    \"name\": \"particularity.py\",\n    \"size\": \"0.7KB\"\n}\n\nFile 38:\n{\n    \"name\": \"atmosphere.py\",\n    \"size\": \"1.2KB\"\n}\n\nFile 39:\n{\n    \"name\": \"partneg.py\",\n    \"size\": \"0.6KB\"\n}",
+        "file_list": [
+            "nvc/ind_data_for_plot.csv",
+            "nvc/valid_syllogisms.csv",
+            "nvc/accuracies_data_for_plot.csv",
+            "nvc/Ragni2016.csv",
+            "nvc/scripts/indiv_table/models/PSYCOP.csv",
+            "nvc/scripts/indiv_table/models/Matching.csv",
+            "nvc/scripts/indiv_table/models/VerbalModels.csv",
+            "nvc/scripts/indiv_table/models/MMT.csv",
+            "nvc/scripts/indiv_table/models/Conversion.csv",
+            "nvc/scripts/indiv_table/models/PHM.csv",
+            "nvc/scripts/indiv_table/models/Atmosphere.csv",
+            "nvc/scripts/indiv_table/rules/negativity.py",
+            "nvc/scripts/indiv_table/rules/figural.py",
+            "nvc/scripts/indiv_table/rules/__init__.py",
+            "nvc/scripts/indiv_table/rules/emptystart.py",
+            "nvc/scripts/indiv_table/rules/particularity.py",
+            "nvc/scripts/indiv_table/rules/atmosphere.py",
+            "nvc/scripts/indiv_table/rules/partneg.py",
+            "nvc/scripts/prediction_errors/models/PSYCOP.csv",
+            "nvc/scripts/prediction_errors/models/Matching.csv",
+            "nvc/scripts/prediction_errors/models/VerbalModels.csv",
+            "nvc/scripts/prediction_errors/models/MMT.csv",
+            "nvc/scripts/prediction_errors/models/Conversion.csv",
+            "nvc/scripts/prediction_errors/models/PHM.csv",
+            "nvc/scripts/prediction_errors/models/Atmosphere.csv",
+            "nvc/scripts/prediction_errors/rules/negativity.py",
+            "nvc/scripts/prediction_errors/rules/figural.py",
+            "nvc/scripts/prediction_errors/rules/__init__.py",
+            "nvc/scripts/prediction_errors/rules/emptystart.py",
+            "nvc/scripts/prediction_errors/rules/particularity.py",
+            "nvc/scripts/prediction_errors/rules/atmosphere.py",
+            "nvc/scripts/prediction_errors/rules/partneg.py",
+            "nvc/scripts/nvc_prediction/rules/negativity.py",
+            "nvc/scripts/nvc_prediction/rules/figural.py",
+            "nvc/scripts/nvc_prediction/rules/__init__.py",
+            "nvc/scripts/nvc_prediction/rules/emptystart.py",
+            "nvc/scripts/nvc_prediction/rules/particularity.py",
+            "nvc/scripts/nvc_prediction/rules/atmosphere.py",
+            "nvc/scripts/nvc_prediction/rules/partneg.py"
+        ],
+        "gold_program_name": "nvc_stackbar_prediction.py",
+        "output_fname": "pred_results/stackedbar_prediction.png",
+        "eval_script_name": "eval_syllogistic_nvc_stackbar_prediction.py"
+    },
+    {
+        "task_id": 63,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Analyze longer periods of resting state data in 'bio_resting_5min_100hz.csv'. Process ECG and RSP signals and perform analysis. The results will contain mean signal rate, as well as variability metrices pertaining to heart rate variability (HRV) and respiratory rate variability (RRV). Save the visualization of processed signals into 'pred_results/bio_ecg_plot.png' and 'pred_results/bio_rsp_plot.png' with tight bounding boxes.",
+        "domain_knowledge": "Electrocardiogram (ECG) is a simple, non-invasive test that measures the heart's electrical activity. Respiratory (RSP) rate is a vital sign that measures how many times a person breathes per minute while at rest. NeuroKit2 is a user-friendly package providing easy access to advanced biosignal processing routines. Use ecg_process() and rsp_process() to process the ECG and RSP signals then use ecg_plot() and rsp_plot() to visualize these signals.",
+        "file_info": "File 1:\n{\n    \"name\": \"bio_eventrelated_100hz.csv\",\n    \"size\": \"844.7KB\"\n}\n\nFile 2:\n{\n    \"name\": \"ecg_1000hz.csv\",\n    \"size\": \"598.5KB\"\n}\n\nFile 3:\n{\n    \"name\": \"eog_100hz.csv\",\n    \"size\": \"260.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"bio_resting_5min_100hz.csv\",\n    \"size\": \"1659.9KB\"\n}",
+        "file_list": [
+            "biosignals/bio_eventrelated_100hz.csv",
+            "biosignals/ecg_1000hz.csv",
+            "biosignals/eog_100hz.csv",
+            "biosignals/bio_resting_5min_100hz.csv"
+        ],
+        "gold_program_name": "bio_interval_analyze.py",
+        "output_fname": "pred_results/bio_ecg_plot.png",
+        "eval_script_name": "eval_bio_interval_analyze.py"
+    },
+    {
+        "task_id": 64,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Data Visualization",
+        "task_inst": "Show a plot comparing the flowline of region 'RGI60-11.00001' in year 2010 and 2005 with OGGM. The plot should show the mass-balance (MB, in mm w.e. per year) against elevation (in m a.s.i). Use the MultipleFlowlineMassBalance model. Save the plot to 'pred_results/plotting_flowline_mb_elevation_pred.png'.",
+        "domain_knowledge": "The Open Global Glacier Model (OGGM) is an open source modelling framework for glaciers.  OGGM\u2019s default model is a \u201cflowline model\u201d, which means that the glacier ice flow is assumed to happen along a representative \u201c1.5D\u201d flowline. A \u201cmass balance model\u201d is any python function that is able to provide annual surface mass balance information to the geometry evolution model for the duration of the run. oggm.core.massbalance.MultipleFlowlineMassBalance() handles mass balance at the glacier level instead of flowline level.",
+        "file_info": "File 1:\n{\n    \"name\": \"RGI60-11.00001.tar.gz\",\n    \"size\": \"247.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"RGI60-15.04847.tar.gz\",\n    \"size\": \"505.2KB\"\n}",
+        "file_list": [
+            "ocean_glacier/per_glacier/RGI60-11/RGI60-11.00/RGI60-11.00001.tar.gz",
+            "ocean_glacier/per_glacier/RGI60-15/RGI60-15.04/RGI60-15.04847.tar.gz"
+        ],
+        "gold_program_name": "plotting_flowline_mb_elevation.py",
+        "output_fname": "pred_results/plotting_flowline_mb_elevation_pred.png",
+        "eval_script_name": "eval_oggm_plotting_flowline_mb_elevation.py"
+    },
+    {
+        "task_id": 65,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Data Visualization",
+        "task_inst": "Show a time series plot for the mass-balance (MB) computed by OGGM for the region 'RGI60-11.00001' from 1960 to 2020. Use the MultipleFlowlineMassBalance model. Save the plot to 'pred_results/plotting_surface_mass_pred.png'.",
+        "domain_knowledge": "The Open Global Glacier Model (OGGM) is an open source modelling framework for glaciers.  OGGM\u2019s default model is a \u201cflowline model\u201d, which means that the glacier ice flow is assumed to happen along a representative \u201c1.5D\u201d flowline. A \u201cmass balance model\u201d is any python function that is able to provide annual surface mass balance information to the geometry evolution model for the duration of the run. oggm.core.massbalance.MultipleFlowlineMassBalance() handles mass balance at the glacier level instead of flowline level. oggm.workflow.init_glacier_directories() extracts a subset of the input data by inputing a region name. ",
+        "file_info": "File 1:\n{\n    \"name\": \"RGI60-11.00001.tar.gz\",\n    \"size\": \"247.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"RGI60-15.04847.tar.gz\",\n    \"size\": \"505.2KB\"\n}",
+        "file_list": [
+            "ocean_glacier/per_glacier/RGI60-11/RGI60-11.00/RGI60-11.00001.tar.gz",
+            "ocean_glacier/per_glacier/RGI60-15/RGI60-15.04/RGI60-15.04847.tar.gz"
+        ],
+        "gold_program_name": "plotting_surface_mass.py",
+        "output_fname": "pred_results/plotting_surface_mass_pred.png",
+        "eval_script_name": "eval_oggm_plotting_surface_mass.py"
+    },
+    {
+        "task_id": 66,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "Generate radar plots comparing cognitive models' similarities to consciousness and openness. Create two polar subplots, one for each personality trait, displaying the similarity scores for seven cognitive models. The resulting visualization will be saved into 'pred_results/CogSci_pattern_high_sim_plot_pred.png'.",
+        "domain_knowledge": "Joint Nonnegative Matrix Factorization (JNMF) is a method for factor analysis that is capable of simultaneously decomposing two datasets into related latent state representations. Enabling factor analysis for contrasting applications, i.e., to find common and distinct structural patterns in data, JNMF has great potential for use in the field of cognitive science. Applied to experimental data, JNMF allows for the extraction of common and distinct patterns of behavior thereby extending the outcomes of traditional correlation-based contrasting methods.",
+        "file_info": "File 1:\n{\n    \"name\": \"CogSci_pattern_high_sim_plot.csv\",\n    \"size\": \"0.4KB\"\n}",
+        "file_list": [
+            "CogSci_pattern_high_sim_plot_data/CogSci_pattern_high_sim_plot.csv"
+        ],
+        "gold_program_name": "CogSci_pattern_high_sim_plot.py",
+        "output_fname": "pred_results/CogSci_pattern_high_sim_plot_pred.png",
+        "eval_script_name": "CogSci_pattern_high_sim_plot_eval.py"
+    },
+    {
+        "task_id": 67,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Analyze cognitive theories using pattern similarity. Process CSV files containing model predictions for various syllogistic reasoning tasks. Calculate similarity scores between these models and pre-computed high-conscientiousness and high-openness patterns. The results will contain similarity scores for each cognitive model with respect to the personality trait patterns. Save the results to 'pred_results/CogSci_pattern_high_sim_data_pred.csv'.",
+        "domain_knowledge": "Joint Nonnegative Matrix Factorization (JNMF) is a method for factor analysis that is capable of simultaneously decomposing two datasets into related latent state representations. Enabling factor analysis for contrasting applications, i.e., to find common and distinct structural patterns in data, JNMF has great potential for use in the field of cognitive science. Applied to experimental data, JNMF allows for the extraction of common and distinct patterns of behavior thereby extending the outcomes of traditional correlation-based contrasting methods.",
+        "file_info": "File 1:\n{\n    \"name\": \"fit_result_openness_W_high.npy\",\n    \"size\": \"9.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"PSYCOP.csv\",\n    \"size\": \"0.8KB\"\n}\n\nFile 3:\n{\n    \"name\": \"Matching.csv\",\n    \"size\": \"1.0KB\"\n}\n\nFile 4:\n{\n    \"name\": \"VerbalModels.csv\",\n    \"size\": \"0.7KB\"\n}\n\nFile 5:\n{\n    \"name\": \"fit_result_conscientiousness_W_high.npy\",\n    \"size\": \"9.1KB\"\n}\n\nFile 6:\n{\n    \"name\": \"MMT.csv\",\n    \"size\": \"1.2KB\"\n}\n\nFile 7:\n{\n    \"name\": \"Conversion.csv\",\n    \"size\": \"0.6KB\"\n}\n\nFile 8:\n{\n    \"name\": \"PHM.csv\",\n    \"size\": \"0.9KB\"\n}\n\nFile 9:\n{\n    \"name\": \"Atmosphere.csv\",\n    \"size\": \"0.8KB\"\n}",
+        "file_list": [
+            "CogSci_pattern_high_sim_data/fit_result_openness_W_high.npy",
+            "CogSci_pattern_high_sim_data/PSYCOP.csv",
+            "CogSci_pattern_high_sim_data/Matching.csv",
+            "CogSci_pattern_high_sim_data/VerbalModels.csv",
+            "CogSci_pattern_high_sim_data/fit_result_conscientiousness_W_high.npy",
+            "CogSci_pattern_high_sim_data/MMT.csv",
+            "CogSci_pattern_high_sim_data/Conversion.csv",
+            "CogSci_pattern_high_sim_data/PHM.csv",
+            "CogSci_pattern_high_sim_data/Atmosphere.csv"
+        ],
+        "gold_program_name": "CogSci_pattern_high_sim.py",
+        "output_fname": "pred_results/CogSci_pattern_high_sim_data_pred.csv",
+        "eval_script_name": "CogSci_pattern_high_sim_eval.py"
+    },
+    {
+        "task_id": 68,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "Visualize conscientiousness patterns in syllogistic reasoning using heatmaps. Process pre-computed weight matrices for high and low conscientiousness groups. Extract and compute a common pattern from these matrices. Generate a figure with three subplots: one each for high conscientiousness, low conscientiousness, and the common pattern. Save the resulting visualization as a PNG file in the 'pred_results/CogSci_pattern_high_com_low_plot_data_pred.png'.",
+        "domain_knowledge": "Joint Nonnegative Matrix Factorization (JNMF) is a method for factor analysis that is capable of simultaneously decomposing two datasets into related latent state representations. Enabling factor analysis for contrasting applications, i.e., to find common and distinct structural patterns in data, JNMF has great potential for use in the field of cognitive science. Applied to experimental data, JNMF allows for the extraction of common and distinct patterns of behavior thereby extending the outcomes of traditional correlation-based contrasting methods.",
+        "file_info": "File 1:\n{\n    \"name\": \"fit_result_conscientiousness_W_low.npy\",\n    \"size\": \"9.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"fit_result_conscientiousness_W_high.npy\",\n    \"size\": \"9.1KB\"\n}",
+        "file_list": [
+            "CogSci_pattern_high_com_low_plot_data/fit_result_conscientiousness_W_low.npy",
+            "CogSci_pattern_high_com_low_plot_data/fit_result_conscientiousness_W_high.npy"
+        ],
+        "gold_program_name": "CogSci_pattern_high_com_low_plot.py",
+        "output_fname": "pred_results/CogSci_pattern_high_com_low_plot_data_pred.png",
+        "eval_script_name": "CogSci_pattern_high_com_low_plot_eval.py"
+    },
+    {
+        "task_id": 69,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Feature Engineering, Statistical Analysis, Data Visualization",
+        "task_inst": "For cell samples in the heart cell atlas dataset, filter out lowly expressed genes and plot UMAP results using the top 30 PCA components on the expression data. Save the UMAP visualization as 'pred_results/hca_cell_type_pca.png', with color representing the cell type.",
+        "domain_knowledge": "1. On dataset format: The dataset is stored in the AnnData format, which is widely used for single-cell RNA sequencing data. The main matrix, `adata.X`, contains gene expression values with cells as rows and genes as columns. The `obs` attribute contains metadata about the cells, such as 'cell_type', 'donor', 'gender', 'n_counts', and 'n_genes', while the `var` attribute holds information about genes, including gene IDs. ",
+        "file_info": "File 1:\n{\n    \"name\": \"hca_subsampled_20k.h5ad\",\n    \"size\": \"64173.5KB\"\n}",
+        "file_list": [
+            "hca/hca_subsampled_20k.h5ad"
+        ],
+        "gold_program_name": "single_cell_analysis_pca.py",
+        "output_fname": "pred_results/hca_cell_type_pca.png",
+        "eval_script_name": "eval_single_cell_analysis_pca.py"
+    },
+    {
+        "task_id": 73,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "Visualize the original and generated EEG signal of Sub-03 using a line plot. Images and channels corresponding to each timepoint should be averaged before plotting. Save the line plot to \"pred_results/eeg2eeg_vis_pred.png\".",
+        "domain_knowledge": "Electroencephalogram (EEG) is the test that measures electrical activity in the brain.",
+        "file_info": "File 1:\n{\n    \"name\": \"fake_sub03.npy\",\n    \"size\": \"2656.4KB\"\n}\n\nFile 2:\n{\n    \"name\": \"sub03.npy\",\n    \"size\": \"5312.6KB\"\n}",
+        "file_list": [
+            "eeg2eeg_vis/fake_sub03.npy",
+            "eeg2eeg_vis/sub03.npy"
+        ],
+        "gold_program_name": "eeg2eeg_vis.py",
+        "output_fname": "pred_results/eeg2eeg_vis_pred.png",
+        "eval_script_name": "eval_eeg2eeg_vis.py"
+    },
+    {
+        "task_id": 74,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Data Visualization",
+        "task_inst": "I would like to simulate and display the change of glacier area and thickness for region 'RGI60-15.04847'. Use the OGGM library and perform a random simulation from year 2020 to year 2060. Use the data from year 1999 as your starting point and set halfsize to 5. Use 1.8 as the temperature bias. Show a comparison of distributed thickness from year 2020, 2040, and 2060 in three subplots. Set the maximum value of thickness to 300. Save the plot to 'pred_results/oggm_plotting_glacier_area_and_thickness_change_pred.png'.",
+        "domain_knowledge": "The Open Global Glacier Model (OGGM) is an open source modelling framework for glaciers.  oggm.core.massbalance.MultipleFlowlineMassBalance() handles mass balance at the glacier level instead of flowline level. oggm.workflow.init_glacier_directories() initializes the list of Glacier Directories for this run by inputing a region or a sub dataset name. oggm.tasks.run_random_climate() runs the random mass balance model for a given number of years. distribute_2d.distribute_thickness_from_simulation() is a method for redistributing glacier ice that has been simulated along the flowline after a glacier retreat simulation. \n",
+        "file_info": "File 1:\n{\n    \"name\": \"RGI60-11.00001.tar.gz\",\n    \"size\": \"247.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"RGI60-15.04847.tar.gz\",\n    \"size\": \"505.2KB\"\n}",
+        "file_list": [
+            "ocean_glacier/per_glacier/RGI60-11/RGI60-11.00/RGI60-11.00001.tar.gz",
+            "ocean_glacier/per_glacier/RGI60-15/RGI60-15.04/RGI60-15.04847.tar.gz"
+        ],
+        "gold_program_name": "plotting_glacier_area_and_thickness_change.py",
+        "output_fname": "pred_results/oggm_plotting_glacier_area_and_thickness_change_pred.png",
+        "eval_script_name": "eval_oggm_plotting_glacier_area_and_thickness_change.py"
+    },
+    {
+        "task_id": 77,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Statistical Analysis, Map Visualization",
+        "task_inst": "Model water quality using spatial interpolation techniques in Python. The analysis should focus on understanding spatial patterns of water quality by using point sample data and interpolating these values across a broader area including unsampled locations. Your goal is to load the water quality sample data, and apply appropriate spatial interpolation methods, such as Kriging, to predict water quality across the region. The final output should be a map showing the interpolated water quality surface, saved as \"pred_results/interploated_water_quality.png\"",
+        "domain_knowledge": "Kriging is a common used spatial interpolation method in soil science and geology. It is based on statistical models that include autocorrelation. It involves fitting into a variogram and using weights derived from covariance to interpolate.",
+        "file_info": "File 1:\n{\n    \"name\": \"DissolvedO2.geojson\",\n    \"size\": \"18057.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"Bay.geojson\",\n    \"size\": \"9.6KB\"\n}",
+        "file_list": [
+            "WaterQuality/DissolvedO2.geojson",
+            "WaterQuality/Bay.geojson"
+        ],
+        "gold_program_name": "WaterQuality.py",
+        "output_fname": "pred_results/interpolated_water_quality.png",
+        "eval_script_name": "WaterQuality_eval.py"
+    },
+    {
+        "task_id": 79,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Using the data provided, compute for each cell the number of genes found in the cell's expression counts. Plot the distribution of this computation using a violin plot. Overlay the violin plot with a strip plot showing the same data. Store the result to 'pred_results/violin.png'.",
+        "domain_knowledge": NaN,
+        "file_info": "File 1:\n{\n    \"name\": \"violin.h5ad\",\n    \"size\": \"210309.4KB\"\n}",
+        "file_list": [
+            "violin/violin.h5ad"
+        ],
+        "gold_program_name": "violin.py",
+        "output_fname": "pred_results/violin.png",
+        "eval_script_name": "eval_violin.py"
+    },
+    {
+        "task_id": 80,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "For the data in provided, plot a scatter plot where the x-axis is the total number of counts per cell and the y-axis is number of genes found in the cell's expression counts. Color each point by the percentage of counts in that cell that are for mitochondrial genes. Store the result to 'pred_results/genes_scatter.png'.",
+        "domain_knowledge": NaN,
+        "file_info": "File 1:\n{\n    \"name\": \"violin.h5ad\",\n    \"size\": \"210309.4KB\"\n}",
+        "file_list": [
+            "violin/violin.h5ad"
+        ],
+        "gold_program_name": "genes_scatter.py",
+        "output_fname": "pred_results/genes_scatter.png",
+        "eval_script_name": "eval_gene_scatter.py"
+    },
+    {
+        "task_id": 81,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "For the given gene expression dataset, perform a scatter plot in UMAP basis to visualize groups of cells that express popular marker genes across various cell types: T-cell, B-cell, plasma, monocytes and dendritic. Also add plots for number of UMI counts per cell and bulk labels per cell. Save all the plots as one figure to 'pred_results/umap.png'.",
+        "domain_knowledge": "The H5ad format is based on the standard h5 format, a Hierarchical Data Formats used to store large amounts of data in the form of multidimensional arrays. H5ad data can be loaded using the AnnData package, and it can be visualized using the Scanpy package.\n\nscanpy.pl.umap plots a scatterplot in UMAP basis. Scatterplot points are colored according to the dataset feature assigned to the color argument. If a list of dataset features is supplied to the function, a scatterplot is created for each feature.\n\nGene markers are crucial for identifying immune cell types. For example, B-cells are marked by CD79A and MS4A1, plasma by IGJ, T-cells by CD3D, NK cells by GNLY and NKG7, myeloid by CST3 and LYZ, monocytes by FCGR3A and Dendritic cells by FCER1A.",
+        "file_info": "File 1:\n{\n    \"name\": \"pbmc.h5ad\",\n    \"size\": \"4352.0KB\"\n}",
+        "file_list": [
+            "pbmc_umap/pbmc.h5ad"
+        ],
+        "gold_program_name": "umap.py",
+        "output_fname": "pred_results/umap.png",
+        "eval_script_name": "eval_umap.py"
+    },
+    {
+        "task_id": 82,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "For the given data in 'pbmc_umap/pbmc.h5ad', visualize the dendrogram of the 'bulk_labels' variable. Save the results to 'pred_results/dendrogram.png'",
+        "domain_knowledge": "The H5ad format is based on the standard h5 format, a Hierarchical Data Formats used to store large amounts of data in the form of multidimensional arrays. H5ad data can be loaded using the AnnData package, and it can be visualized using the Scanpy package.\n\nA dendrogram is a visualization of a hierarchical clustering. Dendrograms can be plotted using Scanpy's tl.dendrogram function.",
+        "file_info": "File 1:\n{\n    \"name\": \"pbmc.h5ad\",\n    \"size\": \"4352.0KB\"\n}",
+        "file_list": [
+            "pbmc_umap/pbmc.h5ad"
+        ],
+        "gold_program_name": "dendrogram.py",
+        "output_fname": "pred_results/dendrogram.png",
+        "eval_script_name": "eval_dendrogram.py"
+    },
+    {
+        "task_id": 83,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Geospatial Analysis, Map Visualization",
+        "task_inst": "Your task is to analyze urban heat using Kriging interpolation techniques in Python. The analysis should focus on understanding spatial patterns of urban heat islands by using point temperature data and interpolating these values across a city. You also have to use a demographical layer to extract and enhance the data visualization on the elder group. Your goal is to load the temperature sample data, apply the Kriging method to predict temperature across the urban area, and generate a choropleth map showing the average interpolated temperature surface in each census block group. The final output should be saved as \"pred_results/interpolated_urban_heat.png\".",
+        "domain_knowledge": "Kriging is a common used spatial interpolation method in soil science and geology. It is based on statistical models that include autocorrelation. It involves fitting into a variogram and using weights derived from covariance to interpolate. A choropleth map is a thematic map that is used to represent statistical data using the color mapping symbology technique. It displays enumeration units, or divided geographical areas or regions that are colored, shaded or patterned in relation to a data variable. Attribute joins are accomplished using the pandas.merge() method. In general, it is recommended to use the merge() method called from the GeoDataFrame in the left argument.",
+        "file_info": "File 1:\n{\n    \"name\": \"Temperature.geojson\",\n    \"size\": \"33.8KB\"\n}\n\nFile 2:\n{\n    \"name\": \"block.geojson\",\n    \"size\": \"506.6KB\"\n}",
+        "file_list": [
+            "UrbanHeat/Temperature.geojson",
+            "UrbanHeat/block.geojson"
+        ],
+        "gold_program_name": "UrbanHeat.py",
+        "output_fname": "pred_results/interpolated_urban_heat.png",
+        "eval_script_name": "UrbanHeat_eval.py"
+    },
+    {
+        "task_id": 84,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Computational Analysis, Map Visualization",
+        "task_inst": "Assess burn scars using satellite imagery and perform spatial analysis to understand the impact of wildfires. The goal is to use the satellite imagery data from 2014 and 2015 on analyzing burn scars by determining the change in Normalized Burn Ratio, and generate a map that visualizes the spatial extent of the damage areas in vector data format (i.e., polygons). The final output should be a visual representation of the burn scars, saved as \"pred_results/burn_scar_analysis.png\".",
+        "domain_knowledge": "Normalized Burn Ratio (NBR) is used to identify burned areas and provide a measure of burn severity. It is calculated as a ratio between the NIR and SWIR values in traditional fashion. \nLandsat 8 satellite imageries have 9 bands: \nBand 1 Coastal Aerosol (0.43 - 0.45 \u00b5m) 30 m\nBand 2 Blue (0.450 - 0.51 \u00b5m) 30 m\nBand 3 Green (0.53 - 0.59 \u00b5m) 30 m\nBand 4 Red (0.64 - 0.67 \u00b5m) 30 m\nBand 5 Near-Infrared (0.85 - 0.88 \u00b5m) 30 m\nBand 6 SWIR 1(1.57 - 1.65 \u00b5m) 30 m\nBand 7 SWIR 2 (2.11 - 2.29 \u00b5m) 30 m\nBand 8 Panchromatic (PAN) (0.50 - 0.68 \u00b5m) 15 m\nBand 9 Cirrus (1.36 - 1.38 \u00b5m) 30 m\nIn Landsat 8-9, NBR = (Band 5 \u2013 Band 7) / (Band 5 + Band 7). ",
+        "file_info": "File 1:\n{\n    \"name\": \"G_2014.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"G_2014.tif.ovr\",\n    \"size\": \"8704.5KB\"\n}\n\nFile 3:\n{\n    \"name\": \"G_2014.tif\",\n    \"size\": \"56324.4KB\"\n}\n\nFile 4:\n{\n    \"name\": \"G_2014.tif.aux.xml\",\n    \"size\": \"18.2KB\"\n}\n\nFile 5:\n{\n    \"name\": \"G_2015.tif\",\n    \"size\": \"56324.4KB\"\n}\n\nFile 6:\n{\n    \"name\": \"G_2014.tif.xml\",\n    \"size\": \"0.7KB\"\n}\n\nFile 7:\n{\n    \"name\": \"G_2015.tfw\",\n    \"size\": \"0.1KB\"\n}\n\nFile 8:\n{\n    \"name\": \"G_2015.tif.aux.xml\",\n    \"size\": \"18.1KB\"\n}\n\nFile 9:\n{\n    \"name\": \"G_2015.tif.ovr\",\n    \"size\": \"8554.9KB\"\n}\n\nFile 10:\n{\n    \"name\": \"G_2015.tif.xml\",\n    \"size\": \"0.7KB\"\n}",
+        "file_list": [
+            "BurnScar/G_2014.tfw",
+            "BurnScar/G_2014.tif.ovr",
+            "BurnScar/G_2014.tif",
+            "BurnScar/G_2014.tif.aux.xml",
+            "BurnScar/G_2015.tif",
+            "BurnScar/G_2014.tif.xml",
+            "BurnScar/G_2015.tfw",
+            "BurnScar/G_2015.tif.aux.xml",
+            "BurnScar/G_2015.tif.ovr",
+            "BurnScar/G_2015.tif.xml"
+        ],
+        "gold_program_name": "BurnScar.py",
+        "output_fname": "pred_results/burn_scar_analysis.png",
+        "eval_script_name": "BurnScar_eval.py"
+    },
+    {
+        "task_id": 85,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Feature Engineering",
+        "task_inst": "Analyze the given saliva data and compute features that represent sample statistics or distribution (e.g., mean, location of max/min value, skewness) for each subject. Save the computed features along with subject condition as a dictionary of dictionaries into a json file \"pred_results/saliva_pred.json\".",
+        "domain_knowledge": "The BioPsyKit function biopsykit.saliva.standard_features computes a set of standard features on saliva data. The following list of features is computed. argmax: Argument (=index) of the maximum value, mean: Mean value, std: Standard deviation, skew: Skewness, kurt: Kurtosis.\n\nEach subject is either in a Control group or an Intervention group. The subject's group is denoted by the \"condition\" attribute.\n\nThe json library contains the json.dump function, which can be used to write data to a JSON file.",
+        "file_info": "File 1:\n{\n    \"name\": \"data.pkl\",\n    \"size\": \"2.8KB\"\n}",
+        "file_list": [
+            "saliva_data/data.pkl"
+        ],
+        "gold_program_name": "saliva.py",
+        "output_fname": "pred_results/saliva_pred.json",
+        "eval_script_name": "biopsykit_saliva_eval.py"
+    },
+    {
+        "task_id": 86,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Map Visualization",
+        "task_inst": "Load Total Electron Content (TEC) data from a space weather NetCDF file and visualize it as a filled contour map with a geographical and coastline background. Save the figure as 'pred_results/TEC_vis.png'.",
+        "domain_knowledge": "matplotlib.pyplot.contour() draw contour lines while matplotlib.pyplot.contourf() draw filled contours. NetCDF (Network Common Data Form) files are commonly used to store multi-dimensional scientific data such as temperature, humidity, wind speed, etc. ",
+        "file_info": "File 1:\n{\n    \"name\": \"space_weather.nc\",\n    \"size\": \"242.4KB\"\n}",
+        "file_list": [
+            "total_electron_content/space_weather.nc"
+        ],
+        "gold_program_name": "plot_TEC.py",
+        "output_fname": "pred_results/TEC_vis.png",
+        "eval_script_name": "eval_plot_TEC.py"
+    },
+    {
+        "task_id": 87,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Statistical Analysis",
+        "task_inst": "Load North America climate data in NetCDF file and extract temperature data along the time series, then perform a quadratic polynomial fit analysis on the temperature data, and output the fitting results by year in 'pred_results/polynomial_fit_pred.csv'.",
+        "domain_knowledge": "NetCDF (Network Common Data Form) files are commonly used to store multi-dimensional scientific data such as temperature, humidity, wind speed, etc.  numpy.polyfit() is a least squares polynomial fitting function. numpy.polyval() estimates polynomial Y values at specific input X values.",
+        "file_info": "File 1:\n{\n    \"name\": \"A1B_north_america.nc\",\n    \"size\": \"1781.3KB\"\n}",
+        "file_list": [
+            "polynomial_fit/A1B_north_america.nc"
+        ],
+        "gold_program_name": "polynomial_fit.py",
+        "output_fname": "pred_results/polynomial_fit_pred.csv",
+        "eval_script_name": "eval_polynomial_fit.py"
+    },
+    {
+        "task_id": 88,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Map Visualization",
+        "task_inst": "Use data on the locations and related information of fatal car crashes in New York City, along with the GeoJSON data of NYC administrative regions, plot the geographical distribution of fatal crashes in 2016 on a map. Save the figure as 'pred_results/collisions_map_vis.png'.",
+        "domain_knowledge": "geoplot is a high-level Python geospatial plotting library. It\u2019s an extension to cartopy and matplotlib. The geoplot.pointplot() is a geospatial scatter plot function that plots each observation in your dataset as a single point on a map. ",
+        "file_info": "File 1:\n{\n    \"name\": \"fatal_collisions.geojson\",\n    \"size\": \"12.9KB\"\n}\n\nFile 2:\n{\n    \"name\": \"nyc_boroughs.geojson\",\n    \"size\": \"3005.0KB\"\n}",
+        "file_list": [
+            "nyc_collisions_map/fatal_collisions.geojson",
+            "nyc_collisions_map/nyc_boroughs.geojson"
+        ],
+        "gold_program_name": "plot_collisions_map.py",
+        "output_fname": "pred_results/collisions_map_vis.png",
+        "eval_script_name": "eval_plot_collisions_map.py"
+    },
+    {
+        "task_id": 89,
+        "domain": "Geographical Information Science",
+        "subtask_categories": "Map Visualization",
+        "task_inst": "Use the GeoJSON data about San Francisco street trees and administrative regions, analyze the tree species NULL percentage in different regions, and visualize this analysis in a quadtree format map. Save the figure as 'pred_results/trees_count_vis.png'.",
+        "domain_knowledge": "geoplot.quadtree() plots a choropleth map with point aggregate by quadtree neighborhoods.\ngeodataframe.assign() function assigns new columns to a GeoDataFrame. A new column could be the data \"nullity\" percentage. geoplot.polyplot() plots a polygon data layer. The DataFrame.notnull() function in Pandas is used to detect non-missing values within a DataFrame. ",
+        "file_info": "File 1:\n{\n    \"name\": \"street_trees_sample.geojson\",\n    \"size\": \"4301.8KB\"\n}\n\nFile 2:\n{\n    \"name\": \"sfo_boroughs.geojson\",\n    \"size\": \"7.4KB\"\n}",
+        "file_list": [
+            "sfo_trees_count/street_trees_sample.geojson",
+            "sfo_trees_count/sfo_boroughs.geojson"
+        ],
+        "gold_program_name": "plot_trees_count.py",
+        "output_fname": "pred_results/trees_count_vis.png",
+        "eval_script_name": "eval_plot_trees_count.py"
+    },
+    {
+        "task_id": 90,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Perform Non-negative matrix factorization for the matrices X1 and X2 given in jnmf_data. X1 should be factorized into two matrices W_high and H_high, where the product of W_high and H_high's transpose should be close to X1. Similarly, X2 should be factorized into W_low and H_low. Store the resulting factorized matrices as pred_results/fit_result_conscientiousness_{W_high/W_low/H_high/H_low}.npy.",
+        "domain_knowledge": "Joint Nonnegative Matrix Factorization (JNMF) is a method for factor analysis that is capable of simultaneously decomposing two datasets into related latent state representations. Enabling factor analysis for contrasting applications, i.e., to find common and distinct structural patterns in data, JNMF has great potential for use in the field of cognitive science. Applied to experimental data, JNMF allows for the extraction of common and distinct patterns of behavior thereby extending the outcomes of traditional correlation-based contrasting methods.",
+        "file_info": "File 1:\n{\n    \"name\": \"X1_conscientiousness.npy\",\n    \"size\": \"207.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"X2_conscientiousness.npy\",\n    \"size\": \"270.1KB\"\n}",
+        "file_list": [
+            "jnmf_data/X1_conscientiousness.npy",
+            "jnmf_data/X2_conscientiousness.npy"
+        ],
+        "gold_program_name": "run_jnmf.py",
+        "output_fname": "pred_results/fit_result_conscientiousness_H_high.npy",
+        "eval_script_name": "eval_jnmf.py"
+    },
+    {
+        "task_id": 91,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "Use the given matrices W_high and W_low in the jnmf_visualization dataset to visualize the high/common/low consciousness patterns. The high consciousness patterns are those in the second column of W_high, the low consciousness patterns are those in the second column of W_low, and the common patterns are the average of the first columns of W_high and W_low. Reshape every pattern into a (64, 9) matrix and plot it as a heatmap. The three patterns should go from left to right in 3 subplots. Save the results to pred_results/patterns_conscientiousness.png.",
+        "domain_knowledge": "Joint Nonnegative Matrix Factorization (JNMF) is a method for factor analysis that is capable of simultaneously decomposing two datasets into related latent state representations. Enabling factor analysis for contrasting applications, i.e., to find common and distinct structural patterns in data, JNMF has great potential for use in the field of cognitive science. Applied to experimental data, JNMF allows for the extraction of common and distinct patterns of behavior thereby extending the outcomes of traditional correlation-based contrasting methods.",
+        "file_info": "File 1:\n{\n    \"name\": \"fit_result_conscientiousness_W_low.npy\",\n    \"size\": \"9.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"fit_result_conscientiousness_W_high.npy\",\n    \"size\": \"9.1KB\"\n}\n\nFile 3:\n{\n    \"name\": \"fit_result_conscientiousness_H_low.npy\",\n    \"size\": \"1.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"fit_result_conscientiousness_H_high.npy\",\n    \"size\": \"0.8KB\"\n}",
+        "file_list": [
+            "jnmf_visualization/fit_result_conscientiousness_W_low.npy",
+            "jnmf_visualization/fit_result_conscientiousness_W_high.npy",
+            "jnmf_visualization/fit_result_conscientiousness_H_low.npy",
+            "jnmf_visualization/fit_result_conscientiousness_H_high.npy"
+        ],
+        "gold_program_name": "jnmf_plot_patterns.py",
+        "output_fname": "pred_results/patterns_conscientiousness.png",
+        "eval_script_name": "eval_jnmf_plot_patterns.py"
+    },
+    {
+        "task_id": 92,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Computational Analysis",
+        "task_inst": "Compute a set of importance factors given the factor matrices W_high, W_low, H_high, H_low given in the jnmf_visualization dataset. The factors are the following:\n1. common error: one minus the inner product of the first column of W_high and W_low.\n2. common importance: the sum of entries in the first column of H_high and H_low, divided by the sum of all entries in H_high and H_low.\n3. high importance: sum of entries in second column of H_high divided by sum of all entries in H_high.\n4. low importance: sum of entries in second column of H_low divided by sum of all entries in H_low.\n5. distinct error: inner product of second rows of W_high and W_low\n6. distinct importance: the sum of entries in the second column of H_high and H_low, divided by the sum of all entries in H_high and H_low.\nStore the scores in a dictionary where each factor name maps to its score value. Save the dictionary as a json file to \"pred_results/jnmf_h_importances.json\".",
+        "domain_knowledge": "Joint Nonnegative Matrix Factorization (JNMF) is a method for factor analysis that is capable of simultaneously decomposing two datasets into related latent state representations. Enabling factor analysis for contrasting applications, i.e., to find common and distinct structural patterns in data, JNMF has great potential for use in the field of cognitive science. Applied to experimental data, JNMF allows for the extraction of common and distinct patterns of behavior thereby extending the outcomes of traditional correlation-based contrasting methods.",
+        "file_info": "File 1:\n{\n    \"name\": \"fit_result_conscientiousness_W_low.npy\",\n    \"size\": \"9.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"fit_result_conscientiousness_W_high.npy\",\n    \"size\": \"9.1KB\"\n}\n\nFile 3:\n{\n    \"name\": \"fit_result_conscientiousness_H_low.npy\",\n    \"size\": \"1.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"fit_result_conscientiousness_H_high.npy\",\n    \"size\": \"0.8KB\"\n}",
+        "file_list": [
+            "jnmf_visualization/fit_result_conscientiousness_W_low.npy",
+            "jnmf_visualization/fit_result_conscientiousness_W_high.npy",
+            "jnmf_visualization/fit_result_conscientiousness_H_low.npy",
+            "jnmf_visualization/fit_result_conscientiousness_H_high.npy"
+        ],
+        "gold_program_name": "h_importances.py",
+        "output_fname": "pred_results/jnmf_h_importances.json",
+        "eval_script_name": "eval_h_importances.py"
+    },
+    {
+        "task_id": 93,
+        "domain": "Psychology and Cognitive science",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "Using the given matrix data in fit_result_conscientiousness_H_low.npy and fit_result_conscientiousness_H_high.npy, plot the data distributions. Specifically, you should have three plots: the \"high\" split is given by the values in the second column of H_high; the \"low\" split is given by the second column of H_low, and the \"common\" split is given by the concatenation of values from the first column of H_high and H_low. All values should be rescaled s.t. the largest values among all is 1.0. You should have three subplots (from left to right) for \"high\", \"common\", \"low\" correspondingly. Save the result figure to pred_results/H_distribution_conscientiousness.png.",
+        "domain_knowledge": "Joint Nonnegative Matrix Factorization (JNMF) is a method for factor analysis that is capable of simultaneously decomposing two datasets into related latent state representations. Enabling factor analysis for contrasting applications, i.e., to find common and distinct structural patterns in data, JNMF has great potential for use in the field of cognitive science. Applied to experimental data, JNMF allows for the extraction of common and distinct patterns of behavior thereby extending the outcomes of traditional correlation-based contrasting methods.",
+        "file_info": "File 1:\n{\n    \"name\": \"fit_result_conscientiousness_W_low.npy\",\n    \"size\": \"9.1KB\"\n}\n\nFile 2:\n{\n    \"name\": \"fit_result_conscientiousness_W_high.npy\",\n    \"size\": \"9.1KB\"\n}\n\nFile 3:\n{\n    \"name\": \"fit_result_conscientiousness_H_low.npy\",\n    \"size\": \"1.1KB\"\n}\n\nFile 4:\n{\n    \"name\": \"fit_result_conscientiousness_H_high.npy\",\n    \"size\": \"0.8KB\"\n}",
+        "file_list": [
+            "jnmf_visualization/fit_result_conscientiousness_W_low.npy",
+            "jnmf_visualization/fit_result_conscientiousness_W_high.npy",
+            "jnmf_visualization/fit_result_conscientiousness_H_low.npy",
+            "jnmf_visualization/fit_result_conscientiousness_H_high.npy"
+        ],
+        "gold_program_name": "plot_h_distribution.py",
+        "output_fname": "pred_results/H_distribution_conscientiousness.png",
+        "eval_script_name": "eval_h_distribution.py"
+    },
+    {
+        "task_id": 94,
+        "domain": "Computational Chemistry",
+        "subtask_categories": "Molecule Visualization",
+        "task_inst": "Visuzalize the molecule in the file 'molecule_ZINC001754572633.pkl' with a graph, which is a rdkit.Chem.rdchem.Mol object, using the rdkit and networkx library. You should use orange for Carbon (C) atoms, magenta for Oxygen (O) atoms, and cyan for Nitrogen (N) atoms. Use the spring layout with random seed set to 10 when drawing the molecue. Set the node size to 800 and add labels to the nodes. Save the plot to 'pred_results/polyverse_visualize_molecules_pred.png'.",
+        "domain_knowledge": "RDKit should be used to fetch atom symbols and atom connectivities. Even though the input file is a pickle file and rdkit is not explicitly imported in this task, RDKit should be installed in the python environment.",
+        "file_info": "File 1:\n{\n    \"name\": \"molecule_ZINC001754572633.pkl\",\n    \"size\": \"0.4KB\"\n}",
+        "file_list": [
+            "polyverse_viz/molecule_ZINC001754572633.pkl"
+        ],
+        "gold_program_name": "polyverse_visualize_molecules.py",
+        "output_fname": "pred_results/polyverse_visualize_molecules_pred.png",
+        "eval_script_name": "eval_polyverse_visualize_molecules.py"
+    },
+    {
+        "task_id": 96,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Data Visualization",
+        "task_inst": "Analyze the preprocessed PBMC dataset with precomputed UMAP components for 700 cells and 765 highly variable genes. Compute clusters using the Leiden method and visualize the clustering results with UMAP. Save the figure to \"pred_results/scatter_pred.png\". ",
+        "domain_knowledge": "\"*On dataset*: The dataset is a AnnData object contains several layers of data for 700 cells and 765 highly variable gene, which has been already preprocessed, UMAP computed and Louvain clustered. Cell-level metadata (e.g., number of genes, cell cycle scores, louvain cluster labels), gene-level metadata for highly variable genes (e.g., counts per gene), PCA and UMAP embeddings can be extracted from `obs`, `var` and `obsm` layers of the object. Furthermore, the object also contains graph-based data, including `distances` and `connectivities` matrices for cells. This information will be used for graph-based clustering as in Leiden.\n*On Leiden algorithm*: With the `scanpy` library, the Leiden algorithm can be implemented using `sc.tl.leiden`. It is a community detection method used to find clusters in graph-structured data. It works by iteratively refining cell clusters to optimize modularity, producing well-separated groups. By default, it uses .obsp[\u2018connectivities\u2019] to extract the connectivity matrix and adds the new clustering labels as per the argument provided ot `key_added` parameter in `sc.tl.leiden`.\"",
+        "file_info": "File 1:\n{\n    \"name\": \"pbmc68k_reduced.h5ad\",\n    \"size\": \"4352.0KB\"\n}",
+        "file_list": [
+            "pbmc68k/pbmc68k_reduced.h5ad"
+        ],
+        "gold_program_name": "scatter.py",
+        "output_fname": "pred_results/scatter_pred.png",
+        "eval_script_name": "scanpy_scatter_eval.py"
+    },
+    {
+        "task_id": 98,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Computational Analysis, Data Visualization",
+        "task_inst": "Compute chain quality control information for this single-cell TCR/RNA-seq data collected from resected tumors, histologically normally adjacent tissues (NAT), and peripheral blood. Then, draw a stacked bar chart of the number of cells in each chain pairing, coloring each portion of the stack by the source (tumor, NAT, or blood).  The figure should be saved as pred_results/3k_pred.png.",
+        "domain_knowledge": "1. Chain pairing measures the presence alpha and beta TCR chain pairs in the T cells.  T cells can have 1 pair of alpha, 1 pair of beta, or 2 pairs, one of each.  In quality control analyses for TCRseq data, we check for the following issues:\n - orphan chains, where cells have only 1 chain, not a full pair,\n - extra chains, where cells have 1 full pair and 1 extra chain (of either type)\n - multichain, where cells have more than 2 pairs (this typically indicates a doublet)\nYour plot will help us analyze the quality of the data and prepare for future data cleaning steps.",
+        "file_info": "File 1:\n{\n    \"name\": \"3kdata.h5mu\",\n    \"size\": \"34927.1KB\"\n}",
+        "file_list": [
+            "cell_3k/3kdata.h5mu"
+        ],
+        "gold_program_name": "3k.py",
+        "output_fname": "pred_results/3k_pred.png",
+        "eval_script_name": "scirpy_3k_eval.py"
+    },
+    {
+        "task_id": 99,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Statistical Analysis, Data Visualization",
+        "task_inst": "You should draw three UMAP figures of the data colored by total_counts, n_genes_by_counts, and clusters, respectively. You should put the three figures in one picture, and save it to pred_results/spatial_pred.png.",
+        "domain_knowledge": "The H5ad format is based on the standard h5 format, a Hierarchical Data Formats used to store large amounts of data in the form of multidimensional arrays. H5ad data can be read using read_h5ad from the AnnData package. H5ad data can be visualized using the Scanpy package.\n\nUMAP visualizations can be created using Scanpy's pl.umap function. The color of the points in the scatterplot is determined by the color argument. If a list is passed to the color argument, multiple UMAP visualizations are created.",
+        "file_info": "File 1:\n{\n    \"name\": \"lymph_node.h5ad\",\n    \"size\": \"229534.7KB\"\n}",
+        "file_list": [
+            "lymph/lymph_node.h5ad"
+        ],
+        "gold_program_name": "spatial.py",
+        "output_fname": "pred_results/spatial_pred.png",
+        "eval_script_name": "scanpy_spatial_eval.py"
+    },
+    {
+        "task_id": 100,
+        "domain": "Bioinformatics",
+        "subtask_categories": "Statistical Analysis, Data Visualization",
+        "task_inst": "You should visualize the data in spatial coordinates in three figures colored by total_counts, n_genes_by_counts, and clusters, respectively. You should put the three figures in one picture, and save it to pred_results/spatial_2_pred.png.",
+        "domain_knowledge": "The H5ad format is based on the standard h5 format, a Hierarchical Data Formats used to store large amounts of data in the form of multidimensional arrays. H5ad data can be read using read_h5ad from the AnnData package.\n\nThe clusters feature can be obtained using Scanpy's tl.leiden function.\n\nH5ad data can be visualized in spatial coordinates using the pl.spatial function from the Scanpy package. The color of the points in the visualization is determined by the color argument. If the color argument is a list, multiple spatial coordinates plots will be created.",
+        "file_info": "File 1:\n{\n    \"name\": \"lymph_node.h5ad\",\n    \"size\": \"229534.7KB\"\n}",
+        "file_list": [
+            "lymph/lymph_node.h5ad"
+        ],
+        "gold_program_name": "spatial_2.py",
+        "output_fname": "pred_results/spatial_2_pred.png",
+        "eval_script_name": "scanpy_spatial_2_eval.py"
+    }
+]

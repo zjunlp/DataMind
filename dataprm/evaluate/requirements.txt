@@ -1,0 +1,17 @@
+numpy==2.2.6
+pandas==2.3.3
+scikit-learn==1.7.2
+seaborn==0.13.2
+transformers==5.5.0
+matplotlib==3.10.8
+
+requests==2.33.1
+websockets==16.0
+python-multipart==0.0.22
+uvicorn==0.43.0
+fastapi==0.135.3
+openai==2.30.0
+pypandoc==1.17
+
+# vllm
+vllm==0.13.0

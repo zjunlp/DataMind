@@ -29,6 +29,8 @@
 ---
 
 ## 🔔 News
+- **[2026-04]** We release a new paper: "[Rewarding the Scientific Process: Process-Level Reward Modeling for Agentic Data Analysis](https://arxiv.org/abs/2604.24198)".
+
 - **[2026-01]** Our paper "Scaling Generalist Data-Analytic Agents" has been accepted to ICLR 2026.
 
 - **[2025-11]** Our paper "Why Do Open-Source LLMs Struggle with Data Analysis? A Systematic Empirical Study" has been accepted to AAAI 2026.
@@ -346,6 +348,16 @@ We deeply appreciate the collaborative efforts of everyone involved. We will con
 If you find our work helpful, please use the following citations.
 
 ```
+@misc{qiu2026rewardingscientificprocessprocesslevel,
+      title={Rewarding the Scientific Process: Process-Level Reward Modeling for Agentic Data Analysis}, 
+      author={Zhisong Qiu and Shuofei Qiao and Kewei Xu and Yuqi Zhu and Lun Du and Ningyu Zhang and Huajun Chen},
+      year={2026},
+      eprint={2604.24198},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2604.24198}, 
+}
+
 @article{qiao2025scaling,
   title={Scaling Generalist Data-Analytic Agents},
   author={Qiao, Shuofei and Zhao, Yanqiu and Qiu, Zhisong and Wang, Xiaobin and Zhang, Jintian and Bin, Zhao and Zhang, Ningyu and Jiang, Yong and Xie, Pengjun and Huang, Fei and others},
