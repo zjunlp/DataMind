@@ -29,6 +29,8 @@
 ---
 
 ## 🔔 News
+- **[2026-05]** Our paper "Rewarding the Scientific Process: Process-Level Reward Modeling for Agentic Data Analysis" has been accepted to KDD 2026.
+- 
 - **[2026-04]** We release a new paper: "[Rewarding the Scientific Process: Process-Level Reward Modeling for Agentic Data Analysis](https://arxiv.org/abs/2604.24198)".
 
 - **[2026-01]** Our paper "Scaling Generalist Data-Analytic Agents" has been accepted to ICLR 2026.
