@@ -179,7 +179,7 @@ The main evaluation score is stored in `results_eval.json`, where each turn rece
 
 ## 🙏 Acknowledgements
 
-We thank the [DSGym](https://github.com/fannie1208/DSGym) team for their open-source evaluation framework. LongDS provides a DSGym-compatible evaluation pipeline and uses DSGym's Docker-based execution infrastructure. For more details about DSGym, please refer to their [paper](https://arxiv.org/abs/2601.16344).
+We thank the [DSGym](https://github.com/fannie1208/DSGym) team for their open-source evaluation framework. We adapted DSGym's evaluation pipeline to support long-horizon, multi-turn data analysis tasks and use DSGym's Docker-based execution infrastructure. For more details about DSGym, please refer to their [paper](https://arxiv.org/abs/2601.16344).
 
 ## 📖 Citation
 
