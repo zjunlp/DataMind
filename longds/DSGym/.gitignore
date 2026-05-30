@@ -7,6 +7,7 @@ CLAUDE.md
 *.egg-info/
 data/
 results/
+examples/results/
 kaggle.json
 pass_k_results/
 generation_results/
