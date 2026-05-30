@@ -127,7 +127,7 @@ class LiteLLMBackend(BaseBackend):
         # Configure LiteLLM settings
         litellm.drop_params = True  # Drop unsupported parameters
         litellm.set_verbose = False  # Disable verbose logging
-        print(f" url={self.base_url}, api_key={self.api_key}")
+        print(f" url={self.base_url}, api_key_set={bool(self.api_key)}")
     def generate(self, messages: List[Dict[str, str]], **kwargs) -> str:
         """
         Generate response using LiteLLM.

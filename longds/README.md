@@ -10,8 +10,10 @@
 
 - 👀 [Overview](#overview)
 - 🔧 [Installation](#installation)
+  - 📋 [Prerequisites](#-prerequisites)
+  - ⚙️ [Environment Setup](#️-environment-setup)
+  - 🐳 [Execution Environment](#-execution-environment)
 - 📦 [Data](#data)
-- 🐳 [Execution Environment](#execution-environment)
 - 💻 [Running LongDS](#running-longds)
 - 📁 [Outputs](#outputs)
 - 🙏 [Acknowledgements](#acknowledgements)
@@ -32,12 +34,12 @@ LongDS contains **68 tasks** constructed from real-world Kaggle notebooks and da
 - rollback to earlier states;
 - multi-state composition.
 
-
 Experiments can be run with [DSGym](https://arxiv.org/abs/2601.16344), which provides isolated Docker execution environments for code-based data analysis.
 
 ## 🔧 Installation
 
 Follow the [DSGym](https://github.com/fannie1208/DSGym) setup instructions to configure the evaluation environment.
+
 ### 📋 Prerequisites
 
 - Python 3.12
@@ -148,7 +150,7 @@ cd /path/to/DataMind/longds/DSGym/examples
 
 uv run python longds.py \
   --dataset longds \
-  --model openai/deepseek-v4-pro-guan \
+  --model openai/<your_model_name> \
   --backend litellm \
   --output-dir ./results
 ```
