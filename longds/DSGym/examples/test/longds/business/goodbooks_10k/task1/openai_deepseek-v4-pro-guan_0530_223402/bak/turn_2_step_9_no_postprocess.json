@@ -1,0 +1,20 @@
+{
+    "response": "",
+    "step_output": {
+        "observations": [
+            {
+                "role": "user",
+                "content": "<information>No python code found. You should either write python code within the <python>CODE</python> tag or write the answer in the <answer>ANSWER</answer> tag.</information>"
+            }
+        ],
+        "reward": 0.0,
+        "done": "",
+        "metadata": {
+            "turns": 9,
+            "execution_output": "",
+            "final_answer": "",
+            "code_executed": false
+        },
+        "postprocessed_action": "<reasoning>no postprocessed action</reasoning>"
+    }
+}

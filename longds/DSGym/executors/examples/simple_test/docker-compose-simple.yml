@@ -1,0 +1,103 @@
+version: '3.8'
+services:
+  manager:
+    build:
+      context: ../../manager
+      dockerfile: Dockerfile
+    command: python main.py
+    ports:
+      - '5000:5000'
+    environment:
+      - PORT=5000
+      - CONTAINER_CONFIG_PATH=container_config.json
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    volumes:
+      - ./container_config.json:/app/container_config.json:ro
+    restart: unless-stopped
+    labels:
+      - service.type=manager
+    depends_on:
+      - executor-001
+      - executor-002
+      - executor-003
+      - executor-004
+  executor-001:
+    build:
+      context: ../../container_images/instance
+      dockerfile: Dockerfile
+    command: python main.py
+    ports:
+      - '60000:8432'
+    environment:
+      - PORT=8432
+      - CONTAINER_ID=1
+      - HOST_PORT=60000
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    restart: unless-stopped
+    labels:
+      - container.id=1
+      - container.port=60000
+      - container.type=executor
+
+  executor-002:
+    build:
+      context: ../../container_images/instance
+      dockerfile: Dockerfile
+    command: python main.py
+    ports:
+      - '60001:8432'
+    environment:
+      - PORT=8432
+      - CONTAINER_ID=2
+      - HOST_PORT=60001
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    restart: unless-stopped
+    labels:
+      - container.id=2
+      - container.port=60001
+      - container.type=executor
+
+  executor-003:
+    build:
+      context: ../../container_images/instance
+      dockerfile: Dockerfile
+    command: python main.py
+    ports:
+      - '60002:8432'
+    environment:
+      - PORT=8432
+      - CONTAINER_ID=3
+      - HOST_PORT=60002
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    restart: unless-stopped
+    labels:
+      - container.id=3
+      - container.port=60002
+      - container.type=executor
+
+  executor-004:
+    build:
+      context: ../../container_images/instance
+      dockerfile: Dockerfile
+    command: python main.py
+    ports:
+      - '60003:8432'
+    environment:
+      - PORT=8432
+      - CONTAINER_ID=4
+      - HOST_PORT=60003
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    restart: unless-stopped
+    labels:
+      - container.id=4
+      - container.port=60003
+      - container.type=executor
+
+networks:
+  default:
+    driver: bridge 

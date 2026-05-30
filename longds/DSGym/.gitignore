@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+.venv/
+CLAUDE.md
+*.egg-info/
+data/
+results/
+kaggle.json
+pass_k_results/
+generation_results/
+filtered_results/
+evaluation_results/

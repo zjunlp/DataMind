@@ -1,0 +1,946 @@
+[
+  {
+    "turn_id": 1,
+    "context": "Throughout this analysis, compute derived quantities such as sums, gaps, ratios, means, or correlations using unrounded values, and report all decimal-valued final results rounded to 4 decimal places.\nBefore any cleaning, inspect the raw data to quantify the problems that downstream analyses must handle:\n- missing values in score columns,\n- inconsistent casing / spelling of categorical values.",
+    "question": "Load the raw data and, for the raw untouched data, report (a) the shape, (b) the count of missing values per column, and (c) the full set of unique values observed for each of the four categorical columns: gender, country, residence, and prevEducation. Return the categorical uniques sorted alphabetically so the output is deterministic.",
+    "code": "# T1: load raw data and record baseline inspection. No cleaning applied yet.\nraw = pd.read_csv(f'{BASE_PATH}/data/intro-to-data-cleaning-eda-and-machine-learning/bi.csv',\n                  encoding='latin1')\n\nmissing_per_column = {k: int(v) for k, v in raw.isnull().sum().items()}\nuniques_before_clean = {\n    col: sorted(raw[col].dropna().astype(str).unique().tolist())\n    for col in ['gender', 'country', 'residence', 'prevEducation']\n}\n\nresult = {\n    \"answer_type\": \"raw_inspection\",\n    \"shape\": list(raw.shape),\n    \"missing_per_column\": missing_per_column,\n    \"unique_values_before_clean\": uniques_before_clean,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "raw_inspection",
+      "shape": [
+        77,
+        11
+      ],
+      "missing_per_column": {
+        "fNAME": 0,
+        "lNAME": 0,
+        "Age": 0,
+        "gender": 0,
+        "country": 0,
+        "residence": 0,
+        "entryEXAM": 0,
+        "prevEducation": 0,
+        "studyHOURS": 0,
+        "Python": 2,
+        "DB": 0
+      },
+      "unique_values_before_clean": {
+        "gender": [
+          "F",
+          "Female",
+          "M",
+          "Male",
+          "female",
+          "male"
+        ],
+        "country": [
+          "Denmark",
+          "France",
+          "Germany",
+          "Italy",
+          "Kenya",
+          "Netherlands",
+          "Nigeria",
+          "Norge",
+          "Norway",
+          "Rsa",
+          "Somali",
+          "South Africa",
+          "Spain",
+          "UK",
+          "Uganda",
+          "norway"
+        ],
+        "residence": [
+          "BI Residence",
+          "BI-Residence",
+          "BIResidence",
+          "BI_Residence",
+          "Private",
+          "Sognsvann"
+        ],
+        "prevEducation": [
+          "Bachelors",
+          "Barrrchelors",
+          "DIPLOMA",
+          "Diploma",
+          "Diplomaaa",
+          "Doctorate",
+          "High School",
+          "HighSchool",
+          "Masters",
+          "diploma"
+        ]
+      }
+    }
+  },
+  {
+    "turn_id": 2,
+    "context": "Now build the canonical category mappings that the rest of the benchmark will rely on. These standardization rules are FIXED and any later task that references \"standardized categories\" uses the mappings you establish here. Rules:\n- gender: map to 'Female' and 'Male'.\n- country: Standardized country names.\n- residence: collapse BI-Residence,BIResidence,BI_Residence to BI Residence; \n- prevEducation: map to High School, Bachelor, Diploma, Masters, Doctorate",
+    "question": "After applying the standardization rules above, report the set of distinct values and their counts for each of the four standardized categorical columns (gender, country, residence, prevEducation). Also report the total number of distinct values per column.",
+    "code": "# T2: apply canonical category mappings. Produces `cleaned` (still un-imputed).\ncleaned = raw.copy()\n\n# gender: lowercase + strip, then map\ncleaned['gender'] = cleaned['gender'].str.strip().str.lower().replace(\n    {'f': 'Female', 'female': 'Female', 'm': 'Male', 'male': 'Male'})\n\n# country: title-case + strip, then collapse\ncleaned['country'] = cleaned['country'].str.strip().str.title().replace(\n    {'Norge': 'Norway', 'Rsa': 'RSA', 'South Africa': 'RSA', 'Uk': 'UK'})\n\n# residence: collapse BI Residence variants\ncleaned['residence'] = cleaned['residence'].replace(\n    {'BI-Residence': 'BI Residence',\n     'BIResidence': 'BI Residence',\n     'BI_Residence': 'BI Residence'})\n\n# prevEducation: collapse education variants\ncleaned['prevEducation'] = cleaned['prevEducation'].replace(\n    {'HighSchool': 'High School',\n     'Bachelors': 'Bachelor', 'Barrrchelors': 'Bachelor',\n     'diploma': 'Diploma', 'DIPLOMA': 'Diploma', 'Diplomaaa': 'Diploma'})\n\ncat_counts = {\n    col: {k: int(v) for k, v in cleaned[col].value_counts().sort_index().items()}\n    for col in ['gender', 'country', 'residence', 'prevEducation']\n}\nn_distinct = {col: int(cleaned[col].nunique()) for col in cat_counts}\n\nresult = {\n    \"answer_type\": \"standardized_counts\",\n    \"counts_per_column\": cat_counts,\n    \"n_distinct_per_column\": n_distinct,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "standardized_counts",
+      "counts_per_column": {
+        "gender": {
+          "Female": 43,
+          "Male": 34
+        },
+        "country": {
+          "Denmark": 2,
+          "France": 2,
+          "Germany": 3,
+          "Italy": 2,
+          "Kenya": 3,
+          "Netherlands": 2,
+          "Nigeria": 2,
+          "Norway": 49,
+          "RSA": 2,
+          "Somali": 2,
+          "Spain": 2,
+          "UK": 2,
+          "Uganda": 4
+        },
+        "residence": {
+          "BI Residence": 32,
+          "Private": 33,
+          "Sognsvann": 12
+        },
+        "prevEducation": {
+          "Bachelor": 25,
+          "Diploma": 12,
+          "Doctorate": 5,
+          "High School": 19,
+          "Masters": 16
+        }
+      },
+      "n_distinct_per_column": {
+        "gender": 2,
+        "country": 13,
+        "residence": 3,
+        "prevEducation": 5
+      }
+    }
+  },
+  {
+    "turn_id": 3,
+    "context": "The only remaining data-quality issue after standardization is the missing values in the Python score column. Impute them with the column mean computed on the standardized data.\nThe resulting data becomes the baseline cleaned sample for every the analysis.",
+    "question": "Fill the missing Python scores with the mean of the non-null Python scores. Report the mean value used for imputation, the number of rows that were imputed, and the final row count of the baseline cleaned sample.",
+    "code": "# T3: create `baseline_sample` by imputing Python missing values with column mean.\nbaseline_sample = cleaned.copy()\n\npython_mean_for_impute = float(baseline_sample['Python'].mean())\nrows_imputed = int(baseline_sample['Python'].isnull().sum())\nbaseline_sample['Python'] = baseline_sample['Python'].fillna(python_mean_for_impute)\n\nresult = {\n    \"answer_type\": \"imputation_report\",\n    \"mean_used_for_imputation\": python_mean_for_impute,\n    \"rows_imputed\": rows_imputed,\n    \"baseline_sample_size\": int(len(baseline_sample)),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "imputation_report",
+      "mean_used_for_imputation": 75.8533,
+      "rows_imputed": 2,
+      "baseline_sample_size": 77
+    }
+  },
+  {
+    "turn_id": 4,
+    "context": "",
+    "question": "For the numeric columns Age, studyHOURS, Python, and DB within the baseline cleaned sample, compute mean, median, population standard deviation, min, max, q25, and q75. Report all four columns' stats side by side.",
+    "code": "# T4: distribution summary on baseline_sample (from T3).\nNUM_COLS = ['Age', 'studyHOURS', 'Python', 'DB']\n\ndef _summary(s):\n    return {\n        \"mean\":   float(s.mean()),\n        \"median\": float(s.median()),\n        \"std\":    float(s.std(ddof=0)),\n        \"min\":    float(s.min()),\n        \"max\":    float(s.max()),\n        \"q25\":    float(s.quantile(0.25)),\n        \"q75\":    float(s.quantile(0.75)),\n    }\n\nstats_per_column = {c: _summary(baseline_sample[c]) for c in NUM_COLS}\n\nresult = {\n    \"answer_type\": \"distribution_summary\",\n    \"columns\": NUM_COLS,\n    \"stats_per_column\": stats_per_column,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "distribution_summary",
+      "columns": [
+        "Age",
+        "studyHOURS",
+        "Python",
+        "DB"
+      ],
+      "stats_per_column": {
+        "Age": {
+          "mean": 35.2078,
+          "median": 33.0,
+          "std": 10.2746,
+          "min": 21.0,
+          "max": 71.0,
+          "q25": 27.0,
+          "q75": 42.0
+        },
+        "studyHOURS": {
+          "mean": 149.7143,
+          "median": 156.0,
+          "std": 12.6603,
+          "min": 114.0,
+          "max": 160.0,
+          "q25": 144.0,
+          "q75": 158.0
+        },
+        "Python": {
+          "mean": 75.8533,
+          "median": 81.0,
+          "std": 15.1071,
+          "min": 15.0,
+          "max": 91.0,
+          "q25": 72.0,
+          "q75": 85.0
+        },
+        "DB": {
+          "mean": 69.4675,
+          "median": 71.0,
+          "std": 16.9227,
+          "min": 30.0,
+          "max": 100.0,
+          "q25": 56.0,
+          "q75": 83.0
+        }
+      }
+    }
+  },
+  {
+    "turn_id": 5,
+    "context": "",
+    "question": "Compute the Pearson correlation matrix over Age, studyHOURS, Python, and DB. Report the full 4x4 matrix and identify both the strongest and weakest off-diagonal pairs by absolute correlation.",
+    "code": "# T5: correlation matrix on baseline_sample.\ncorr_matrix = baseline_sample[NUM_COLS].corr()\n\npairs = pd.DataFrame([\n    {\"a\": a, \"b\": b, \"r\": float(corr_matrix.loc[a, b])}\n    for i, a in enumerate(NUM_COLS)\n    for b in NUM_COLS[i + 1:]\n])\npairs['abs_r'] = pairs['r'].abs()\npairs = pairs.sort_values('abs_r', ascending=False).reset_index(drop=True)\n\nresult = {\n    \"answer_type\": \"correlation_matrix\",\n    \"matrix\": {c: {c2: float(corr_matrix.loc[c, c2]) for c2 in NUM_COLS}\n               for c in NUM_COLS},\n    \"strongest_pair\": {\n        \"a\": pairs.iloc[0]['a'], \"b\": pairs.iloc[0]['b'],\n        \"r\": float(pairs.iloc[0]['r']),\n    },\n    \"weakest_pair\": {\n        \"a\": pairs.iloc[-1]['a'], \"b\": pairs.iloc[-1]['b'],\n        \"r\": float(pairs.iloc[-1]['r']),\n    },\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "correlation_matrix",
+      "matrix": {
+        "Age": {
+          "Age": 1.0,
+          "studyHOURS": 0.2147,
+          "Python": -0.0143,
+          "DB": 0.0995
+        },
+        "studyHOURS": {
+          "Age": 0.2147,
+          "studyHOURS": 1.0,
+          "Python": 0.7837,
+          "DB": 0.466
+        },
+        "Python": {
+          "Age": -0.0143,
+          "studyHOURS": 0.7837,
+          "Python": 1.0,
+          "DB": 0.4427
+        },
+        "DB": {
+          "Age": 0.0995,
+          "studyHOURS": 0.466,
+          "Python": 0.4427,
+          "DB": 1.0
+        }
+      },
+      "strongest_pair": {
+        "a": "studyHOURS",
+        "b": "Python",
+        "r": 0.7837
+      },
+      "weakest_pair": {
+        "a": "Age",
+        "b": "Python",
+        "r": -0.0143
+      }
+    }
+  },
+  {
+    "turn_id": 6,
+    "context": "",
+    "question": "Calculate the Pearson correlation coefficient between study hours and Python scores within the current sample. Report the value.",
+    "code": "# T6: single-point anchor — correlation of studyHOURS and Python.\ncorr_studyhours_python = float(\n    baseline_sample['studyHOURS'].corr(baseline_sample['Python']))\n\nresult = {\n    \"answer_type\": \"correlation\",\n    \"pair\": [\"studyHOURS\", \"Python\"],\n    \"value\": corr_studyhours_python,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "correlation",
+      "pair": [
+        "studyHOURS",
+        "Python"
+      ],
+      "value": 0.7837
+    }
+  },
+  {
+    "turn_id": 7,
+    "context": "",
+    "question": "Compute the mean Python score within each previous-education level. Return the per-level means sorted in descending order, and identify the education level with the highest mean Python score.",
+    "code": "# T7: mean Python by prevEducation; remember the leading level as `edu_leader`.\nmean_python_by_edu = (baseline_sample.groupby('prevEducation')['Python']\n                      .mean().sort_values(ascending=False))\nedu_leader = str(mean_python_by_edu.idxmax())\nedu_leader_value = float(mean_python_by_edu.max())\n\nresult = {\n    \"answer_type\": \"ranking\",\n    \"primary_metric\": \"mean_python\",\n    \"records\": [{\"name\": k, \"value\": float(v)}\n                for k, v in mean_python_by_edu.items()],\n    \"leader\": edu_leader,\n    \"leader_value\": edu_leader_value,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "ranking",
+      "primary_metric": "mean_python",
+      "records": [
+        {
+          "name": "Masters",
+          "value": 81.1875
+        },
+        {
+          "name": "Bachelor",
+          "value": 80.0
+        },
+        {
+          "name": "Doctorate",
+          "value": 75.6
+        },
+        {
+          "name": "Diploma",
+          "value": 70.0833
+        },
+        {
+          "name": "High School",
+          "value": 69.6161
+        }
+      ],
+      "leader": "Masters",
+      "leader_value": 81.1875
+    }
+  },
+  {
+    "turn_id": 8,
+    "context": "",
+    "question": "Compare the two genders on Python scores by both mean and median. Return both statistics per gender, the absolute gap in means, and the gender with the higher median.",
+    "code": "# T8: gender-level means and medians; store `gender_leader_median`.\n_gender_group = baseline_sample.groupby('gender')['Python']\ngender_mean   = _gender_group.mean()\ngender_median = _gender_group.median()\n\ngender_leader_median = str(gender_median.idxmax())\n\nmean_gap = abs(float(gender_mean.iloc[0]) - float(gender_mean.iloc[1]))\n\nresult = {\n    \"answer_type\": \"gender_comparison\",\n    \"mean\":   {k: float(v) for k, v in gender_mean.items()},\n    \"median\": {k: float(v) for k, v in gender_median.items()},\n    \"mean_gap_absolute\": mean_gap,\n    \"median_leader\": gender_leader_median,\n    \"median_leader_value\": float(gender_median.max()),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "gender_comparison",
+      "mean": {
+        "Female": 75.9966,
+        "Male": 75.6722
+      },
+      "median": {
+        "Female": 80.0,
+        "Male": 81.0
+      },
+      "mean_gap_absolute": 0.3244,
+      "median_leader": "Male",
+      "median_leader_value": 81.0
+    }
+  },
+  {
+    "turn_id": 9,
+    "context": "",
+    "question": "For each residence category, compute the descriptive statistics of the entry exam score (count, mean, sample standard deviation, min, 25th percentile, median, 75th percentile, and max). Return the full table and identify the residence category with the highest median entry exam score.",
+    "code": "# T9: entryEXAM descriptive per residence on baseline_sample.\nentry_exam_desc = baseline_sample.groupby('residence')['entryEXAM'].describe()\nentry_exam_medians = baseline_sample.groupby('residence')['entryEXAM'].median()\nresidence_median_leader = str(entry_exam_medians.idxmax())\n\nrecords = []\nfor res, row in entry_exam_desc.iterrows():\n    record = {\"residence\": res}\n    for k, v in row.items():\n        record[k] = int(v) if k == \"count\" else float(v)\n    records.append(record)\n\nresult = {\n    \"answer_type\": \"group_descriptive\",\n    \"metric\": \"entryEXAM\",\n    \"records\": records,\n    \"median_leader\": residence_median_leader,\n    \"median_leader_value\": float(entry_exam_medians.max()),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "group_descriptive",
+      "metric": "entryEXAM",
+      "records": [
+        {
+          "residence": "BI Residence",
+          "count": 32,
+          "mean": 75.9688,
+          "std": 14.3695,
+          "min": 45.0,
+          "25%": 68.0,
+          "50%": 78.0,
+          "75%": 88.25,
+          "max": 98.0
+        },
+        {
+          "residence": "Private",
+          "count": 33,
+          "mean": 78.303,
+          "std": 16.7098,
+          "min": 28.0,
+          "25%": 76.0,
+          "50%": 80.0,
+          "75%": 90.0,
+          "max": 96.0
+        },
+        {
+          "residence": "Sognsvann",
+          "count": 12,
+          "mean": 74.5833,
+          "std": 21.6142,
+          "min": 35.0,
+          "25%": 62.5,
+          "50%": 84.0,
+          "75%": 90.0,
+          "max": 98.0
+        }
+      ],
+      "median_leader": "Sognsvann",
+      "median_leader_value": 84.0
+    }
+  },
+  {
+    "turn_id": 10,
+    "context": "",
+    "question": "Restrict attention to learners whose previous-education level is the one with the highest mean Python score identified earlier, AND whose gender is the one with the higher median Python score identified earlier. For this doubly-filtered subset, report the count of learners and their mean Python score.",
+    "code": "# T10: [multi-hop DD] depends on:\n#   - baseline_sample (T3)\n#   - edu_leader                (T7 — highest mean Python education)\n#   - gender_leader_median      (T8 — gender with higher median Python)\nsubset_t10 = baseline_sample[\n    (baseline_sample['prevEducation'] == edu_leader) &\n    (baseline_sample['gender']        == gender_leader_median)\n]\nsubset_t10_count       = int(len(subset_t10))\nsubset_t10_mean_python = (float(subset_t10['Python'].mean())\n                          if subset_t10_count > 0 else None)\n\nresult = {\n    \"answer_type\": \"conditional_subset\",\n    \"condition\": {\"prevEducation\": edu_leader, \"gender\": gender_leader_median},\n    \"count\": subset_t10_count,\n    \"mean_python\": subset_t10_mean_python,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "conditional_subset",
+      "condition": {
+        "prevEducation": "Masters",
+        "gender": "Male"
+      },
+      "count": 5,
+      "mean_python": 78.6
+    }
+  },
+  {
+    "turn_id": 11,
+    "context": "Introduce the first age-binning scheme. Treat this scheme as the active age grouping from this task onward, unless a subsequent task explicitly redefines it.\nIntroduce a five-tier, right-inclusive age-grouping scheme—18–24, 25–34, 35–44, 45–54, and 55+—that becomes the active grouping from this task onward unless explicitly redefined later.",
+    "question": "Create the age-group column per the binning scheme above, then compute mean Python score within each age group. Return the per-group means and identify the age group with the highest mean Python score.",
+    "code": "# T11: define age_group_v1 on baseline_sample. This scheme stays active\n# until T23 explicitly replaces it.\nAGE_BINS_V1   = [17, 24, 34, 44, 54, 100]\nAGE_LABELS_V1 = ['18-24', '25-34', '35-44', '45-54', '55+']\nbaseline_sample['age_group_v1'] = pd.cut(\n    baseline_sample['Age'], bins=AGE_BINS_V1, labels=AGE_LABELS_V1)\n\nmean_python_by_age_v1 = baseline_sample.groupby('age_group_v1', observed=True)['Python'].mean()\nage_v1_python_leader = str(mean_python_by_age_v1.idxmax())\n\nresult = {\n    \"answer_type\": \"group_stat\",\n    \"grouping\": \"age_group_v1\",\n    \"metric\": \"mean_python\",\n    \"records\": [{\"name\": str(k), \"value\": float(v)}\n                for k, v in mean_python_by_age_v1.items()],\n    \"leader\": age_v1_python_leader,\n    \"leader_value\": float(mean_python_by_age_v1.max()),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "group_stat",
+      "grouping": "age_group_v1",
+      "metric": "mean_python",
+      "records": [
+        {
+          "name": "18-24",
+          "value": 66.6707
+        },
+        {
+          "name": "25-34",
+          "value": 79.5
+        },
+        {
+          "name": "35-44",
+          "value": 74.375
+        },
+        {
+          "name": "45-54",
+          "value": 82.6
+        },
+        {
+          "name": "55+",
+          "value": 59.3333
+        }
+      ],
+      "leader": "45-54",
+      "leader_value": 82.6
+    }
+  },
+  {
+    "turn_id": 12,
+    "context": "Introduce a composite performance score defined as the simple average of each learner's Python score and DB score. Treat this equal-weight composite as the currently active composite score from this task onward.",
+    "question": "Using the simple average of the two course scores as the composite, rank learners by this composite within the baseline cleaned sample and return the top 5 with first name, last name, Python score, DB score, and the composite score. If learners tie on the composite score, break ties by their original row order in the baseline cleaned sample.",
+    "code": "# T12: introduce final_score_v1 (active composite for the next several tasks).\nbaseline_sample['final_score_v1'] = (baseline_sample['Python']\n                                     + baseline_sample['DB']) / 2\n\ntop5_v1 = (baseline_sample\n           .sort_values('final_score_v1', ascending=False, kind='mergesort')\n           .head(5).copy())\n\ntop5_v1_records_df = top5_v1[['fNAME', 'lNAME', 'Python', 'DB', 'final_score_v1']].copy()\ntop5_v1_records_df[['Python', 'DB', 'final_score_v1']] = top5_v1_records_df[\n    ['Python', 'DB', 'final_score_v1']].astype(float)\ntop5_v1_records = top5_v1_records_df.to_dict(orient='records')\n\nresult = {\n    \"answer_type\": \"ranking\",\n    \"formula\": \"final_score_v1 = (Python + DB) / 2\",\n    \"top5\": top5_v1_records,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "ranking",
+      "formula": "final_score_v1 = (Python + DB) / 2",
+      "top5": [
+        {
+          "fNAME": "Sindre",
+          "lNAME": "Hansen",
+          "Python": 87.0,
+          "DB": 99.0,
+          "final_score_v1": 93.0
+        },
+        {
+          "fNAME": "Odd",
+          "lNAME": "Knudsen",
+          "Python": 85.0,
+          "DB": 99.0,
+          "final_score_v1": 92.0
+        },
+        {
+          "fNAME": "Jens",
+          "lNAME": "Lunde",
+          "Python": 81.0,
+          "DB": 100.0,
+          "final_score_v1": 90.5
+        },
+        {
+          "fNAME": "Line",
+          "lNAME": "Næss",
+          "Python": 90.0,
+          "DB": 90.0,
+          "final_score_v1": 90.0
+        },
+        {
+          "fNAME": "Grethe",
+          "lNAME": "Brekke",
+          "Python": 87.0,
+          "DB": 92.0,
+          "final_score_v1": 89.5
+        }
+      ]
+    }
+  },
+  {
+    "turn_id": 13,
+    "context": "",
+    "question": "Compute the Pearson correlation of the currently active composite score with each of four factors: study hours, the entry exam score, age, and the natural logarithm of one plus each learner's age. Report all four correlations, plus the factor with the largest absolute correlation.",
+    "code": "# T13: correlations of final_score_v1 (still active) with four factors.\n# log_age is computed here and kept on baseline_sample so later tasks may reuse it.\nbaseline_sample['log_age'] = np.log(baseline_sample['Age'] + 1)\n\ncorrs_v1 = {\n    'studyHOURS': float(baseline_sample['final_score_v1'].corr(baseline_sample['studyHOURS'])),\n    'entryEXAM':  float(baseline_sample['final_score_v1'].corr(baseline_sample['entryEXAM'])),\n    'Age':        float(baseline_sample['final_score_v1'].corr(baseline_sample['Age'])),\n    'log_age':    float(baseline_sample['final_score_v1'].corr(baseline_sample['log_age'])),\n}\nstrongest_factor_v1 = max(corrs_v1, key=lambda k: abs(corrs_v1[k]))\n\nresult = {\n    \"answer_type\": \"correlations\",\n    \"target\": \"final_score_v1\",\n    \"values\": corrs_v1,\n    \"strongest_factor\": strongest_factor_v1,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "correlations",
+      "target": "final_score_v1",
+      "values": {
+        "studyHOURS": 0.7247,
+        "entryEXAM": 0.7997,
+        "Age": 0.0539,
+        "log_age": 0.106
+      },
+      "strongest_factor": "entryEXAM"
+    }
+  },
+  {
+    "turn_id": 14,
+    "context": "",
+    "question": "For the current age grouping, compute the mean of the active composite score within each age bin. Report the per-bin means and the leading age bin.",
+    "code": "# T14: [multi-hop DD] depends on:\n#   - age_group_v1   (T11 — active age binning)\n#   - final_score_v1 (T12 — active composite)\nmean_fs_v1_by_age_v1 = (baseline_sample\n                        .groupby('age_group_v1', observed=True)['final_score_v1']\n                        .mean())\nage_v1_fs_leader = str(mean_fs_v1_by_age_v1.idxmax())\n\nresult = {\n    \"answer_type\": \"group_stat\",\n    \"grouping\": \"age_group_v1\",\n    \"metric\": \"mean_final_score_v1\",\n    \"records\": [{\"name\": str(k), \"value\": float(v)}\n                for k, v in mean_fs_v1_by_age_v1.items()],\n    \"leader\": age_v1_fs_leader,\n    \"leader_value\": float(mean_fs_v1_by_age_v1.max()),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "group_stat",
+      "grouping": "age_group_v1",
+      "metric": "mean_final_score_v1",
+      "records": [
+        {
+          "name": "18-24",
+          "value": 61.9853
+        },
+        {
+          "name": "25-34",
+          "value": 75.9833
+        },
+        {
+          "name": "35-44",
+          "value": 72.6042
+        },
+        {
+          "name": "45-54",
+          "value": 76.15
+        },
+        {
+          "name": "55+",
+          "value": 63.8333
+        }
+      ],
+      "leader": "45-54",
+      "leader_value": 76.15
+    }
+  },
+  {
+    "turn_id": 15,
+    "context": "",
+    "question": "Compute the mean active composite score by previous-education level. Return the ranking and identify the education level with the highest mean composite score.",
+    "code": "# T15: group active composite by prevEducation (still the v1 formula here).\nmean_fs_v1_by_edu = (baseline_sample.groupby('prevEducation')['final_score_v1']\n                     .mean().sort_values(ascending=False))\nedu_fs_v1_leader = str(mean_fs_v1_by_edu.idxmax())\n\nresult = {\n    \"answer_type\": \"ranking\",\n    \"primary_metric\": \"mean_final_score_v1\",\n    \"records\": [{\"name\": k, \"value\": float(v)}\n                for k, v in mean_fs_v1_by_edu.items()],\n    \"leader\": edu_fs_v1_leader,\n    \"leader_value\": float(mean_fs_v1_by_edu.max()),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "ranking",
+      "primary_metric": "mean_final_score_v1",
+      "records": [
+        {
+          "name": "Masters",
+          "value": 79.125
+        },
+        {
+          "name": "Bachelor",
+          "value": 75.44
+        },
+        {
+          "name": "Doctorate",
+          "value": 72.7
+        },
+        {
+          "name": "Diploma",
+          "value": 69.5417
+        },
+        {
+          "name": "High School",
+          "value": 65.5186
+        }
+      ],
+      "leader": "Masters",
+      "leader_value": 79.125
+    }
+  },
+  {
+    "turn_id": 16,
+    "context": "Introduce an engineered feature defined as the product of a learner's age and their study hours. This feature remains available for later questions that reference it without restating the formula.",
+    "question": "Add the age-study interaction feature as a new column on the baseline cleaned sample, then report its Pearson correlation with the currently active composite score.",
+    "code": "# T16: define age_study_interaction (persistent feature).\nbaseline_sample['age_study_interaction'] = (baseline_sample['Age']\n                                            * baseline_sample['studyHOURS'])\n\ncorr_interaction_fs_v1 = float(\n    baseline_sample['age_study_interaction'].corr(baseline_sample['final_score_v1']))\n\nresult = {\n    \"answer_type\": \"correlation\",\n    \"pair\": [\"age_study_interaction\", \"final_score_v1\"],\n    \"value\": corr_interaction_fs_v1,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "correlation",
+      "pair": [
+        "age_study_interaction",
+        "final_score_v1"
+      ],
+      "value": 0.2448
+    }
+  },
+  {
+    "turn_id": 17,
+    "context": "",
+    "question": "For the learners who form the top-5 ranking by the active composite score, report the mean of the age-study interaction feature. Compare it with the overall mean of the same feature across the full baseline sample, and report the absolute difference.",
+    "code": "# T17: [multi-hop DD] depends on:\n#   - top5_v1                   (T12 — top 5 by final_score_v1)\n#   - age_study_interaction     (T16)\n# Reuses the stored DataFrame `top5_v1`; its index maps back to baseline_sample rows.\navg_interaction_top5 = float(\n    baseline_sample.loc[top5_v1.index, 'age_study_interaction'].mean())\navg_interaction_full = float(\n    baseline_sample['age_study_interaction'].mean())\n\ndifference_interaction = abs(avg_interaction_top5 - avg_interaction_full)\n\nresult = {\n    \"answer_type\": \"comparison\",\n    \"metric\": \"age_study_interaction\",\n    \"top5_mean\": avg_interaction_top5,\n    \"full_sample_mean\": avg_interaction_full,\n    \"difference_absolute\": difference_interaction,\n    \"top5_higher\": bool(avg_interaction_top5 > avg_interaction_full),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "comparison",
+      "metric": "age_study_interaction",
+      "top5_mean": 5104.0,
+      "full_sample_mean": 5299.039,
+      "difference_absolute": 195.039,
+      "top5_higher": false
+    }
+  },
+  {
+    "turn_id": 18,
+    "context": "From this task onward, the composite score changes to a weighted combination of the Python and DB scores, with the Python score weighted 0.6 and the DB score weighted 0.4. The earlier equal-weight version stays available, but every subsequent question that mentions \"the currently active composite score\" should use this new weighted form.",
+    "question": "Apply the new weighting to every learner in the baseline cleaned sample and recompute the top-5 ranking under the new active composite. Return first name, last name, Python score, DB score, and the new composite score for the new top 5.",
+    "code": "# T18: UPDATE — switch active composite to weighted form.\n# `final_score_v1` is preserved on baseline_sample for future explicit backtracks.\nbaseline_sample['final_score_v2'] = (0.6 * baseline_sample['Python']\n                                     + 0.4 * baseline_sample['DB'])\n\ntop5_v2 = (baseline_sample\n           .sort_values('final_score_v2', ascending=False, kind='mergesort')\n           .head(5).copy())\n\ntop5_v2_records_df = top5_v2[['fNAME', 'lNAME', 'Python', 'DB', 'final_score_v2']].copy()\ntop5_v2_records_df[['Python', 'DB', 'final_score_v2']] = top5_v2_records_df[\n    ['Python', 'DB', 'final_score_v2']].astype(float)\ntop5_v2_records = top5_v2_records_df.to_dict(orient='records')\n\nresult = {\n    \"answer_type\": \"ranking\",\n    \"formula\": \"final_score_v2 = 0.6 * Python + 0.4 * DB\",\n    \"top5\": top5_v2_records,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "ranking",
+      "formula": "final_score_v2 = 0.6 * Python + 0.4 * DB",
+      "top5": [
+        {
+          "fNAME": "Sindre",
+          "lNAME": "Hansen",
+          "Python": 87.0,
+          "DB": 99.0,
+          "final_score_v2": 91.8
+        },
+        {
+          "fNAME": "Odd",
+          "lNAME": "Knudsen",
+          "Python": 85.0,
+          "DB": 99.0,
+          "final_score_v2": 90.6
+        },
+        {
+          "fNAME": "Line",
+          "lNAME": "Næss",
+          "Python": 90.0,
+          "DB": 90.0,
+          "final_score_v2": 90.0
+        },
+        {
+          "fNAME": "Dag",
+          "lNAME": "Arnesen",
+          "Python": 90.0,
+          "DB": 89.0,
+          "final_score_v2": 89.6
+        },
+        {
+          "fNAME": "Grethe",
+          "lNAME": "Brekke",
+          "Python": 87.0,
+          "DB": 92.0,
+          "final_score_v2": 89.0
+        }
+      ]
+    }
+  },
+  {
+    "turn_id": 19,
+    "context": "",
+    "question": "Using the currently active composite score, recompute its Pearson correlations with study hours, the entry exam score, age, and the natural logarithm of one plus each learner's age. Return all four correlations and identify which factor's correlation with the composite score shifted the most in absolute terms compared with the earlier correlation analysis done under the equal-weight formulation.",
+    "code": "# T19: [multi-hop] depends on:\n#   - corrs_v1         (T13 — correlations under v1)\n#   - final_score_v2   (T18 — new active composite)\ncorrs_v2 = {\n    'studyHOURS': float(baseline_sample['final_score_v2'].corr(baseline_sample['studyHOURS'])),\n    'entryEXAM':  float(baseline_sample['final_score_v2'].corr(baseline_sample['entryEXAM'])),\n    'Age':        float(baseline_sample['final_score_v2'].corr(baseline_sample['Age'])),\n    'log_age':    float(baseline_sample['final_score_v2'].corr(baseline_sample['log_age'])),\n}\nshifts = {k: abs(corrs_v2[k] - corrs_v1[k]) for k in corrs_v2}\nlargest_shift_factor = max(shifts, key=lambda k: shifts[k])\n\nresult = {\n    \"answer_type\": \"correlations_with_comparison\",\n    \"target_now\": \"final_score_v2\",\n    \"values_now\": corrs_v2,\n    \"absolute_shift_vs_v1\": shifts,\n    \"largest_shift_factor\": largest_shift_factor,\n    \"largest_shift_value\":  shifts[largest_shift_factor],\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "correlations_with_comparison",
+      "target_now": "final_score_v2",
+      "values_now": {
+        "studyHOURS": 0.7597,
+        "entryEXAM": 0.8148,
+        "Age": 0.0403,
+        "log_age": 0.0932
+      },
+      "absolute_shift_vs_v1": {
+        "studyHOURS": 0.0351,
+        "entryEXAM": 0.0151,
+        "Age": 0.0136,
+        "log_age": 0.0127
+      },
+      "largest_shift_factor": "studyHOURS",
+      "largest_shift_value": 0.0351
+    }
+  },
+  {
+    "turn_id": 20,
+    "context": "",
+    "question": "Compare the earlier top-5 ranking with the current top-5 ranking. Report the number of learners appearing in both lists, the set of learners who entered the new top 5, and the set of learners who dropped out.",
+    "code": "# T20: [PERTURBATION compare] depends on:\n#   - top5_v1  (T12 — top 5 under final_score_v1)\n#   - top5_v2  (T18 — top 5 under final_score_v2)\nnames_v1 = {(r['fNAME'], r['lNAME']) for r in top5_v1[['fNAME','lNAME']].to_dict(orient='records')}\nnames_v2 = {(r['fNAME'], r['lNAME']) for r in top5_v2[['fNAME','lNAME']].to_dict(orient='records')}\n\noverlap = names_v1 & names_v2\nentered = names_v2 - names_v1\nexited  = names_v1 - names_v2\n\ndef _fmt(pairs):\n    return [f\"{fn} {ln}\" for fn, ln in sorted(pairs)]\n\nresult = {\n    \"answer_type\": \"top5_comparison\",\n    \"overlap_count\": len(overlap),\n    \"overlap_members\": _fmt(overlap),\n    \"entered_new_top5\": _fmt(entered),\n    \"exited_from_top5\": _fmt(exited),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "top5_comparison",
+      "overlap_count": 4,
+      "overlap_members": [
+        "Grethe Brekke",
+        "Line Næss",
+        "Odd Knudsen",
+        "Sindre Hansen"
+      ],
+      "entered_new_top5": [
+        "Dag Arnesen"
+      ],
+      "exited_from_top5": [
+        "Jens Lunde"
+      ]
+    }
+  },
+  {
+    "turn_id": 21,
+    "context": "",
+    "question": "Using the active weighted composite and the currently active age-binning scheme, compute the mean composite score within each age band. Return the per-band means and identify whether the leading age band is the same as the one that led when the equal-weight composite was used.",
+    "code": "# T21: [multi-hop] depends on:\n#   - age_group_v1           (T11 — still the active binning)\n#   - final_score_v2         (T18 — active composite)\n#   - age_v1_fs_leader       (T14 — previous leading band under v1)\nmean_fs_v2_by_age_v1 = (baseline_sample\n                        .groupby('age_group_v1', observed=True)['final_score_v2']\n                        .mean())\ncurrent_leader = str(mean_fs_v2_by_age_v1.idxmax())\n\nresult = {\n    \"answer_type\": \"group_stat_with_comparison\",\n    \"grouping\": \"age_group_v1\",\n    \"metric\": \"mean_final_score_v2\",\n    \"records\": [{\"name\": str(k), \"value\": float(v)}\n                for k, v in mean_fs_v2_by_age_v1.items()],\n    \"current_leader\": current_leader,\n    \"previous_leader_under_v1\": age_v1_fs_leader,\n    \"leader_unchanged\": bool(current_leader == age_v1_fs_leader),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "group_stat_with_comparison",
+      "grouping": "age_group_v1",
+      "metric": "mean_final_score_v2",
+      "records": [
+        {
+          "name": "18-24",
+          "value": 62.9224
+        },
+        {
+          "name": "25-34",
+          "value": 76.6867
+        },
+        {
+          "name": "35-44",
+          "value": 72.9583
+        },
+        {
+          "name": "45-54",
+          "value": 77.44
+        },
+        {
+          "name": "55+",
+          "value": 62.9333
+        }
+      ],
+      "current_leader": "45-54",
+      "previous_leader_under_v1": "45-54",
+      "leader_unchanged": true
+    }
+  },
+  {
+    "turn_id": 22,
+    "context": "",
+    "question": "Probe the robustness of the top-1 learner against the choice of composite weights. Besides the active weighted formula, evaluate two alternative schemes: 70% Python with 30% DB, and 50% Python with 50% DB. For each of the three schemes report the top-1 learner's full name and their composite score, plus a boolean indicating whether the same learner tops the ranking under every scheme.",
+    "code": "# T22: [PERTURBATION robustness] depends on:\n#   - top5_v2  (T18) — first row = top-1 under 0.6/0.4\nSCHEMES = {\n    \"0.6*Python + 0.4*DB (active)\": (0.6, 0.4),\n    \"0.7*Python + 0.3*DB\":          (0.7, 0.3),\n    \"0.5*Python + 0.5*DB\":          (0.5, 0.5),\n}\n\ntop1_per_scheme = {}\nfor label, (w_py, w_db) in SCHEMES.items():\n    series = w_py * baseline_sample['Python'] + w_db * baseline_sample['DB']\n    idx_top = series.idxmax()\n    top_row = baseline_sample.loc[idx_top]\n    top1_per_scheme[label] = {\n        \"name\":  f\"{top_row['fNAME']} {top_row['lNAME']}\",\n        \"value\": float(series.loc[idx_top]),\n    }\n\nunique_names = {v[\"name\"] for v in top1_per_scheme.values()}\nsame_top1 = len(unique_names) == 1\n\nresult = {\n    \"answer_type\": \"weight_perturbation\",\n    \"top1_per_scheme\": top1_per_scheme,\n    \"same_top1_across_schemes\": bool(same_top1),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "weight_perturbation",
+      "top1_per_scheme": {
+        "0.6*Python + 0.4*DB (active)": {
+          "name": "Sindre Hansen",
+          "value": 91.8
+        },
+        "0.7*Python + 0.3*DB": {
+          "name": "Sindre Hansen",
+          "value": 90.6
+        },
+        "0.5*Python + 0.5*DB": {
+          "name": "Sindre Hansen",
+          "value": 93.0
+        }
+      },
+      "same_top1_across_schemes": true
+    }
+  },
+  {
+    "turn_id": 23,
+    "context": "From this task onward, the age-binning scheme switches to a new four-band version:\nThe age grouping is consolidated from five tiers into four. The youngest band extends its upper boundary by one year, and the next band starts immediately after it and runs through age 35. The two former middle-age bands are merged into a single 36–50 bracket,\nTreat this four-band binning as the currently active age grouping from this point forward.",
+    "question": "Apply the four-band age binning to every learner in the baseline cleaned sample. Using the currently active composite score, compute the mean composite score within each of the new bands. Return per-band means and the leading band.",
+    "code": "# T23: UPDATE — redefine active age binning as `age_group_v2`.\nAGE_BINS_V2   = [17, 25, 35, 50, 100]\nAGE_LABELS_V2 = ['<=25', '26-35', '36-50', '51+']\nbaseline_sample['age_group_v2'] = pd.cut(\n    baseline_sample['Age'], bins=AGE_BINS_V2, labels=AGE_LABELS_V2)\n\nmean_fs_v2_by_age_v2 = (baseline_sample\n                        .groupby('age_group_v2', observed=True)['final_score_v2']\n                        .mean())\nage_v2_fs_leader = str(mean_fs_v2_by_age_v2.idxmax())\n\nresult = {\n    \"answer_type\": \"group_stat\",\n    \"grouping\": \"age_group_v2\",\n    \"metric\": \"mean_final_score_v2\",\n    \"records\": [{\"name\": str(k), \"value\": float(v)}\n                for k, v in mean_fs_v2_by_age_v2.items()],\n    \"leader\": age_v2_fs_leader,\n    \"leader_value\": float(mean_fs_v2_by_age_v2.max()),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "group_stat",
+      "grouping": "age_group_v2",
+      "metric": "mean_final_score_v2",
+      "records": [
+        {
+          "name": "<=25",
+          "value": 67.8683
+        },
+        {
+          "name": "26-35",
+          "value": 76.1241
+        },
+        {
+          "name": "36-50",
+          "value": 74.32
+        },
+        {
+          "name": "51+",
+          "value": 62.9333
+        }
+      ],
+      "leader": "26-35",
+      "leader_value": 76.1241
+    }
+  },
+  {
+    "turn_id": 24,
+    "context": "",
+    "question": "Compute the population standard deviation of the active composite score within each age band. Report all bands' std values and the band with the highest variability.",
+    "code": "# T24: [multi-hop] depends on:\n#   - age_group_v2     (T23 — active binning)\n#   - final_score_v2   (T18 — active composite)\nstd_fs_v2_by_age_v2 = (baseline_sample\n                       .groupby('age_group_v2', observed=True)['final_score_v2']\n                       .std(ddof=0))\nhigh_std_band = str(std_fs_v2_by_age_v2.idxmax())\n\nresult = {\n    \"answer_type\": \"group_stat\",\n    \"grouping\": \"age_group_v2\",\n    \"metric\": \"std_final_score_v2\",\n    \"records\": [{\"name\": str(k), \"value\": float(v)}\n                for k, v in std_fs_v2_by_age_v2.items()],\n    \"high_std_band\": high_std_band,\n    \"high_std_value\": float(std_fs_v2_by_age_v2.max()),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "group_stat",
+      "grouping": "age_group_v2",
+      "metric": "std_final_score_v2",
+      "records": [
+        {
+          "name": "<=25",
+          "value": 16.5764
+        },
+        {
+          "name": "26-35",
+          "value": 10.8627
+        },
+        {
+          "name": "36-50",
+          "value": 11.6905
+        },
+        {
+          "name": "51+",
+          "value": 21.3394
+        }
+      ],
+      "high_std_band": "51+",
+      "high_std_value": 21.3394
+    }
+  },
+  {
+    "turn_id": 25,
+    "context": "",
+    "question": "Assess the sensitivity of the age-band ranking to the choice of central tendency. Redo the per-band aggregation using the median of the active composite score (instead of the mean), and compare the induced ranking of bands with the mean-based ranking. Report both rankings, identify whether the leading bin changes, and return a boolean indicating whether the two orderings are identical.",
+    "code": "# T25: [PERTURBATION aggregation-swap] depends on:\n#   - age_group_v2         (T23)\n#   - final_score_v2       (T18)\n#   - mean_fs_v2_by_age_v2 (T23 — mean per bin)\nmedian_fs_v2_by_age_v2 = (baseline_sample\n                          .groupby('age_group_v2', observed=True)['final_score_v2']\n                          .median())\n\nmean_order   = list(mean_fs_v2_by_age_v2.sort_values(ascending=False).index)\nmedian_order = list(median_fs_v2_by_age_v2.sort_values(ascending=False).index)\n\nmean_leader_band   = str(mean_order[0])\nmedian_leader_band = str(median_order[0])\norderings_identical = [str(x) for x in mean_order] == [str(x) for x in median_order]\n\nresult = {\n    \"answer_type\": \"aggregation_perturbation\",\n    \"mean_ranking\":   [str(x) for x in mean_order],\n    \"median_ranking\": [str(x) for x in median_order],\n    \"mean_leader\":   mean_leader_band,\n    \"median_leader\": median_leader_band,\n    \"leader_unchanged\":    bool(mean_leader_band == median_leader_band),\n    \"orderings_identical\": bool(orderings_identical),\n    \"median_values\": {str(k): float(v)\n                      for k, v in median_fs_v2_by_age_v2.items()},\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "aggregation_perturbation",
+      "mean_ranking": [
+        "26-35",
+        "36-50",
+        "<=25",
+        "51+"
+      ],
+      "median_ranking": [
+        "26-35",
+        "36-50",
+        "<=25",
+        "51+"
+      ],
+      "mean_leader": "26-35",
+      "median_leader": "26-35",
+      "leader_unchanged": true,
+      "orderings_identical": true,
+      "median_values": {
+        "<=25": 69.4,
+        "26-35": 77.6,
+        "36-50": 76.0,
+        "51+": 66.0
+      }
+    }
+  },
+  {
+    "turn_id": 26,
+    "context": "",
+    "question": "Within the age band that has the highest variability in the active composite score, break the learners down by gender. Report the count of learners and the mean active composite score per gender in that band.",
+    "code": "# T26: [multi-hop DD] depends on:\n#   - high_std_band      (T24 — band with highest std)\n#   - baseline_sample    (T3, now carrying age_group_v2 + final_score_v2)\nsubset_high_std = baseline_sample[baseline_sample['age_group_v2'] == high_std_band]\n\ngender_breakdown = (subset_high_std.groupby('gender')\n                    .agg(count=('fNAME', 'count'),\n                         mean_final_score_v2=('final_score_v2', 'mean')))\n\nrecords = [{\"gender\": g,\n            \"count\": int(row['count']),\n            \"mean_final_score_v2\": float(row['mean_final_score_v2'])}\n           for g, row in gender_breakdown.iterrows()]\n\nresult = {\n    \"answer_type\": \"gender_breakdown_within_band\",\n    \"band\": high_std_band,\n    \"records\": records,\n    \"band_size\": int(len(subset_high_std)),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "gender_breakdown_within_band",
+      "band": "51+",
+      "records": [
+        {
+          "gender": "Female",
+          "count": 1,
+          "mean_final_score_v2": 35.4
+        },
+        {
+          "gender": "Male",
+          "count": 2,
+          "mean_final_score_v2": 76.7
+        }
+      ],
+      "band_size": 3
+    }
+  },
+  {
+    "turn_id": 27,
+    "context": "The sample base is restricted to learners whose study hours are at least 140.",
+    "question": "Form the restricted sample by filtering learners with at least 140 study hours and report (a) the sample size of this restricted sample and (b) the mean of the currently active composite score within the restricted sample.",
+    "code": "# T27: UPDATE — sample base becomes sample_v2 (studyHOURS >= 140).\nsample_v2 = baseline_sample[baseline_sample['studyHOURS'] >= 140].copy()\n\nsample_v2_size = int(len(sample_v2))\nsample_v2_mean_fs = float(sample_v2['final_score_v2'].mean())\n\nresult = {\n    \"answer_type\": \"sample_update\",\n    \"rule\": \"studyHOURS >= 140\",\n    \"sample_v2_size\": sample_v2_size,\n    \"sample_v2_mean_final_score_v2\": sample_v2_mean_fs,\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "sample_update",
+      "rule": "studyHOURS >= 140",
+      "sample_v2_size": 64,
+      "sample_v2_mean_final_score_v2": 76.9111
+    }
+  },
+  {
+    "turn_id": 28,
+    "context": "",
+    "question": "Within the currently active restricted sample, compute the Pearson correlation between the currently active composite score and each of four factors: study hours, the entry exam score, age, and the age-study interaction feature introduced earlier. Report the four correlations and rank them by absolute value.",
+    "code": "# T28: [multi-hop] depends on:\n#   - sample_v2                (T27)\n#   - final_score_v2           (T18, present on baseline_sample and carried to sample_v2)\n#   - age_study_interaction    (T16)\ncorrs_sv2 = {\n    'studyHOURS':            float(sample_v2['final_score_v2'].corr(sample_v2['studyHOURS'])),\n    'entryEXAM':             float(sample_v2['final_score_v2'].corr(sample_v2['entryEXAM'])),\n    'Age':                   float(sample_v2['final_score_v2'].corr(sample_v2['Age'])),\n    'age_study_interaction': float(sample_v2['final_score_v2'].corr(sample_v2['age_study_interaction'])),\n}\nranked_factors = sorted(corrs_sv2.items(), key=lambda kv: abs(kv[1]), reverse=True)\n\nresult = {\n    \"answer_type\": \"factor_ranking_within_sample_v2\",\n    \"correlations\": corrs_sv2,\n    \"ranking_by_abs_r\": [{\"factor\": f, \"value\": v} for f, v in ranked_factors],\n    \"strongest_factor\": ranked_factors[0][0],\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "factor_ranking_within_sample_v2",
+      "correlations": {
+        "studyHOURS": 0.6804,
+        "entryEXAM": 0.7451,
+        "Age": -0.0263,
+        "age_study_interaction": 0.0709
+      },
+      "ranking_by_abs_r": [
+        {
+          "factor": "entryEXAM",
+          "value": 0.7451
+        },
+        {
+          "factor": "studyHOURS",
+          "value": 0.6804
+        },
+        {
+          "factor": "age_study_interaction",
+          "value": 0.0709
+        },
+        {
+          "factor": "Age",
+          "value": -0.0263
+        }
+      ],
+      "strongest_factor": "entryEXAM"
+    }
+  },
+  {
+    "turn_id": 29,
+    "context": "",
+    "question": "Within the currently active restricted sample and using the currently active age binning, compute the mean of the currently active composite score in each band. Compare the leading band observed here against the leading band obtained earlier on the full cleaned sample under the same active definitions. Return all per-band means on the restricted sample, both leading bands, and a boolean indicating whether they coincide.",
+    "code": "# T29: [multi-hop DD] depends on:\n#   - sample_v2         (T27)\n#   - age_group_v2      (T23, present on baseline_sample and carried to sample_v2)\n#   - final_score_v2    (T18)\n#   - age_v2_fs_leader  (T23 — leading band on full baseline_sample under v2 defs)\nmean_fs_v2_age_v2_on_sv2 = (sample_v2\n                            .groupby('age_group_v2', observed=True)['final_score_v2']\n                            .mean())\nsv2_leader = str(mean_fs_v2_age_v2_on_sv2.idxmax())\n\nresult = {\n    \"answer_type\": \"leader_comparison\",\n    \"metric\": \"mean_final_score_v2\",\n    \"grouping\": \"age_group_v2\",\n    \"records_on_sample_v2\": [{\"name\": str(k), \"value\": float(v)}\n                             for k, v in mean_fs_v2_age_v2_on_sv2.items()],\n    \"leader_on_sample_v2\": sv2_leader,\n    \"leader_on_full_baseline\": age_v2_fs_leader,\n    \"leaders_match\": bool(sv2_leader == age_v2_fs_leader),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "leader_comparison",
+      "metric": "mean_final_score_v2",
+      "grouping": "age_group_v2",
+      "records_on_sample_v2": [
+        {
+          "name": "<=25",
+          "value": 77.616
+        },
+        {
+          "name": "26-35",
+          "value": 78.1462
+        },
+        {
+          "name": "36-50",
+          "value": 75.6483
+        },
+        {
+          "name": "51+",
+          "value": 76.7
+        }
+      ],
+      "leader_on_sample_v2": "26-35",
+      "leader_on_full_baseline": "26-35",
+      "leaders_match": true
+    }
+  },
+  {
+    "turn_id": 30,
+    "context": "Apply the following rules here:\n- the composite score uses the equal-weight form introduced earlier, not the currently active weighted form;\n- the age grouping uses the earlier five-band scheme, not the currently active four-band scheme;\n- analyses use the full cleaned sample, ignoring the study-hours restriction imposed earlier.",
+    "question": "Equal-weight composite, five-band age binning, full cleaned sample, compute the mean composite score within each age band. Return the per-band means and the leading band. Finally, compare this leading band against the leading band under the currently active definitions on the restricted sample and report whether they are the same band name.",
+    "code": "# T30: [EXPLICIT BACKTRACK + multi-hop] depends on:\n#   - baseline_sample     (T3 — full cleaned sample, ignore sample_v2)\n#   - age_group_v1        (T11 — rolled back binning)\n#   - final_score_v1      (T12 — rolled back composite, preserved on baseline_sample)\n#   - sv2_leader          (T29 — currently active leader on sample_v2 under v2 defs)\nrollback_means = (baseline_sample\n                  .groupby('age_group_v1', observed=True)['final_score_v1']\n                  .mean())\nrollback_leader = str(rollback_means.idxmax())\n\nresult = {\n    \"answer_type\": \"explicit_backtrack_comparison\",\n    \"rollback_definitions\": {\n        \"composite\": \"final_score_v1 = (Python + DB) / 2\",\n        \"age_binning\": \"age_group_v1 (5 bands)\",\n        \"sample_base\": \"full baseline_sample\",\n    },\n    \"rollback_records\": [{\"name\": str(k), \"value\": float(v)}\n                         for k, v in rollback_means.items()],\n    \"rollback_leader\": rollback_leader,\n    \"current_active_leader_on_sample_v2\": sv2_leader,\n    \"same_leader_name\": bool(rollback_leader == sv2_leader),\n}\nprint_result(result)\n",
+    "answer": {
+      "answer_type": "explicit_backtrack_comparison",
+      "rollback_definitions": {
+        "composite": "final_score_v1 = (Python + DB) / 2",
+        "age_binning": "age_group_v1 (5 bands)",
+        "sample_base": "full baseline_sample"
+      },
+      "rollback_records": [
+        {
+          "name": "18-24",
+          "value": 61.9853
+        },
+        {
+          "name": "25-34",
+          "value": 75.9833
+        },
+        {
+          "name": "35-44",
+          "value": 72.6042
+        },
+        {
+          "name": "45-54",
+          "value": 76.15
+        },
+        {
+          "name": "55+",
+          "value": 63.8333
+        }
+      ],
+      "rollback_leader": "45-54",
+      "current_active_leader_on_sample_v2": "26-35",
+      "same_leader_name": false
+    }
+  }
+]
