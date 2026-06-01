@@ -29,6 +29,8 @@
 ---
 
 ## 🔔 News
+- **[2026-05]** We release a new paper: "[LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis](https://arxiv.org/abs/2605.30434)".
+
 - **[2026-05]** Our paper "Rewarding the Scientific Process: Process-Level Reward Modeling for Agentic Data Analysis" has been accepted to KDD 2026.
 
 - **[2026-04]** We release a new paper: "[Rewarding the Scientific Process: Process-Level Reward Modeling for Agentic Data Analysis](https://arxiv.org/abs/2604.24198)".
@@ -350,6 +352,15 @@ We deeply appreciate the collaborative efforts of everyone involved. We will con
 If you find our work helpful, please use the following citations.
 
 ```
+@misc{xu2026longdsbench,
+      title={LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis}, 
+      author={Kewei Xu and Xiaoben Lu and Shuofei Qiao and Zihan Ding and Haoming Xu and Lei Liang and Ningyu Zhang},
+      year={2026},
+      eprint={2605.30434},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2605.30434}, 
+}
 @misc{qiu2026rewardingscientificprocessprocesslevel,
       title={Rewarding the Scientific Process: Process-Level Reward Modeling for Agentic Data Analysis}, 
       author={Zhisong Qiu and Shuofei Qiao and Kewei Xu and Yuqi Zhu and Lun Du and Ningyu Zhang and Huajun Chen},

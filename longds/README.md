@@ -25,7 +25,13 @@
 
 LongDS-Bench is a benchmark for evaluating long-horizon, multi-turn agentic data analysis. Real-world analysis is rarely a sequence of independent questions: filters, metric definitions, assumptions, intermediate tables, and branch-specific results evolve over many turns. LongDS tests whether agents can maintain and apply these evolving analytical states correctly.
 
-LongDS contains **68 tasks** constructed from real-world Kaggle notebooks and datasets, spanning **2,225 turns** across six domains: Business, Community, Education, Geoscience, Social Good, and Sports. The tasks cover representative state-evolution patterns, including:
+LongDS contains **68 tasks** and **2,225 turns** across six domains: Business, Community, Education, Geoscience, Social Good, and Sports. It is constructed from real-world Kaggle notebooks and datasets through source filtering, initial task construction, expert review, semi-automated validation, and final consistency checks.
+
+<p align="center">
+  <img src="figs/benchmark-domain.png" alt="LongDS task construction pipeline and domain distribution" width="95%">
+</p>
+
+The resulting tasks cover representative state-evolution patterns, including:
 
 - initial analytical state construction;
 - state inheritance;
@@ -33,6 +39,10 @@ LongDS contains **68 tasks** constructed from real-world Kaggle notebooks and da
 - counterfactual perturbation;
 - rollback to earlier states;
 - multi-state composition.
+
+<p align="center">
+  <img src="figs/mainPic.png" alt="LongDS multi-turn analytical state evolution" width="95%">
+</p>
 
 Experiments can be run with [DSGym](https://arxiv.org/abs/2601.16344), which provides isolated Docker execution environments for code-based data analysis.
 
@@ -188,10 +198,13 @@ We thank the [DSGym](https://github.com/fannie1208/DSGym) team for their open-so
 If you use LongDS, please cite:
 
 ```bibtex
-@misc{xu2026longdsbench,
-  title = {LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis},
-  author = {Xu, Kewei and Lu, Xiaoben and Qiao, Shuofei and Ding, Zihan and Xu, Haoming and Liang, Lei and Zhang, Ningyu},
-  year = {2026},
-  howpublished = {\url{https://github.com/zjunlp/DataMind}}
+@misc{xu2026longdsbenchfailurelonghorizonagentic,
+      title={LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis}, 
+      author={Kewei Xu and Xiaoben Lu and Shuofei Qiao and Zihan Ding and Haoming Xu and Lei Liang and Ningyu Zhang},
+      year={2026},
+      eprint={2605.30434},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2605.30434}, 
 }
 ```
