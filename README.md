@@ -29,6 +29,8 @@
 ---
 
 ## 🔔 News
+- **[2026-06]** We release a [tutorial](docs/project-level-skills-guide.md) on using data-analysis skills in Claude Code and Codex. We welcome users to try it.
+
 - **[2026-05]** We release a new paper: "[LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis](https://arxiv.org/abs/2605.30434)".
 
 - **[2026-05]** Our paper "Rewarding the Scientific Process: Process-Level Reward Modeling for Agentic Data Analysis" has been accepted to KDD 2026.
