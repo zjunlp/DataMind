@@ -71,6 +71,8 @@ LongDS uses DSGym's container manager to allocate isolated Python execution envi
 
 Build and start the LongDS executor pool:
 
+> Note: The complete executor image is approximately 12 GB. Ensure sufficient disk space and a stable network connection before building.
+
 ```bash
 cd /path/to/DataMind/longds/DSGym/executors
 
@@ -84,6 +86,8 @@ python generate_compose.py \
 
 docker compose -f docker-compose.yml up -d --build
 ```
+
+> If manager-to-executor requests return `502 Bad Gateway` while using a proxy or VPN, add the Docker service names to `NO_PROXY`.
 
 Stop the executor pool:
 
