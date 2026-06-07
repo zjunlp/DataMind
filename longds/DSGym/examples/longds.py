@@ -40,7 +40,7 @@ DATASET_CONFIG = {
 }
 
 
-def llm_judge_evaluate(task_trajectories, api_key=None, base_url=None, judge_model="deepseek-v4-pro-guan", max_workers=15):
+def llm_judge_evaluate(task_trajectories, api_key=None, base_url=None, judge_model="deepseek-v4-pro", max_workers=15):
     """Evaluate each task's solution against ground_truth using LLM as judge."""
     
     api_key = api_key or os.environ.get("JUDGE_API_KEY")
@@ -151,6 +151,8 @@ def create_parser():
                        help="Maximum agent steps per turn")
     parser.add_argument("--api-key", type=str, default=None,
                        help="API key (uses environment variable if not provided)")
+    parser.add_argument("--judge-model", type=str, default="deepseek-v4-pro",
+                       help="Model name used by the LLM-as-judge evaluator")
     parser.add_argument("--max-workers", type=int, default=1,
                        help="Maximum number of parallel workers (auto-set based on backend if not provided)")
     parser.add_argument("--max-model-len", type=int, default=32768,
@@ -369,7 +371,7 @@ def main():
         # LLM as judge evaluation
         print("⚖️ Running LLM judge evaluation...")
         all_eval_path = f"{output_dir}/results_eval.json"
-        task_trajectories = llm_judge_evaluate(task_trajectories)
+        task_trajectories = llm_judge_evaluate(task_trajectories, judge_model=args.judge_model)
         with open(all_eval_path, "w") as f:
             json.dump(task_trajectories, f, indent=2, ensure_ascii=False)
         print(f"📁 Results with judge scores saved to: {all_eval_path}")

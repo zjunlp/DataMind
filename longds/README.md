@@ -153,7 +153,7 @@ export JUDGE_API_KEY="<your_judge_api_key>"
 export JUDGE_BASE_URL="<your_judge_base_url>"
 ```
 
-The default judge model is set in `examples/longds.py`. Modify that file if your endpoint uses a different model name.
+The judge model defaults to `deepseek-v4-pro`. Use `--judge-model` if your endpoint uses a different model name.
 
 ### 2. Run Evaluation
 
@@ -176,6 +176,7 @@ Useful options:
 --start-index N       Start from the task directory at index N in task_list.json.
 --turn-limit N        Evaluate at most N turns per task.
 --max-steps N         Maximum agent steps per turn. Default: 40.
+--judge-model NAME    Judge model name. Default: deepseek-v4-pro.
 ```
 
 ## 📁 Outputs
