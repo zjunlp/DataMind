@@ -23,7 +23,9 @@
 
 ## 👀 Overview
 
-LongDS-Bench is a benchmark for evaluating long-horizon, multi-turn agentic data analysis. Real-world analysis is rarely a sequence of independent questions: filters, metric definitions, assumptions, intermediate tables, and branch-specific results evolve over many turns. LongDS tests whether agents can maintain and apply these evolving analytical states correctly.
+### Introduction
+
+**LongDS** is a benchmark for evaluating long-horizon, multi-turn agentic data analysis. Real-world analysis is rarely a sequence of independent questions: filters, metric definitions, assumptions, intermediate tables, and branch-specific results evolve over many turns. LongDS tests whether agents can maintain, update, and apply these evolving analytical states correctly.
 
 LongDS contains **68 tasks** and **2,225 turns** across six domains: Business, Community, Education, Geoscience, Social Good, and Sports. It is constructed from real-world Kaggle notebooks and datasets through source filtering, initial task construction, expert review, semi-automated validation, and final consistency checks.
 
@@ -31,22 +33,36 @@ LongDS contains **68 tasks** and **2,225 turns** across six domains: Business, C
   <img src="figs/benchmark-domain.png" alt="LongDS task construction pipeline and domain distribution" width="95%">
 </p>
 
-The resulting tasks cover representative state-evolution patterns, including:
+### State-Evolution Patterns
 
-- initial analytical state construction;
-- state inheritance;
-- state update;
-- counterfactual perturbation;
-- rollback to earlier states;
-- multi-state composition.
+**LongDS** covers representative state-evolution patterns that commonly arise in long-horizon data analysis:
+
+- **Initial state construction**, where the agent builds reusable analytical context from raw data.
+- **State inheritance**, where later turns depend on definitions or intermediate results from earlier turns.
+- **State update**, where the analytical state must be revised as new constraints are introduced.
+- **Counterfactual perturbation**, where the agent must reason under changed assumptions.
+- **Rollback**, where the agent returns to an earlier state and continues from it.
+- **Multi-state composition**, where multiple previous states must be combined.
 
 <p align="center">
   <img src="figs/mainPic.png" alt="LongDS multi-turn analytical state evolution" width="95%">
 </p>
 
-Experiments can be run with [DSGym](https://arxiv.org/abs/2601.16344), which provides isolated Docker execution environments for code-based data analysis.
+### Experimental Results
+
+Experimental results show that LongDS remains challenging for both proprietary and open-source models. The best-performing model, Gemini-3.1-Pro, reaches only **48.45** average accuracy, while GPT-5.4 and Claude-4.6-Sonnet obtain **43.50** and **41.56**, respectively. Performance varies substantially across domains: models perform relatively better on Education but struggle on Geoscience, Business, and Sports, where long-horizon feature engineering and state management are more demanding.
+
+Further analysis reveals consistent degradation as tasks become longer and more state-dependent. Model accuracy drops sharply along task progress, decreases as dependency breadth increases, and becomes lower under more complex state-evolution patterns such as counterfactual perturbation and rollback. These trends suggest that the main bottleneck is maintaining a correct evolving analytical state rather than simply increasing the interaction budget.
+
+<p align="center">
+  <img src="figs/results_table.png" alt="LongDS evaluation results across models and domains" width="95%">
+  <img src="figs/result_fig.png" alt="LongDS performance analysis across task progress, dependency breadth, and state-evolution patterns" width="95%">
+</p>
+
 
 ## 🔧 Installation
+
+Experiments can be run with [DSGym](https://arxiv.org/abs/2601.16344), which provides Docker-based execution infrastructure for code-based data analysis.
 
 Follow the [DSGym](https://github.com/fannie1208/DSGym) setup instructions to configure the evaluation environment.
 
@@ -203,7 +219,7 @@ We thank the [DSGym](https://github.com/fannie1208/DSGym) team for their open-so
 If you use LongDS, please cite:
 
 ```bibtex
-@misc{xu2026longdsbenchfailurelonghorizonagentic,
+@misc{xu2026longdsbench,
       title={LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis}, 
       author={Kewei Xu and Xiaoben Lu and Shuofei Qiao and Zihan Ding and Haoming Xu and Lei Liang and Ningyu Zhang},
       year={2026},
