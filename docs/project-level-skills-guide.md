@@ -1,56 +1,103 @@
-# Using Project-Level Skills in Codex and Claude Code
+<div align="center">
 
-This document explains how to configure prepared skill files as project-level skills in Codex and Claude Code, and how to use them through automatic triggering in real tasks.
+# Project-Level Skills Guide
 
-The installation and usage workflow is general and works for any set of task-specific skill files. The examples at the end are data-analysis tasks that use skills, showing the full process from prompting, to triggering a skill, to following the skill workflow, to checking the answer.
+**Use prepared skills as reusable project-level capabilities in Codex and Claude Code.**
 
-## When to Use This
+<p>
+  <img src="https://img.shields.io/badge/Codex-project--level--skills-black" />
+  <img src="https://img.shields.io/badge/Claude_Code-supported-purple" />
+  <img src="https://img.shields.io/badge/Skill_File-SKILL.md-blue" />
+  <img src="https://img.shields.io/badge/No_paste-required-success" />
+</p>
 
-Use this guide when:
+</div>
+
+> This guide explains how to install, trigger, verify, and reuse prepared `SKILL.md` files without pasting them into every conversation.
+
+<p align="center">
+  <img src="assets/project-level-skills-overview.png" width="720" alt="Project-level skills workflow">
+</p>
+
+## 🎬 Demo
+
+This short demo shows a complete project-level skill workflow on a real CSV analysis task. It starts from a clean project folder, checks the available Codex skill with `/skills`, runs a Chicago Food Inspections analysis task, generates a Markdown report and a bar chart, and verifies whether the skill was loaded and followed.
+
+The demo uses the ready-to-use [`csv-analysis`](skills-example/csv-analysis/) skill provided in this repository.
+
+<p align="center">
+  <a href="https://youtu.be/SVzxxnxm6Gk">
+    <img src="assets/demo-play.svg" width="720" alt="Project-level skills demo">
+  </a>
+</p>
+
+<p align="center">
+  <sub>Click the image to watch the demo on YouTube.</sub>
+</p>
+
+Watch the demo in either way:
+
+- [Watch online on YouTube](https://youtu.be/SVzxxnxm6Gk)
+- [Download the MP4 from GitHub Releases](https://github.com/healer-666/DataMind/releases/download/demo-v1/demo.mp4)
+
+## 🎯 When should you use this guide?
+
+Use this guide if you want to:
+
+| Goal | Meaning |
+|---|---|
+| Reuse skills | Keep skills in the project instead of uploading them every time |
+| Enable auto-triggering | Let Codex or Claude Code select the right skill from the task |
+| Keep workflows stable | Make repeated tasks follow the same rules and file-reading process |
+| Verify execution | Check whether the skill was actually loaded and followed |
+
+## 🧭 Workflow
+
+| Step | What happens |
+|---|---|
+| 1. Install | Put prepared `SKILL.md` folders under `.codex/skills/` or `.claude/skills/` |
+| 2. Use | Ask a normal task from the project root; the tool can trigger the matching skill |
+| 3. Verify | Ask a follow-up check to confirm whether the skill was loaded and followed |
 
 ```text
-You already have a set of skill files.
-You want to reuse those skills in Codex or Claude Code.
-You want the tool to choose the right skill automatically.
-You do not want to paste or upload the skill content every time.
-You want to confirm whether a skill was actually loaded and used.
+Install skill files
+        ↓
+Ask a normal task
+        ↓
+Skill-guided execution
+        ↓
+Verify skill usage
 ```
 
-## Recommended Layout
+## 🗂️ Recommended Project Layout
 
-Keep the source skills in a normal project directory first:
-
-```text
-skills/
-  skill_a/
-    SKILL.md
-  skill_b/
-    SKILL.md
-  skill_c/
-    SKILL.md
-```
-
-If the skills need local data, keep the data in a stable project directory:
+Keep source skills and data in stable project directories:
 
 ```text
-data/
-  dataset.csv
-  rules.json
-  manual.md
+project-root/
+├── skills/
+│   ├── skill_a/
+│   │   └── SKILL.md
+│   └── skill_b/
+│       └── SKILL.md
+└── data/
+    ├── dataset.csv
+    ├── rules.json
+    └── manual.md
 ```
 
 Then copy the skills you want to enable into the project-level skill directory for Codex or Claude Code.
 
-## Skill File Requirements
+## 🧩 Skill File Requirements
 
-Each skill should be a standalone folder containing `SKILL.md`:
+Each skill should be a standalone folder with a `SKILL.md` file:
 
 ```text
 skill_name/
-  SKILL.md
+└── SKILL.md
 ```
 
-The top of `SKILL.md` should include metadata:
+`SKILL.md` should start with YAML metadata:
 
 ```yaml
 ---
@@ -59,135 +106,59 @@ description: "Describe what task this skill should be used for"
 ---
 ```
 
-The fields mean:
+Keep these requirements in mind:
 
-```text
-name: skill name.
-description: trigger description used by the tool to decide when to load the skill.
-```
+- Use one folder per skill.
+- Keep the file name exactly `SKILL.md`.
+- Use `name` as the skill name.
+- Use `description` to explain when the tool should load the skill.
+- Make the description specific, and quote it if it contains YAML-sensitive punctuation.
+- Put long references, scripts, or examples in subfolders if needed.
 
-Recommendations:
+## 🔧 Installation
 
-```text
-Use one folder per skill.
-Keep the file name exactly SKILL.md.
-Make the description specific to the task type.
-Quote the description if it contains colons or YAML-sensitive punctuation.
-Put long references, scripts, or examples in subfolders when needed.
-```
+| Tool | Project-level skill directory |
+|---|---|
+| Codex | `.codex/skills/` |
+| Claude Code | `.claude/skills/` |
 
-## Install in Codex
-
-Create this directory at the project root:
-
-```text
-.codex/skills/
-```
-
-Copy the skill folders into it:
-
-```text
-.codex/skills/
-  skill_a/
-    SKILL.md
-  skill_b/
-    SKILL.md
-```
-
-Then:
-
-```text
-1. Open a new Codex session.
-2. Make sure the current working directory is the project root.
-3. Check that the project-level skills appear in the skill list.
-```
-
-## Install in Claude Code
-
-Create this directory at the project root:
-
-```text
-.claude/skills/
-```
-
-Copy the skill folders into it:
-
-```text
-.claude/skills/
-  skill_a/
-    SKILL.md
-  skill_b/
-    SKILL.md
-```
-
-Then:
-
-```text
-1. Reopen Claude Code if the directory was newly created.
-2. Open Claude Code from the project root or a child directory.
-3. Confirm that project-level skills can be discovered.
-```
-
-## Confirm the Skills Are Configured
-
-After installation, first make sure you are in the correct project location. Project-level skills only apply to the corresponding project. Start Codex / Claude Code from the project root that contains `.codex/skills/` or `.claude/skills/`, or run the check commands from that project root. If you start the tool from another directory, the configured skills may not appear.
-
-The installed project structure can be checked against this layout:
+Expected layout:
 
 ```text
 project-root/
-  .codex/
-    skills/
-      skill_a/
-        SKILL.md
-      skill_b/
-        SKILL.md
-  .claude/
-    skills/
-      skill_a/
-        SKILL.md
-      skill_b/
-        SKILL.md
-  data/
-    dataset.csv
-    rules.json
+├── .codex/
+│   └── skills/
+│       └── skill_name/
+│           └── SKILL.md
+├── .claude/
+│   └── skills/
+│       └── skill_name/
+│           └── SKILL.md
+└── data/
+    └── dataset.csv
 ```
 
 If you only use Codex, you only need `.codex/skills/`. If you only use Claude Code, you only need `.claude/skills/`.
 
-There are three ways to confirm the setup.
+After copying the skill folders:
 
-Claude Code:
+1. Start or reopen Codex / Claude Code from the project root or a child directory.
+2. Make sure the current working directory belongs to the project that contains the skill directory.
+3. Check that the project-level skills appear in the skill list.
 
-```text
-1. File check:
-   Run from the project root:
-   find .claude/skills -maxdepth 2 -name SKILL.md -print
+If your Codex environment uses `.agents/skills/` instead of `.codex/skills/`, replace `.codex/skills/` with the directory used by your environment. The important point is that the tool launch location, command execution location, and skill installation location all belong to the same project.
 
-2. In-tool check:
-   Start Claude Code from the project root or a child directory, then enter /skills and confirm that the target skill appears in the list.
+## ✅ Confirm the Setup
 
-3. Invocation check:
-   Enter /<skill-name>, or explicitly write "Use <skill-name>" in a task.
-```
+Project-level skills only apply to the project where they are installed. If you start the tool from another directory, the configured skills may not appear.
 
-Codex:
+| Check | What to do |
+|---|---|
+| File check | From the project root, run `find .codex/skills -maxdepth 2 -name SKILL.md -print` or `find .claude/skills -maxdepth 2 -name SKILL.md -print` |
+| In-tool check | Start Codex / Claude Code from the project root or a child directory, then open the skill list or enter `/skills` if supported |
+| Invocation check | Write `Use <skill-name>` in a task, mention the skill name, or enter `/<skill-name>` if direct skill invocation is supported |
 
-```text
-1. File check:
-   Run from the project root:
-   find .codex/skills -maxdepth 2 -name SKILL.md -print
-
-2. In-tool check:
-   Start Codex from the project root or a child directory, then check the skill list, or enter /skills to confirm that the target skill appears.
-
-3. Invocation check:
-   Explicitly write "Use <skill-name>" in a task, or mention the skill name to trigger the target skill.
-```
-
-If your Codex environment uses `.agents/skills/` instead of `.codex/skills/`, replace the directory in the structure diagram and commands with the directory used by your environment. The important point is that the tool launch location, the command execution location, and the skill installation location all belong to the same project.
-
-## How to Use
+## 🚀 How to Use
 
 After installation, do not paste the `SKILL.md` content into the conversation. Ask the task normally and provide the required data path when needed.
 
@@ -213,7 +184,7 @@ You can also explicitly call a specific skill:
 Use <skill_name> to answer this question.
 ```
 
-## Confirm Whether a Skill Was Used
+## 🔍 Verify Skill Usage
 
 After the task is complete, ask a short follow-up:
 
@@ -227,17 +198,23 @@ used_data_files:
 evidence:
 ```
 
-The first two examples use ready-to-use example skills provided in [docs/skills-example/](skills-example/). These skills were generated by our internal skill generation workflow and can be copied directly into `.codex/skills/` or `.claude/skills/`. The code for generating skills will be open-sourced in a future release.
+## 🧪 Examples
 
-## Example 1: Querying Applicable Rule IDs
+The demo and the first two examples use ready-to-use example skills provided in [`docs/skills-example/`](skills-example/). These skills were generated by our internal skill generation workflow and can be copied directly into `.codex/skills/` or `.claude/skills/`. The code for generating skills will be open-sourced in a future release.
 
-The following is an example of using a skill. It shows how a normal user prompt can automatically trigger the corresponding project-level skill and complete the task by following that skill's workflow.
+### Example 1: Query applicable fee IDs
 
-Task:
+| Field | Value |
+|---|---|
+| Task type | Merchant + date rule query |
+| Skill | `Applicable_Fee_IDs` |
+| Source skill | [`docs/skills-example/Applicable_Fee_IDs/`](skills-example/Applicable_Fee_IDs/) |
+| Data path | `<project-root>/skill/dabstep_data/context` |
+| Expected answer | `64, 123, 304, 381, 384, 454, 473, 572, 595, 678, 813` |
+| Observed result | matched in Codex and Claude Code |
 
-```text
-For the 200th of the year 2023, what are the Fee IDs applicable to Golfclub_Baron_Friso?
-```
+<details>
+<summary>View prompt, workflow, and observed verification</summary>
 
 Prompt:
 
@@ -249,36 +226,22 @@ For the 200th of the year 2023, what are the Fee IDs applicable to Golfclub_Baro
 Return only the final answer.
 ```
 
-Expected answer:
+Why this triggers the skill:
 
-```text
-64, 123, 304, 381, 384, 454, 473, 572, 595, 678, 813
-```
+> This task matches `Applicable_Fee_IDs` because it asks which fee rules apply to a merchant on a specific date.
 
-Project-level skill:
+Skill-guided workflow:
 
-```text
-Applicable_Fee_IDs
-```
-
-Skill source: [docs/skills-example/Applicable_Fee_IDs/](skills-example/Applicable_Fee_IDs/)
-
-This task naturally triggers `Applicable_Fee_IDs` because it asks which Fee IDs apply to a merchant on a specific date.
-
-The skill-guided workflow is:
-
-```text
 1. Identify the task type: Merchant + Day Query.
-2. Extract the merchant: Golfclub_Baron_Friso.
+2. Extract the merchant: `Golfclub_Baron_Friso`.
 3. Extract the date: day 200 of 2023.
 4. Map the day to its month to compute monthly volume and fraud brackets.
-5. Read payments.csv to find the transaction combinations that occurred for this merchant on that day.
-6. Read merchant_data.json to get account type, merchant category code, capture delay, and related merchant attributes.
-7. Read fees.json and apply the fee matching rules defined by the skill.
+5. Read `payments.csv` to find transaction combinations for this merchant on that day.
+6. Read `merchant_data.json` to get account type, MCC, capture delay, and merchant attributes.
+7. Read `fees.json` and apply the fee matching rules defined by the skill.
 8. Collect matched Fee IDs and output them in ascending order.
-```
 
-Observed result in Codex and Claude Code:
+Observed verification:
 
 ```text
 loaded_skill: yes
@@ -288,15 +251,21 @@ model_output: 64, 123, 304, 381, 384, 454, 473, 572, 595, 678, 813
 answer_match: yes
 ```
 
-This example shows that you only need to provide a normal task and a data directory. The tool loads the matching project-level skill, and the skill determines which files to read and which rules to use for the answer.
+</details>
 
-## Example 2: Computing an Average Fee
+### Example 2: Compute an average fee
 
-Task:
+| Field | Value |
+|---|---|
+| Task type | Filtered average fee calculation |
+| Skill | `Average_Fee_Estimation` |
+| Source skill | [`docs/skills-example/Average_Fee_Estimation/`](skills-example/Average_Fee_Estimation/) |
+| Data path | `<project-root>/skill/dabstep_data/context` |
+| Expected answer | `0.126459` |
+| Observed result | matched in Codex and Claude Code |
 
-```text
-For credit transactions, what would be the average fee that the card scheme NexPay would charge for a transaction value of 10 EUR?
-```
+<details>
+<summary>View prompt, workflow, and observed verification</summary>
 
 Prompt:
 
@@ -308,38 +277,24 @@ For credit transactions, what would be the average fee that the card scheme NexP
 Return only the final answer.
 ```
 
-Expected answer:
+Why this triggers the skill:
 
-```text
-0.126459
-```
+> This task matches `Average_Fee_Estimation` because it asks for an average processing fee under a specified transaction value, card scheme, and credit-card condition.
 
-Project-level skill:
+Skill-guided workflow:
 
-```text
-Average_Fee_Estimation
-```
-
-Skill source: [docs/skills-example/Average_Fee_Estimation/](skills-example/Average_Fee_Estimation/)
-
-This task naturally triggers `Average_Fee_Estimation` because it asks for an average processing fee under a specified transaction value, card scheme, and credit-card condition.
-
-The skill-guided workflow is:
-
-```text
 1. Identify the task type: Filtered Average.
 2. Extract the transaction value: 10 EUR.
-3. Extract the card scheme: NexPay.
+3. Extract the card scheme: `NexPay`.
 4. Extract the transaction type: credit transactions.
-5. Read fees.json.
-6. Filter fee rules where card_scheme is NexPay.
+5. Read `fees.json`.
+6. Filter fee rules where `card_scheme` is `NexPay`.
 7. Apply the credit-card filtering rule defined by the skill.
-8. For each applicable rule, compute fixed_amount + rate * transaction_value / 10000.
+8. For each applicable rule, compute `fixed_amount + rate * transaction_value / 10000`.
 9. Average the computed fees across applicable rules.
 10. Output the final numeric value in the required format.
-```
 
-Observed result in Codex and Claude Code:
+Observed verification:
 
 ```text
 loaded_skill: yes
@@ -349,23 +304,27 @@ model_output: 0.126459
 answer_match: yes
 ```
 
-This example shows that the skill does not only provide background knowledge, but also defines the filtering conditions, calculation formula, and final output format.
+</details>
 
-## Example 3: General CSV Sales Analysis
+### Example 3: General CSV sales analysis
 
-The following is a more general data-analysis example. It does not depend on a domain-specific dataset. Instead, it uses a regular `sales.csv` file to show how a general CSV analysis skill can perform grouped aggregation.
+| Field | Value |
+|---|---|
+| Task type | CSV grouped aggregation |
+| Skill | `csv-pipeline` |
+| Data path | `<project-root>/data/sales.csv` |
+| Source skill | [clawhub.ai/skills/csv-pipeline](https://clawhub.ai/skills/csv-pipeline) |
+| Expected result | complete product and region revenue summaries |
+| Observed result | matched in Codex |
 
-This example uses the general-purpose `csv-pipeline` skill:
+<details>
+<summary>View prompt, sample data, workflow, and expected output</summary>
+
+Source:
 
 ```text
 https://clawhub.ai/skills/csv-pipeline
 https://github.com/openclaw/skills/blob/main/skills/gitgoodordietrying/csv-pipeline/SKILL.md
-```
-
-Data file:
-
-```text
-<project-root>/data/sales.csv
 ```
 
 Example data structure:
@@ -375,12 +334,6 @@ date,region,product,units,unit_price,revenue
 2026-01-03,East,Laptop,3,1200,3600
 2026-01-04,West,Phone,10,600,6000
 ...
-```
-
-Task:
-
-```text
-Use sales.csv to summarize total_revenue by product and region, and identify the product and region with the highest total_revenue.
 ```
 
 Prompt:
@@ -393,6 +346,17 @@ Use the data in <project-root>/data and sales.csv to complete the following anal
 3. Identify the product and region with the highest total_revenue.
 4. Output the complete summary results as Markdown tables and end with one sentence of conclusion.
 ```
+
+Skill-guided workflow:
+
+1. Locate `sales.csv`.
+2. Read the header and sample rows.
+3. Confirm that the file contains `product`, `region`, and `revenue`.
+4. Group by `product` and sum `revenue`.
+5. Group by `region` and sum `revenue`.
+6. Verify that output row counts match the number of unique group keys.
+7. Identify the highest-revenue product and region.
+8. Output two complete Markdown tables and one sentence of conclusion.
 
 Expected output example:
 
@@ -415,27 +379,7 @@ Verified: the product summary table has 3 rows, matching the 3 unique product va
 Conclusion: the product with the highest total_revenue is Phone (15000.00), and the region with the highest total_revenue is West (12000.00).
 ```
 
-Project-level skill:
-
-```text
-csv-pipeline
-```
-
-This task naturally triggers `csv-pipeline` because it asks to read a CSV file, group by fields, aggregate a numeric column, and generate Markdown summary tables.
-
-The skill-guided workflow is:
-
-```text
-1. Locate the user-specified data file sales.csv.
-2. Read the header and sample rows, confirming that the file contains product, region, and revenue.
-3. Group by product and sum revenue to compute total_revenue for each product.
-4. Group by region and sum revenue to compute total_revenue for each region.
-5. Verify that the output table row counts match the number of unique group keys in the source data.
-6. Identify the product and region with the highest total_revenue.
-7. Output two complete Markdown tables and one sentence of conclusion.
-```
-
-Observed result in Codex:
+Observed verification:
 
 ```text
 loaded_skill: yes
@@ -445,20 +389,24 @@ model_output: complete product and region summary tables, correctly identifying 
 answer_match: yes
 ```
 
-This example shows that project-level skills are not limited to domain-specific business rules. They can also support general CSV data-analysis tasks.
+</details>
 
-## Troubleshooting
+## 🔔 Troubleshooting
 
-### Skill Does Not Appear
+### Skill does not appear
 
-Check:
+- [ ] The skill is under `.codex/skills/` or `.claude/skills/`.
+- [ ] Each skill has its own folder.
+- [ ] The file is named exactly `SKILL.md`.
+- [ ] The metadata starts and ends with `---`.
+- [ ] The metadata contains `name` and `description`.
+- [ ] The description is valid YAML.
+- [ ] The tool was reopened after the skill directory was created.
+- [ ] Codex / Claude Code was started from the project root or a child directory.
 
-```text
-The skill is under .codex/skills/ or .claude/skills/.
-Each skill has its own folder.
-The file is named exactly SKILL.md.
-The metadata starts and ends with ---.
-The metadata contains name and description.
-The description is valid YAML.
-The tool was reopened after the skill directory was created.
-```
+### Skill appears but is not used
+
+- [ ] Make the `description` more specific to the task type.
+- [ ] Mention the skill name explicitly in the task once to test invocation.
+- [ ] Confirm that the data path in the prompt points to the project where the skill is installed.
+- [ ] Ask the verification follow-up to check whether the skill was loaded and followed.
