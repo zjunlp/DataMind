@@ -57,6 +57,8 @@ mkdir -p "$RUN"
 
 ## 2. Prepare Pilot Data
 
+`task.json` contains reference answers and may also include or sit beside gold solution code. `prepare_dataset.py` separates the reference answers into held-out `gold/` files and gives the agent an answer-free `manifest/` for solving.
+
 Prepare three tasks with at most three turns per task:
 
 ```bash
@@ -67,7 +69,19 @@ python "$SKILL_DIR/scripts/prepare_dataset.py" \
   --turn-limit 3
 ```
 
+This produces:
+
+```text
+$RUN/
+|-- index.json           # Task list and data_dir_exists checks.
+|-- manifest/<key>.json  # Agent reads: turn_id, context, question, data_dir. No answers.
+|-- gold/<key>.json      # Judge reads: question and ground_truth. Held out from the agent.
+`-- answers/             # Agent writes one <key>.json answer file per task.
+```
+
 Confirm that `$RUN/index.json` exists and that `data_dir_exists` is `true`.
+
+For a full run, use a new `RUN` directory and rerun preparation without `--task-limit` or `--turn-limit`.
 
 **Important:** `--strip-source` modifies the shared dataset. Do not use this option with the shared `dataset/` directory.
 
@@ -78,7 +92,7 @@ You do not need to install or register `longds_bench` as a named skill. Launch t
 To run a pilot and score it immediately:
 
 ```text
-Use SKILL_DIR, RUN, and VENV from the environment. Read and follow $SKILL_DIR/SKILL.md to run the prepared LongDS tasks on yourself. Start with the one-task pilot, show me the score, then ask before the full run.
+Use SKILL_DIR, RUN, and VENV from the environment. Read and follow $SKILL_DIR/SKILL.md to run the prepared LongDS tasks on yourself. Start with the prepared pilot subset, show me the score, then ask before the full run.
 ```
 
 To answer tasks without scoring immediately:

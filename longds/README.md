@@ -14,8 +14,9 @@
   - ⚙️ [Environment Setup](#️-environment-setup)
   - 🐳 [Execution Environment](#-execution-environment)
 - 📦 [Data](#data)
-- 💻 [Running LongDS](#running-longds)
+- 💻 [Running LongDS using DSGym](#running-longds-using-dsgym)
 - 📁 [Outputs](#outputs)
+- 💻 [Running LongDS using Agent-Agnostic Runner](#running-longds-using-agent-agnostic-runner)
 - 🙏 [Acknowledgements](#acknowledgements)
 - 📖 [Citation](#citation)
 
@@ -62,7 +63,8 @@ Further analysis reveals consistent degradation as tasks become longer and more 
 
 ## 🔧 Installation
 
-Experiments can be run with [DSGym](https://arxiv.org/abs/2601.16344), which provides Docker-based execution infrastructure for code-based data analysis.
+The paper experiments use [DSGym](https://arxiv.org/abs/2601.16344), which provides Docker-based execution infrastructure for code-based data analysis.
+LongDS also includes an agent-agnostic runner based on the LDC Labs [longds-bench](https://github.com/ldclabs/longds-bench) skill for evaluating agents that execute the benchmark with their own shell/code tools; see [runners/agent_agnostic/README.md](runners/agent_agnostic/README.md).
 
 Follow the [DSGym](https://github.com/fannie1208/DSGym) setup instructions to configure the evaluation environment.
 
@@ -142,7 +144,7 @@ hf download zjunlp/LongDS \
   --local-dir dataset
 ```
 
-## 💻 Running LongDS
+## 💻 Running LongDS using DSGym
 
 Run LongDS using `runners/DSGym/scripts/longds.py`.
 
@@ -225,9 +227,17 @@ For each task, LongDS writes results under:
 
 The main evaluation score is stored in `results_eval.json`, where each turn receives a judge score and the final element contains a summary with the average score.
 
+## 💻 Running LongDS using Agent-Agnostic Runner
+
+If you want the agent itself to act as the runtime under test, use the agent-agnostic runner instead of DSGym. This method does not start Docker executors or call a model through LiteLLM; the agent reads `runners/agent_agnostic/longds_bench/SKILL.md`, uses its own tools and a persistent Python session, and writes answers for later judging.
+
+For setup, pilot runs, scoring, and comparability notes, see [runners/agent_agnostic/README.md](runners/agent_agnostic/README.md).
+
 ## 🙏 Acknowledgements
 
 We thank the [DSGym](https://github.com/fannie1208/DSGym) team for their open-source evaluation framework. We adapted DSGym's evaluation pipeline to support long-horizon, multi-turn data analysis tasks and use DSGym's Docker-based execution infrastructure. For more details about DSGym, please refer to their [paper](https://arxiv.org/abs/2601.16344).
+
+We also thank [LDC Labs](https://github.com/ldclabs) for open-sourcing the agent-agnostic [longds-bench](https://github.com/ldclabs/longds-bench) skill, which supports running LongDS-Bench with the agent itself as the runtime under test.
 
 ## 📖 Citation
 
