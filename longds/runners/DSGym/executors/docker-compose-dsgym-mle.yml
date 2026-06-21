@@ -1,0 +1,649 @@
+version: '3.8'
+services:
+  executor-000:
+    image: dsgym-mle
+    command: python main.py
+    ports:
+    - 60000:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=0
+    - HOST_PORT=60000
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=0
+    - container.port=60000
+    - container.type=dsgym-mle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '0'
+            capabilities:
+            - gpu
+    volumes:
+    - /data/junlin/trajectory_gen_MLE_Lite2/submissions/DSAgent/container_000:/submission
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/private:/private/data/aerial-cactus-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/public:/data/aerial-cactus-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/private:/private/data/aptos2019-blindness-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/public:/data/aptos2019-blindness-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/private:/private/data/denoising-dirty-documents/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/public:/data/denoising-dirty-documents:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/private:/private/data/detecting-insults-in-social-commentary/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/public:/data/detecting-insults-in-social-commentary:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/private:/private/data/dog-breed-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/public:/data/dog-breed-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/private:/private/data/dogs-vs-cats-redux-kernels-edition/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/public:/data/dogs-vs-cats-redux-kernels-edition:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/private:/private/data/histopathologic-cancer-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/public:/data/histopathologic-cancer-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/private:/private/data/jigsaw-toxic-comment-classification-challenge/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/public:/data/jigsaw-toxic-comment-classification-challenge:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/private:/private/data/leaf-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/public:/data/leaf-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/private:/private/data/mlsp-2013-birds/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/public:/data/mlsp-2013-birds:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/private:/private/data/new-york-city-taxi-fare-prediction/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/public:/data/new-york-city-taxi-fare-prediction:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/private:/private/data/nomad2018-predict-transparent-conductors/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/public:/data/nomad2018-predict-transparent-conductors:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/private:/private/data/plant-pathology-2020-fgvc7/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/public:/data/plant-pathology-2020-fgvc7:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/private:/private/data/random-acts-of-pizza/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/public:/data/random-acts-of-pizza:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/private:/private/data/ranzcr-clip-catheter-line-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/public:/data/ranzcr-clip-catheter-line-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/private:/private/data/siim-isic-melanoma-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/public:/data/siim-isic-melanoma-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/private:/private/data/spooky-author-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/public:/data/spooky-author-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/private:/private/data/tabular-playground-series-dec-2021/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/public:/data/tabular-playground-series-dec-2021:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/private:/private/data/tabular-playground-series-may-2022/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/public:/data/tabular-playground-series-may-2022:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/private:/private/data/text-normalization-challenge-english-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/public:/data/text-normalization-challenge-english-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/private:/private/data/text-normalization-challenge-russian-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/public:/data/text-normalization-challenge-russian-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:/private/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/public:/data/the-icml-2013-whale-challenge-right-whale-redux:ro
+  executor-001:
+    image: dsgym-mle
+    command: python main.py
+    ports:
+    - 60001:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=1
+    - HOST_PORT=60001
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=1
+    - container.port=60001
+    - container.type=dsgym-mle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '1'
+            capabilities:
+            - gpu
+    volumes:
+    - /data/junlin/trajectory_gen_MLE_Lite2/submissions/DSAgent/container_001:/submission
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/private:/private/data/aerial-cactus-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/public:/data/aerial-cactus-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/private:/private/data/aptos2019-blindness-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/public:/data/aptos2019-blindness-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/private:/private/data/denoising-dirty-documents/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/public:/data/denoising-dirty-documents:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/private:/private/data/detecting-insults-in-social-commentary/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/public:/data/detecting-insults-in-social-commentary:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/private:/private/data/dog-breed-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/public:/data/dog-breed-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/private:/private/data/dogs-vs-cats-redux-kernels-edition/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/public:/data/dogs-vs-cats-redux-kernels-edition:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/private:/private/data/histopathologic-cancer-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/public:/data/histopathologic-cancer-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/private:/private/data/jigsaw-toxic-comment-classification-challenge/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/public:/data/jigsaw-toxic-comment-classification-challenge:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/private:/private/data/leaf-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/public:/data/leaf-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/private:/private/data/mlsp-2013-birds/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/public:/data/mlsp-2013-birds:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/private:/private/data/new-york-city-taxi-fare-prediction/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/public:/data/new-york-city-taxi-fare-prediction:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/private:/private/data/nomad2018-predict-transparent-conductors/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/public:/data/nomad2018-predict-transparent-conductors:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/private:/private/data/plant-pathology-2020-fgvc7/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/public:/data/plant-pathology-2020-fgvc7:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/private:/private/data/random-acts-of-pizza/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/public:/data/random-acts-of-pizza:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/private:/private/data/ranzcr-clip-catheter-line-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/public:/data/ranzcr-clip-catheter-line-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/private:/private/data/siim-isic-melanoma-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/public:/data/siim-isic-melanoma-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/private:/private/data/spooky-author-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/public:/data/spooky-author-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/private:/private/data/tabular-playground-series-dec-2021/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/public:/data/tabular-playground-series-dec-2021:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/private:/private/data/tabular-playground-series-may-2022/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/public:/data/tabular-playground-series-may-2022:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/private:/private/data/text-normalization-challenge-english-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/public:/data/text-normalization-challenge-english-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/private:/private/data/text-normalization-challenge-russian-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/public:/data/text-normalization-challenge-russian-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:/private/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/public:/data/the-icml-2013-whale-challenge-right-whale-redux:ro
+  executor-002:
+    image: dsgym-mle
+    command: python main.py
+    ports:
+    - 60002:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=2
+    - HOST_PORT=60002
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=2
+    - container.port=60002
+    - container.type=dsgym-mle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '2'
+            capabilities:
+            - gpu
+    volumes:
+    - /data/junlin/trajectory_gen_MLE_Lite2/submissions/DSAgent/container_002:/submission
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/private:/private/data/aerial-cactus-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/public:/data/aerial-cactus-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/private:/private/data/aptos2019-blindness-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/public:/data/aptos2019-blindness-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/private:/private/data/denoising-dirty-documents/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/public:/data/denoising-dirty-documents:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/private:/private/data/detecting-insults-in-social-commentary/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/public:/data/detecting-insults-in-social-commentary:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/private:/private/data/dog-breed-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/public:/data/dog-breed-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/private:/private/data/dogs-vs-cats-redux-kernels-edition/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/public:/data/dogs-vs-cats-redux-kernels-edition:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/private:/private/data/histopathologic-cancer-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/public:/data/histopathologic-cancer-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/private:/private/data/jigsaw-toxic-comment-classification-challenge/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/public:/data/jigsaw-toxic-comment-classification-challenge:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/private:/private/data/leaf-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/public:/data/leaf-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/private:/private/data/mlsp-2013-birds/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/public:/data/mlsp-2013-birds:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/private:/private/data/new-york-city-taxi-fare-prediction/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/public:/data/new-york-city-taxi-fare-prediction:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/private:/private/data/nomad2018-predict-transparent-conductors/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/public:/data/nomad2018-predict-transparent-conductors:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/private:/private/data/plant-pathology-2020-fgvc7/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/public:/data/plant-pathology-2020-fgvc7:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/private:/private/data/random-acts-of-pizza/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/public:/data/random-acts-of-pizza:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/private:/private/data/ranzcr-clip-catheter-line-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/public:/data/ranzcr-clip-catheter-line-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/private:/private/data/siim-isic-melanoma-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/public:/data/siim-isic-melanoma-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/private:/private/data/spooky-author-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/public:/data/spooky-author-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/private:/private/data/tabular-playground-series-dec-2021/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/public:/data/tabular-playground-series-dec-2021:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/private:/private/data/tabular-playground-series-may-2022/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/public:/data/tabular-playground-series-may-2022:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/private:/private/data/text-normalization-challenge-english-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/public:/data/text-normalization-challenge-english-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/private:/private/data/text-normalization-challenge-russian-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/public:/data/text-normalization-challenge-russian-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:/private/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/public:/data/the-icml-2013-whale-challenge-right-whale-redux:ro
+  executor-003:
+    image: dsgym-mle
+    command: python main.py
+    ports:
+    - 60003:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=3
+    - HOST_PORT=60003
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=3
+    - container.port=60003
+    - container.type=dsgym-mle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '3'
+            capabilities:
+            - gpu
+    volumes:
+    - /data/junlin/trajectory_gen_MLE_Lite2/submissions/DSAgent/container_003:/submission
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/private:/private/data/aerial-cactus-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/public:/data/aerial-cactus-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/private:/private/data/aptos2019-blindness-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/public:/data/aptos2019-blindness-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/private:/private/data/denoising-dirty-documents/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/public:/data/denoising-dirty-documents:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/private:/private/data/detecting-insults-in-social-commentary/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/public:/data/detecting-insults-in-social-commentary:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/private:/private/data/dog-breed-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/public:/data/dog-breed-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/private:/private/data/dogs-vs-cats-redux-kernels-edition/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/public:/data/dogs-vs-cats-redux-kernels-edition:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/private:/private/data/histopathologic-cancer-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/public:/data/histopathologic-cancer-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/private:/private/data/jigsaw-toxic-comment-classification-challenge/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/public:/data/jigsaw-toxic-comment-classification-challenge:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/private:/private/data/leaf-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/public:/data/leaf-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/private:/private/data/mlsp-2013-birds/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/public:/data/mlsp-2013-birds:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/private:/private/data/new-york-city-taxi-fare-prediction/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/public:/data/new-york-city-taxi-fare-prediction:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/private:/private/data/nomad2018-predict-transparent-conductors/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/public:/data/nomad2018-predict-transparent-conductors:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/private:/private/data/plant-pathology-2020-fgvc7/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/public:/data/plant-pathology-2020-fgvc7:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/private:/private/data/random-acts-of-pizza/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/public:/data/random-acts-of-pizza:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/private:/private/data/ranzcr-clip-catheter-line-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/public:/data/ranzcr-clip-catheter-line-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/private:/private/data/siim-isic-melanoma-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/public:/data/siim-isic-melanoma-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/private:/private/data/spooky-author-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/public:/data/spooky-author-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/private:/private/data/tabular-playground-series-dec-2021/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/public:/data/tabular-playground-series-dec-2021:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/private:/private/data/tabular-playground-series-may-2022/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/public:/data/tabular-playground-series-may-2022:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/private:/private/data/text-normalization-challenge-english-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/public:/data/text-normalization-challenge-english-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/private:/private/data/text-normalization-challenge-russian-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/public:/data/text-normalization-challenge-russian-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:/private/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/public:/data/the-icml-2013-whale-challenge-right-whale-redux:ro
+  executor-004:
+    image: dsgym-mle
+    command: python main.py
+    ports:
+    - 60004:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=4
+    - HOST_PORT=60004
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=4
+    - container.port=60004
+    - container.type=dsgym-mle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '4'
+            capabilities:
+            - gpu
+    volumes:
+    - /data/junlin/trajectory_gen_MLE_Lite2/submissions/DSAgent/container_004:/submission
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/private:/private/data/aerial-cactus-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/public:/data/aerial-cactus-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/private:/private/data/aptos2019-blindness-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/public:/data/aptos2019-blindness-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/private:/private/data/denoising-dirty-documents/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/public:/data/denoising-dirty-documents:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/private:/private/data/detecting-insults-in-social-commentary/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/public:/data/detecting-insults-in-social-commentary:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/private:/private/data/dog-breed-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/public:/data/dog-breed-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/private:/private/data/dogs-vs-cats-redux-kernels-edition/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/public:/data/dogs-vs-cats-redux-kernels-edition:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/private:/private/data/histopathologic-cancer-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/public:/data/histopathologic-cancer-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/private:/private/data/jigsaw-toxic-comment-classification-challenge/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/public:/data/jigsaw-toxic-comment-classification-challenge:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/private:/private/data/leaf-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/public:/data/leaf-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/private:/private/data/mlsp-2013-birds/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/public:/data/mlsp-2013-birds:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/private:/private/data/new-york-city-taxi-fare-prediction/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/public:/data/new-york-city-taxi-fare-prediction:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/private:/private/data/nomad2018-predict-transparent-conductors/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/public:/data/nomad2018-predict-transparent-conductors:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/private:/private/data/plant-pathology-2020-fgvc7/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/public:/data/plant-pathology-2020-fgvc7:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/private:/private/data/random-acts-of-pizza/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/public:/data/random-acts-of-pizza:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/private:/private/data/ranzcr-clip-catheter-line-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/public:/data/ranzcr-clip-catheter-line-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/private:/private/data/siim-isic-melanoma-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/public:/data/siim-isic-melanoma-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/private:/private/data/spooky-author-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/public:/data/spooky-author-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/private:/private/data/tabular-playground-series-dec-2021/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/public:/data/tabular-playground-series-dec-2021:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/private:/private/data/tabular-playground-series-may-2022/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/public:/data/tabular-playground-series-may-2022:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/private:/private/data/text-normalization-challenge-english-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/public:/data/text-normalization-challenge-english-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/private:/private/data/text-normalization-challenge-russian-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/public:/data/text-normalization-challenge-russian-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:/private/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/public:/data/the-icml-2013-whale-challenge-right-whale-redux:ro
+  executor-005:
+    image: dsgym-mle
+    command: python main.py
+    ports:
+    - 60005:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=5
+    - HOST_PORT=60005
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=5
+    - container.port=60005
+    - container.type=dsgym-mle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '5'
+            capabilities:
+            - gpu
+    volumes:
+    - /data/junlin/trajectory_gen_MLE_Lite2/submissions/DSAgent/container_005:/submission
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/private:/private/data/aerial-cactus-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/public:/data/aerial-cactus-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/private:/private/data/aptos2019-blindness-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/public:/data/aptos2019-blindness-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/private:/private/data/denoising-dirty-documents/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/public:/data/denoising-dirty-documents:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/private:/private/data/detecting-insults-in-social-commentary/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/public:/data/detecting-insults-in-social-commentary:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/private:/private/data/dog-breed-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/public:/data/dog-breed-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/private:/private/data/dogs-vs-cats-redux-kernels-edition/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/public:/data/dogs-vs-cats-redux-kernels-edition:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/private:/private/data/histopathologic-cancer-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/public:/data/histopathologic-cancer-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/private:/private/data/jigsaw-toxic-comment-classification-challenge/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/public:/data/jigsaw-toxic-comment-classification-challenge:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/private:/private/data/leaf-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/public:/data/leaf-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/private:/private/data/mlsp-2013-birds/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/public:/data/mlsp-2013-birds:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/private:/private/data/new-york-city-taxi-fare-prediction/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/public:/data/new-york-city-taxi-fare-prediction:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/private:/private/data/nomad2018-predict-transparent-conductors/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/public:/data/nomad2018-predict-transparent-conductors:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/private:/private/data/plant-pathology-2020-fgvc7/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/public:/data/plant-pathology-2020-fgvc7:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/private:/private/data/random-acts-of-pizza/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/public:/data/random-acts-of-pizza:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/private:/private/data/ranzcr-clip-catheter-line-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/public:/data/ranzcr-clip-catheter-line-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/private:/private/data/siim-isic-melanoma-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/public:/data/siim-isic-melanoma-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/private:/private/data/spooky-author-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/public:/data/spooky-author-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/private:/private/data/tabular-playground-series-dec-2021/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/public:/data/tabular-playground-series-dec-2021:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/private:/private/data/tabular-playground-series-may-2022/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/public:/data/tabular-playground-series-may-2022:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/private:/private/data/text-normalization-challenge-english-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/public:/data/text-normalization-challenge-english-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/private:/private/data/text-normalization-challenge-russian-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/public:/data/text-normalization-challenge-russian-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:/private/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/public:/data/the-icml-2013-whale-challenge-right-whale-redux:ro
+  executor-006:
+    image: dsgym-mle
+    command: python main.py
+    ports:
+    - 60006:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=6
+    - HOST_PORT=60006
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=6
+    - container.port=60006
+    - container.type=dsgym-mle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '6'
+            capabilities:
+            - gpu
+    volumes:
+    - /data/junlin/trajectory_gen_MLE_Lite2/submissions/DSAgent/container_006:/submission
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/private:/private/data/aerial-cactus-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/public:/data/aerial-cactus-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/private:/private/data/aptos2019-blindness-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/public:/data/aptos2019-blindness-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/private:/private/data/denoising-dirty-documents/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/public:/data/denoising-dirty-documents:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/private:/private/data/detecting-insults-in-social-commentary/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/public:/data/detecting-insults-in-social-commentary:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/private:/private/data/dog-breed-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/public:/data/dog-breed-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/private:/private/data/dogs-vs-cats-redux-kernels-edition/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/public:/data/dogs-vs-cats-redux-kernels-edition:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/private:/private/data/histopathologic-cancer-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/public:/data/histopathologic-cancer-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/private:/private/data/jigsaw-toxic-comment-classification-challenge/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/public:/data/jigsaw-toxic-comment-classification-challenge:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/private:/private/data/leaf-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/public:/data/leaf-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/private:/private/data/mlsp-2013-birds/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/public:/data/mlsp-2013-birds:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/private:/private/data/new-york-city-taxi-fare-prediction/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/public:/data/new-york-city-taxi-fare-prediction:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/private:/private/data/nomad2018-predict-transparent-conductors/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/public:/data/nomad2018-predict-transparent-conductors:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/private:/private/data/plant-pathology-2020-fgvc7/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/public:/data/plant-pathology-2020-fgvc7:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/private:/private/data/random-acts-of-pizza/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/public:/data/random-acts-of-pizza:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/private:/private/data/ranzcr-clip-catheter-line-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/public:/data/ranzcr-clip-catheter-line-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/private:/private/data/siim-isic-melanoma-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/public:/data/siim-isic-melanoma-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/private:/private/data/spooky-author-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/public:/data/spooky-author-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/private:/private/data/tabular-playground-series-dec-2021/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/public:/data/tabular-playground-series-dec-2021:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/private:/private/data/tabular-playground-series-may-2022/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/public:/data/tabular-playground-series-may-2022:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/private:/private/data/text-normalization-challenge-english-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/public:/data/text-normalization-challenge-english-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/private:/private/data/text-normalization-challenge-russian-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/public:/data/text-normalization-challenge-russian-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:/private/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/public:/data/the-icml-2013-whale-challenge-right-whale-redux:ro
+  executor-007:
+    image: dsgym-mle
+    command: python main.py
+    ports:
+    - 60007:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=7
+    - HOST_PORT=60007
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=7
+    - container.port=60007
+    - container.type=dsgym-mle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '7'
+            capabilities:
+            - gpu
+    volumes:
+    - /data/junlin/trajectory_gen_MLE_Lite2/submissions/DSAgent/container_007:/submission
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/private:/private/data/aerial-cactus-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aerial-cactus-identification/prepared/public:/data/aerial-cactus-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/private:/private/data/aptos2019-blindness-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/aptos2019-blindness-detection/prepared/public:/data/aptos2019-blindness-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/private:/private/data/denoising-dirty-documents/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/denoising-dirty-documents/prepared/public:/data/denoising-dirty-documents:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/private:/private/data/detecting-insults-in-social-commentary/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/detecting-insults-in-social-commentary/prepared/public:/data/detecting-insults-in-social-commentary:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/private:/private/data/dog-breed-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dog-breed-identification/prepared/public:/data/dog-breed-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/private:/private/data/dogs-vs-cats-redux-kernels-edition/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/dogs-vs-cats-redux-kernels-edition/prepared/public:/data/dogs-vs-cats-redux-kernels-edition:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/private:/private/data/histopathologic-cancer-detection/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/histopathologic-cancer-detection/prepared/public:/data/histopathologic-cancer-detection:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/private:/private/data/jigsaw-toxic-comment-classification-challenge/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/jigsaw-toxic-comment-classification-challenge/prepared/public:/data/jigsaw-toxic-comment-classification-challenge:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/private:/private/data/leaf-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/leaf-classification/prepared/public:/data/leaf-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/private:/private/data/mlsp-2013-birds/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/mlsp-2013-birds/prepared/public:/data/mlsp-2013-birds:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/private:/private/data/new-york-city-taxi-fare-prediction/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/new-york-city-taxi-fare-prediction/prepared/public:/data/new-york-city-taxi-fare-prediction:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/private:/private/data/nomad2018-predict-transparent-conductors/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/nomad2018-predict-transparent-conductors/prepared/public:/data/nomad2018-predict-transparent-conductors:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/private:/private/data/plant-pathology-2020-fgvc7/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/plant-pathology-2020-fgvc7/prepared/public:/data/plant-pathology-2020-fgvc7:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/private:/private/data/random-acts-of-pizza/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/random-acts-of-pizza/prepared/public:/data/random-acts-of-pizza:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/private:/private/data/ranzcr-clip-catheter-line-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/ranzcr-clip-catheter-line-classification/prepared/public:/data/ranzcr-clip-catheter-line-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/private:/private/data/siim-isic-melanoma-classification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/siim-isic-melanoma-classification/prepared/public:/data/siim-isic-melanoma-classification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/private:/private/data/spooky-author-identification/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/spooky-author-identification/prepared/public:/data/spooky-author-identification:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/private:/private/data/tabular-playground-series-dec-2021/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-dec-2021/prepared/public:/data/tabular-playground-series-dec-2021:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/private:/private/data/tabular-playground-series-may-2022/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/tabular-playground-series-may-2022/prepared/public:/data/tabular-playground-series-may-2022:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/private:/private/data/text-normalization-challenge-english-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-english-language/prepared/public:/data/text-normalization-challenge-english-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/private:/private/data/text-normalization-challenge-russian-language/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/text-normalization-challenge-russian-language/prepared/public:/data/text-normalization-challenge-russian-language:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:/private/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/private:ro
+    - /data/junlin/trajectory_gen_MLE_Lite2/data/the-icml-2013-whale-challenge-right-whale-redux/prepared/public:/data/the-icml-2013-whale-challenge-right-whale-redux:ro
+  manager:
+    image: manager-prebuilt
+    command: python main.py
+    ports:
+    - 5000:5000
+    environment:
+    - PORT=5000
+    - CONTAINER_CONFIG_PATH=container_config.json
+    volumes:
+    - ./container_config.json:/app/container_config.json:ro
+    depends_on:
+    - executor-000
+    - executor-001
+    - executor-002
+    - executor-003
+    - executor-004
+    - executor-005
+    - executor-006
+    - executor-007
+    restart: unless-stopped
+networks:
+  default:
+    driver: bridge

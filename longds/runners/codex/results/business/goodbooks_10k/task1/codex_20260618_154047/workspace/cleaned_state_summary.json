@@ -1,0 +1,13 @@
+{
+  "active_demand_absolute_score_80th_percentile": 81.66867009070047,
+  "active_ratings_count_85th_percentile": 72676.2,
+  "active_review_books": 8160,
+  "books_missing_required": 585,
+  "books_removed_for_duplicate_raw_original_title": 264,
+  "cleaned_books": 9151,
+  "cleaned_rating_rows_joined_to_clean_books": 896111,
+  "first_review_pool_books": 750,
+  "rating_rows_removed_for_repeated_user_book_pairs": 4487,
+  "raw_books": 10000,
+  "raw_rating_rows": 981756
+}

@@ -1,0 +1,53 @@
+longds-bench
+Copyright (c) 2026 LDC Labs
+
+This repository provides an agent-agnostic *runtime adapter* for running the
+LongDS-Bench benchmark with the agent under test acting as the runtime. The
+original code in this repository (the scripts and documentation authored here)
+is licensed under the MIT License (see LICENSE).
+
+--------------------------------------------------------------------------------
+Third-party material — NOT covered by this repository's MIT license
+--------------------------------------------------------------------------------
+
+1. LongDS-Bench (benchmark, task protocol, and judge prompt)
+   - Source:  https://github.com/zjunlp/DataMind  (longds/)
+   - License: Apache License 2.0
+   - Authors: Kewei Xu, Xiaoben Lu, Shuofei Qiao, Zihan Ding, Haoming Xu,
+              Lei Liang, Ningyu Zhang (Zhejiang University / ZJUNLP)
+   - Reused here:
+       * scripts/judge.py contains the JUDGE_PROMPT copied VERBATIM from
+         DataMind/longds/DSGym/examples/prompt.py.
+       * The multi-turn task protocol and per-turn prompt format (described in
+         SKILL.md) follow DataMind/longds/DSGym/examples/longds.py and prompt.py.
+     These remain © their authors under Apache-2.0; we reproduce the prompt
+     unchanged so that scoring matches the official benchmark.
+
+2. DSGym (execution framework that LongDS adapts)
+   - Source: https://github.com/fannie1208/DSGym
+   - Paper:  https://arxiv.org/abs/2601.16344
+   - This repository does NOT vendor or redistribute DSGym; it only references
+     its design. (Notably, this adapter deliberately does NOT use DSGym's
+     Docker executor — the agent under test is the runtime instead.)
+
+3. LongDS dataset
+   - Source:  https://huggingface.co/datasets/zjunlp/LongDS
+   - License: "other" (custom terms stated on the dataset card)
+   - This repository does NOT include or redistribute any dataset content.
+     Users download the dataset themselves from Hugging Face and must comply
+     with the dataset's own license/terms.
+
+--------------------------------------------------------------------------------
+Citation
+--------------------------------------------------------------------------------
+
+@misc{xu2026longdsbench,
+      title={LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis},
+      author={Kewei Xu and Xiaoben Lu and Shuofei Qiao and Zihan Ding and
+              Haoming Xu and Lei Liang and Ningyu Zhang},
+      year={2026},
+      eprint={2605.30434},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2605.30434},
+}

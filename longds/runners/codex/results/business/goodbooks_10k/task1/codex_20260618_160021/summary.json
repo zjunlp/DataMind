@@ -1,0 +1,20 @@
+{
+  "run_name": "codex_20260618_160021",
+  "codex_model": "config-default",
+  "analysis_python": "/mnt/20t/xkw/anaconda3/envs/longds/bin/python",
+  "task_root": "/mnt/40t/xkw/LongMemDA/DataMind/longds/DSGym/data/task/longds",
+  "data_root": "/mnt/40t/xkw/LongMemDA/DataMind/longds/DSGym/data/data/longds",
+  "results_root": "/mnt/40t/xkw/LongMemDA/DataMind/longds/scripts/results",
+  "tasks": [],
+  "errors": [
+    {
+      "task": {
+        "task_domain": "business",
+        "dataset_name": "goodbooks_10k",
+        "task_id": "task1"
+      },
+      "run_dir": "/mnt/40t/xkw/LongMemDA/DataMind/longds/scripts/results/business/goodbooks_10k/task1/codex_20260618_160021",
+      "error": "Codex exited with code 1; see /mnt/40t/xkw/LongMemDA/DataMind/longds/scripts/results/business/goodbooks_10k/task1/codex_20260618_160021/turn_003"
+    }
+  ]
+}

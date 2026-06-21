@@ -75,7 +75,7 @@ Follow the [DSGym](https://github.com/fannie1208/DSGym) setup instructions to co
 ### ⚙️ Environment Setup
 
 ```bash
-cd /path/to/DataMind/longds/DSGym
+cd /path/to/DataMind/longds/runners/DSGym
 
 # Install main dependencies (includes litellm by default)
 uv sync
@@ -90,7 +90,7 @@ Build and start the LongDS executor pool:
 > Note: The complete executor image is approximately 12 GB. Ensure sufficient disk space and a stable network connection before building.
 
 ```bash
-cd /path/to/DataMind/longds/DSGym/executors
+cd DataMind/longds/runners/DSGym/executors
 
 docker build -t executor-prebuilt ./container_images/longds_image
 docker build -t manager-prebuilt ./manager
@@ -98,26 +98,28 @@ docker build -t manager-prebuilt ./manager
 python generate_compose.py \
   -n 8 \
   --types "executor-prebuilt:8" \
-  -m ../data/data
+  -m ../../../dataset/data
 
 docker compose -f docker-compose.yml up -d --build
 ```
+
+From `runners/DSGym/executors/`, `../../../dataset/data` resolves to `longds/dataset/data` and is mounted read-only at `/data` in each executor.
 
 > If manager-to-executor requests return `502 Bad Gateway` while using a proxy or VPN, add the Docker service names to `NO_PROXY`.
 
 Stop the executor pool:
 
 ```bash
-cd /path/to/DataMind/longds/DSGym/executors
+cd DataMind/longds/runners/DSGym/executors
 docker compose -f docker-compose.yml down
 ```
 
 ## 📦 Data
 
-LongDS expects the following layout under `DSGym/data`:
+LongDS expects the following layout under `longds/dataset/`:
 
 ```text
-DSGym/data/
+dataset/
 ├── data/
 │   └── longds/
 │       └── {domain}/{dataset}/taskN/data/...
@@ -134,15 +136,15 @@ DSGym/data/
 You can download the released data from [Hugging Face](https://huggingface.co/datasets/zjunlp/LongDS):
 
 ```bash
-cd /path/to/DataMind/longds/DSGym
+cd /path/to/DataMind/longds
 hf download zjunlp/LongDS \
   --repo-type dataset \
-  --local-dir data
+  --local-dir dataset
 ```
 
 ## 💻 Running LongDS
 
-Run LongDS using `examples/longds.py`.
+Run LongDS using `runners/DSGym/scripts/longds.py`.
 
 ### 1. Configure Model Access
 
@@ -176,13 +178,27 @@ The judge model defaults to `deepseek-v4-pro`. Use `--judge-model` if your endpo
 Evaluate all LongDS tasks:
 
 ```bash
-cd /path/to/DataMind/longds/DSGym/examples
+cd /path/to/DataMind/longds/runners/DSGym/scripts
 
 uv run python longds.py \
   --dataset longds \
   --model openai/<your_model_name> \
   --backend litellm \
   --output-dir ./results
+```
+
+Run one task for its first three turns using deepseek-v4-pro:
+
+```bash
+cd /path/to/DataMind/longds/runners/DSGym/scripts
+
+uv run python longds.py \
+  --dataset longds \
+  --model openai/deepseek-v4-pro \
+  --backend litellm \
+  --output-dir ./results \
+  --task-limit 1 \
+  --turn-limit 3
 ```
 
 Useful options:

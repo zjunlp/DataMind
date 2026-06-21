@@ -1,0 +1,34 @@
+{
+  "0": {
+    "url": "http://executor-000:8432",
+    "type": "executor-prebuilt"
+  },
+  "1": {
+    "url": "http://executor-001:8432",
+    "type": "executor-prebuilt"
+  },
+  "2": {
+    "url": "http://executor-002:8432",
+    "type": "executor-prebuilt"
+  },
+  "3": {
+    "url": "http://executor-003:8432",
+    "type": "executor-prebuilt"
+  },
+  "4": {
+    "url": "http://executor-004:8432",
+    "type": "executor-prebuilt"
+  },
+  "5": {
+    "url": "http://executor-005:8432",
+    "type": "executor-prebuilt"
+  },
+  "6": {
+    "url": "http://executor-006:8432",
+    "type": "executor-prebuilt"
+  },
+  "7": {
+    "url": "http://executor-007:8432",
+    "type": "executor-prebuilt"
+  }
+}

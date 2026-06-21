@@ -1,0 +1,30 @@
+# Data preprocessing
+pyarrow
+polars
+pandas
+numpy
+tabulate
+
+# ML libraries
+xgboost
+lightgbm
+catboost
+scikit-learn
+scipy
+
+
+# Feature engineering
+category_encoders
+optuna
+
+# Tools
+tqdm
+rich
+fastapi==0.104.1
+uvicorn==0.24.0
+httpx
+jupyter-client==8.6.0
+ipykernel==6.26.0 
+requests
+sympy
+tavily-python
