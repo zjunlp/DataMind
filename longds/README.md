@@ -75,7 +75,7 @@ Follow the [DSGym](https://github.com/fannie1208/DSGym) setup instructions to co
 ### ⚙️ Environment Setup
 
 ```bash
-cd /path/to/DataMind/longds/runners/DSGym
+cd DataMind/longds/runners/DSGym
 
 # Install main dependencies (includes litellm by default)
 uv sync
@@ -178,7 +178,7 @@ The judge model defaults to `deepseek-v4-pro`. Use `--judge-model` if your endpo
 Evaluate all LongDS tasks:
 
 ```bash
-cd /path/to/DataMind/longds/runners/DSGym/scripts
+cd DataMind/longds/runners/DSGym/scripts
 
 uv run python longds.py \
   --dataset longds \
@@ -187,11 +187,10 @@ uv run python longds.py \
   --output-dir ./results
 ```
 
+#### Example:
 Run one task for its first three turns using deepseek-v4-pro:
 
 ```bash
-cd /path/to/DataMind/longds/runners/DSGym/scripts
-
 uv run python longds.py \
   --dataset longds \
   --model openai/deepseek-v4-pro \
