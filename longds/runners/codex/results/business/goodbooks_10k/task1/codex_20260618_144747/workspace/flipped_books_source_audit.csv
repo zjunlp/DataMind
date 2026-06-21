@@ -1,5 +1,0 @@
-movement,book_key,display_title,full_authors,cover_link,main_genre,tag_evidence,restored_recognized_tag_row_count,duplicate_cleaned_title,listed_author_count,main_source_risk
-entered,1851,The Emperor of All Maladies: A Biography of Cancer,Siddhartha Mukherjee,https://images.gr-assets.com/books/1280771091s/7170627.jpg,science,science:1624; nonfiction:987; history:709,5,False,1,low_source_risk
-entered,5640,Rising Strong,Brené Brown,https://images.gr-assets.com/books/1428641002s/23317538.jpg,self_help,self-help:359; nonfiction:291; business:22,8,False,1,low_source_risk
-left,6793,Glory over Everything: Beyond The Kitchen House,Kathleen Grissom,https://images.gr-assets.com/books/1444246918s/25813937.jpg,historical_fiction,historical-fiction:72; fiction:23; history:10,4,False,1,low_source_risk
-left,6425,Here be Dragons,Sharon Kay Penman,https://images.gr-assets.com/books/1448657042s/77449.jpg,historical_fiction,historical-fiction:1403; fiction:269; fantasy:88,6,False,1,low_source_risk

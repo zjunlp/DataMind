@@ -1,6 +1,0 @@
-relative_rank,book_key,original_title,authors,main_genre,reading_intent_count,cleaned_rating_activity,intent_per_cleaned_rating,ratings_count,average_rating,demand_relative_score,relative_reader_intent_contribution,exposure_gap_contribution,genre_scarcity_contribution,quality_contribution,relative_review_score
-1,7884,Stephen King's N.,"Marc Guggenheim, Alex Maleev, Stephen King",horror,154,100,1.54,10844,4.22,85.0016391651,28.9005573161,21.2016173096,16.7217790405,16.2889301716,83.1128838378
-2,7297,All But My Life,Gerda Weissmann Klein,memoir,127,95,1.3368421053,13710,4.28,82.428149929,28.0255709758,17.9836083488,18.5525079226,17.6374166758,82.1991039231
-3,7275,"Far from the Tree: Parents, Children, and the Search for Identity",Andrew Solomon,nonfiction,137,100,1.37,11879,4.26,82.8215495574,28.1593268495,19.9663424762,16.1291662113,17.2440170473,81.4988525844
-4,8362,Evicted: Poverty and Profit in the American City,Matthew Desmond,nonfiction,131,96,1.3645833333,15165,4.48,82.7341274178,28.129603322,16.5568790296,16.1291662113,19.6852802972,80.5009288602
-5,6810,America's First Daughter,"Stephanie Dray, Laura Kamoie",historical_fiction,200,100,2.0,13279,4.22,89.1432630314,30.3087094307,18.4569992351,14.5773139548,16.2889301716,79.631952792

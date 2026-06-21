@@ -1,7 +1,0 @@
-LongDS task turn 3 of 5.
-
-Context:
-Shrink lightly exposed titles toward the overall rating level. Use the 60th percentile of Goodreads rating count as the exposure floor, compute the overall mean weighted by Goodreads rating count, weight each book's own average by its Goodreads rating count relative to that count plus the exposure floor, weight the overall mean by the remaining floor share, and percentile-rank the blended value. Use the earlier volume-based demand lens here. Flip strength is the absolute value of the unweighted sum of the demand-percentile gap and quality-percentile gap between the compared treatments.
-
-Question:
-Find books whose membership in the ten-book monitoring set changes when volume demand is paired with exposure-aware quality. Show up to five strongest flips and the score components behind each movement.

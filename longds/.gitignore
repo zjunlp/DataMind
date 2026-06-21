@@ -1,0 +1,7 @@
+codex_results/
+scripts/workspace/
+scripts/results/
+dataset/*
+.codex
+.agents
+AGENTS.md

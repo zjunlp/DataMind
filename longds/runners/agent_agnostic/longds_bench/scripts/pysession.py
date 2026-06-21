@@ -8,7 +8,7 @@ so the agent's discrete shell calls share one stateful session per task.
 Run one kernel per task. Lifecycle:
 
   # start (run in background; keep it alive for the whole task):
-  python pysession.py start --conn /tmp/longds/<key>.json --pidfile /tmp/longds/<key>.pid --cwd <data_dir>
+  python pysession.py start --conn /tmp/longds/<key>.json --pidfile /tmp/longds/<key>.pid --cwd <workspace_dir>
 
   # each analysis step (the agent's <python> block):
   echo '<code>' > step.py
@@ -29,7 +29,7 @@ def cmd_start(args) -> int:
     conn = str(Path(args.conn).resolve())
     Path(conn).parent.mkdir(parents=True, exist_ok=True)
     km = KernelManager(connection_file=conn)
-    # Launch the kernel with THIS interpreter so it inherits our venv (pandas, etc.)
+    # Launch the kernel with this interpreter so it inherits its environment.
     # rather than whatever `python3` kernelspec happens to be installed.
     km.kernel_cmd = [sys.executable, "-m", "ipykernel_launcher", "-f", "{connection_file}"]
     km.start_kernel(cwd=args.cwd or None)

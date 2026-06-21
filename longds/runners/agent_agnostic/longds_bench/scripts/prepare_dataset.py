@@ -2,7 +2,7 @@
 """Prepare an ALREADY-DOWNLOADED LongDS dataset for agent self-evaluation.
 
 This does NOT download anything (the full dataset is ~19.5 GB; download it
-yourself first — see README.md). It splits each task into:
+yourself first — see the operator guide at $SKILL_DIR/../README). It splits each task into:
 
   <out>/manifest/<key>.json   <- the AGENT sees this: turn_id / context / question / data_dir (NO answers)
   <out>/gold/<key>.json        <- JUDGE only (held out): question + ground_truth
