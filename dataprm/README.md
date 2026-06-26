@@ -14,7 +14,7 @@
 - 🔧 [Installation](#installation)
 - 💻 [Training](#Training)
 - 🧐 [Evaluation](#evaluation)
-
+- ✍️ [Citation](#citation)
 ---
 
 ## 👀 Overview
@@ -152,3 +152,16 @@ python run_eval.py scienceagentbench \
 - **ScienceAgentBench**: Download from [ScienceAgentBench](https://github.com/OSU-NLP-Group/ScienceAgentBench). The task list used in our experiments is provided at `evaluate/datasets/scienceagentbench/science_agent_bench_tasks_with_file_info.json`.
 
 An example input file is provided in `evaluate/input_files_examples`; refer to it to format your own input files for DataPRM.
+
+## ✍️ Citation
+
+If you find our work helpful, please use the following citations.
+
+```
+@article{qiu2026rewarding,
+  title={Rewarding the scientific process: Process-level reward modeling for agentic data analysis},
+  author={Qiu, Zhisong and Qiao, Shuofei and Xu, Kewei and Zhu, Yuqi and Du, Lun and Zhang, Ningyu and Chen, Huajun},
+  journal={arXiv preprint arXiv:2604.24198},
+  year={2026}
+}
+```
