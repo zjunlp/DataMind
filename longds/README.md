@@ -15,8 +15,11 @@
   - 🐳 [Execution Environment](#-execution-environment)
 - 📦 [Data](#data)
 - 💻 [Running LongDS using DSGym](#running-longds-using-dsgym)
-- 📁 [Outputs](#outputs)
+  - [1. Configure Model Access](#1-configure-model-access)
+  - [2. Run Evaluation](#2-run-evaluation)
+  - [3. Outputs](#3-outputs)
 - 💻 [Running LongDS using Agent-Agnostic Runner](#running-longds-using-agent-agnostic-runner)
+- 💻 [Running LongDS using Codex](#running-longds-using-codex)
 - 🙏 [Acknowledgements](#acknowledgements)
 - 📖 [Citation](#citation)
 
@@ -212,7 +215,7 @@ Useful options:
 --judge-model NAME    Judge model name. Default: deepseek-v4-pro.
 ```
 
-## 📁 Outputs
+### 3. Outputs
 
 For each task, LongDS writes results under:
 
@@ -232,6 +235,39 @@ The main evaluation score is stored in `results_eval.json`, where each turn rece
 If you want the agent itself to act as the runtime under test, use the agent-agnostic runner instead of DSGym. This method does not start Docker executors or call a model through LiteLLM; the agent reads `runners/agent_agnostic/longds_bench/SKILL.md`, uses its own tools and a persistent Python session, and writes answers for later judging.
 
 For setup, pilot runs, scoring, and comparability notes, see [runners/agent_agnostic/README.md](runners/agent_agnostic/README.md).
+
+## 💻 Running LongDS using Codex
+
+Use the Codex runner when you want the Codex CLI itself to execute LongDS tasks without DSGym Docker executors or LiteLLM. The runner starts `codex exec` sessions, resumes the same session across turns in a task, copies each task's released data into an isolated workspace, and stores per-turn outputs for later judging.
+
+Quick start:
+
+```bash
+cd DataMind/longds/runners/codex
+
+conda create -n longds python=3.12 -y
+conda activate longds
+pip install --upgrade pip
+pip install -r requirements-environment.txt
+
+codex login
+
+python run_codex_longds.py \
+  --task-limit 1 \
+  --turn-limit 1
+```
+
+After a run finishes, configure the judge endpoint and score the Codex outputs:
+
+```bash
+export JUDGE_API_KEY="<your_judge_api_key>"
+export JUDGE_BASE_URL="<your_judge_base_url>"
+
+python judge.py
+```
+
+The runner writes results under `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/`. The judge skips runs that already have `results_eval.json` unless `--overwrite` is passed. For full setup, options, output layout, and judge behavior, see [runners/codex/README.md](runners/codex/README.md).
+
 
 ## 🙏 Acknowledgements
 
