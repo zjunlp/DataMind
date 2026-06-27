@@ -137,10 +137,15 @@ Or score every completed run under `results/`:
 python judge.py
 ```
 
-The judge writes `results_eval.json` back to each run directory. When scoring multiple runs, it
-also writes an aggregate `results/results_eval.json`. Runs that already have `results_eval.json`
-are skipped by default and reused in the aggregate summary. To force re-evaluation, pass
-`--overwrite`:
+The judge writes `results_eval.json` back to each run directory. Runs that already have
+`results_eval.json` are skipped by default and reused in the printed summary. In all-runs mode,
+no aggregate file is written unless `--out` is provided:
+
+```bash
+python judge.py --out results_eval.json
+```
+
+To force re-evaluation, pass `--overwrite`:
 
 ```bash
 python judge.py --overwrite
