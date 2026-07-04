@@ -259,7 +259,9 @@ python run_codex_longds.py \
   --turn-limit 1
 ```
 
-After a run finishes, configure the judge endpoint and score the Codex outputs:
+After a run finishes, you can reopen the codex session from `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/workspace`; the session ID is recorded in `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/summary.json`.
+
+You can also configure the judge endpoint and score the Codex outputs:
 
 ```bash
 export JUDGE_API_KEY="<your_judge_api_key>"
@@ -284,14 +286,16 @@ conda activate longds
 pip install --upgrade pip
 pip install -r requirements-environment.txt
 
-claude auth
+claude
 
 python run_claude_longds.py \
   --task-limit 1 \
   --turn-limit 1
 ```
 
-After a run finishes, configure the judge endpoint and score the Claude Code outputs:
+After a run finishes, you can reopen the claude code session from `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/workspace`; the session ID is recorded in `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/summary.json`.
+
+You can also configure the judge endpoint and score the Claude Code outputs:
 
 ```bash
 export JUDGE_API_KEY="<your_judge_api_key>"

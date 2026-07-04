@@ -35,7 +35,7 @@ Make sure Claude Code is installed and authenticated:
 
 ```bash
 claude --version
-claude auth
+claude
 ```
 
 Then run one LongDS turn from the activated conda environment:
@@ -117,6 +117,8 @@ Claude Code is launched with `cwd` set to the task workspace:
 `results/<domain>/<dataset>/<task_id>/<run_name>/workspace/`. From inside Claude Code, benchmark files are available under `data/`, and temporary analysis files should be written outside `data/`.
 
 The runner first copies only that task's released `data/` directory into `workspace/data/`. Claude Code is not given the original `dataset/task/...` path that contains `task.json`, `task.py`, `task.ipynb`, metadata, and gold answers.
+
+After a run finishes, you can reopen the claude code session from `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/workspace`; the session ID is recorded in `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/summary.json`.
 
 Note: Claude Code permission mode controls tool approval behavior, not filesystem sandboxing. This runner isolates tasks by copying data into a workspace and launching Claude Code with that workspace as `cwd`.
 

@@ -115,6 +115,8 @@ During a task, `results.json` does not include ground truth. After the task fini
 writes `results_with_ground_truth.json` and `task_metadata_with_sources.json` for offline scoring
 and debugging. The run-level `summary.json` is saved in each task's run directory.
 
+After a run finishes, you can also reopen the codex session from `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/workspace`; the session ID is recorded in `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/summary.json`.
+
 ## Run the LLM Judge
 
 Set the judge endpoint first:
