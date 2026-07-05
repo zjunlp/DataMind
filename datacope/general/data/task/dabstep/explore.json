@@ -1,0 +1,56 @@
+[
+    {
+        "task_id": "1741",
+        "query": "What are the applicable fee IDs for Belles_cookbook_store in 2023?\nAnswer must be a list of values in comma separated list, eg: A, B, C. If the answer is an empty list, reply with an empty string. If a question does not have a relevant or applicable answer for the task, please respond with 'Not Applicable'",
+        "data_files": [
+            "acquirer_countries.csv",
+            "fees.json",
+            "manual.md",
+            "merchant_category_codes.csv",
+            "merchant_data.json",
+            "payments-readme.md",
+            "payments.csv"
+        ],
+        "ground_truth": "36, 51, 53, 64, 65, 107, 123, 150, 154, 163, 231, 249, 276, 286, 319, 347, 381, 384, 394, 398, 428, 454, 470, 471, 473, 477, 536, 556, 572, 595, 608, 626, 680, 709, 725, 741, 813, 868, 895, 939, 960",
+        "metadata": {
+            "level": "hard",
+            "category": "Applicable_Fee_IDs"
+        }
+    },
+    {
+        "task_id": "1234",
+        "query": "What is the average transaction value grouped by shopper_interaction for Crossfit_Hanna's TransactPlus transactions between January and April 2023?\nPresent your results broken down by grouping and sorted in ascending order. The final answer should be a list of this format: [grouping_i: amount_i, ]. When grouping by country use the country_code. The elements of the list are sorted in ascending order by the amount. All amounts should be rounded to 2 decimal places.. If a question does not have a relevant or applicable answer for the task, please respond with 'Not Applicable'",
+        "data_files": [
+            "acquirer_countries.csv",
+            "fees.json",
+            "manual.md",
+            "merchant_category_codes.csv",
+            "merchant_data.json",
+            "payments-readme.md",
+            "payments.csv"
+        ],
+        "ground_truth": "[POS: 89.34, Ecommerce: 92.70]",
+        "metadata": {
+            "level": "hard",
+            "category": "Average_Transaction_Value_Stats"
+        }
+    },
+    {
+        "task_id": "1738",
+        "query": "For the 200th of the year 2023, what is the total fees (in euros) that Rafa_AI should pay?\nAnswer must be just a number rounded to 2 decimals. If a question does not have a relevant or applicable answer for the task, please respond with 'Not Applicable'",
+        "data_files": [
+            "acquirer_countries.csv",
+            "fees.json",
+            "manual.md",
+            "merchant_category_codes.csv",
+            "merchant_data.json",
+            "payments-readme.md",
+            "payments.csv"
+        ],
+        "ground_truth": "52.37",
+        "metadata": {
+            "level": "hard",
+            "category": "Total_Fees_Calculation"
+        }
+    }
+]

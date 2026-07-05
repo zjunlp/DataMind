@@ -1,0 +1,313 @@
+version: '3.8'
+services:
+  executor-000:
+    image: executor-kaggle
+    command: python main.py
+    ports:
+    - 60000:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=0
+    - HOST_PORT=60000
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - WORKSPACE_FOLDER=/data
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=0
+    - container.port=60000
+    - container.type=executor-kaggle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '0'
+            capabilities:
+            - gpu
+    volumes:
+    - ../data/data:/data:ro
+    - ../submissions/container_000:/submission
+  executor-001:
+    image: executor-kaggle
+    command: python main.py
+    ports:
+    - 60001:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=1
+    - HOST_PORT=60001
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - WORKSPACE_FOLDER=/data
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=1
+    - container.port=60001
+    - container.type=executor-kaggle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '1'
+            capabilities:
+            - gpu
+    volumes:
+    - ../data/data:/data:ro
+    - ../submissions/container_001:/submission
+  executor-002:
+    image: executor-kaggle
+    command: python main.py
+    ports:
+    - 60002:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=2
+    - HOST_PORT=60002
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - WORKSPACE_FOLDER=/data
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=2
+    - container.port=60002
+    - container.type=executor-kaggle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '2'
+            capabilities:
+            - gpu
+    volumes:
+    - ../data/data:/data:ro
+    - ../submissions/container_002:/submission
+  executor-003:
+    image: executor-kaggle
+    command: python main.py
+    ports:
+    - 60003:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=3
+    - HOST_PORT=60003
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - WORKSPACE_FOLDER=/data
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=3
+    - container.port=60003
+    - container.type=executor-kaggle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '3'
+            capabilities:
+            - gpu
+    volumes:
+    - ../data/data:/data:ro
+    - ../submissions/container_003:/submission
+  executor-004:
+    image: executor-kaggle
+    command: python main.py
+    ports:
+    - 60004:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=4
+    - HOST_PORT=60004
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - WORKSPACE_FOLDER=/data
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=4
+    - container.port=60004
+    - container.type=executor-kaggle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '4'
+            capabilities:
+            - gpu
+    volumes:
+    - ../data/data:/data:ro
+    - ../submissions/container_004:/submission
+  executor-005:
+    image: executor-kaggle
+    command: python main.py
+    ports:
+    - 60005:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=5
+    - HOST_PORT=60005
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - WORKSPACE_FOLDER=/data
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=5
+    - container.port=60005
+    - container.type=executor-kaggle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '5'
+            capabilities:
+            - gpu
+    volumes:
+    - ../data/data:/data:ro
+    - ../submissions/container_005:/submission
+  executor-006:
+    image: executor-kaggle
+    command: python main.py
+    ports:
+    - 60006:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=6
+    - HOST_PORT=60006
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - WORKSPACE_FOLDER=/data
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=6
+    - container.port=60006
+    - container.type=executor-kaggle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '6'
+            capabilities:
+            - gpu
+    volumes:
+    - ../data/data:/data:ro
+    - ../submissions/container_006:/submission
+  executor-007:
+    image: executor-kaggle
+    command: python main.py
+    ports:
+    - 60007:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=7
+    - HOST_PORT=60007
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3600
+    - WORKSPACE_FOLDER=/data
+    - SUBMISSION_DIR=/submission
+    restart: unless-stopped
+    labels:
+    - container.id=7
+    - container.port=60007
+    - container.type=executor-kaggle
+    mem_limit: 24G
+    cpus: 8.0
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          devices:
+          - driver: nvidia
+            device_ids:
+            - '7'
+            capabilities:
+            - gpu
+    volumes:
+    - ../data/data:/data:ro
+    - ../submissions/container_007:/submission
+  manager:
+    image: manager-prebuilt
+    command: python main.py
+    ports:
+    - 5000:5000
+    environment:
+    - PORT=5000
+    - CONTAINER_CONFIG_PATH=container_config.json
+    volumes:
+    - ./container_config_dspredict_hard.json:/app/container_config.json:ro
+    depends_on:
+    - executor-000
+    - executor-001
+    - executor-002
+    - executor-003
+    - executor-004
+    - executor-005
+    - executor-006
+    - executor-007
+    restart: unless-stopped
+networks:
+  default:
+    driver: bridge

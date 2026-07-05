@@ -53,7 +53,7 @@ This repository hosts multiple data analysis projects. The table below provides 
 | **DataMind**          | Scalable data synthesis and agent training recipe for building generalist data-analytic agents               | [ICLR 2026](https://arxiv.org/abs/2509.25084) | [DataMind.md](./datamind/README.md)                   |
 | **DataPRM**           | Environment-aware process reward model for reliable multi-step data analysis                                 | [KDD 2026](https://arxiv.org/abs/2604.24198)     | [DataPRM.md](./dataprm/README.md)                     |
 | **LongDS-Bench**      | Long-horizon benchmark for evaluating analytical state management in multi-turn data analysis                | [arXiv](https://arxiv.org/abs/2605.30434)     | [LongDS-Bench.md](./longds/README.md)           |
-| **DataCOPE**          | Unsupervised verifier-guided skill discovery framework for data-analytic agents                              | [arXiv](https://arxiv.org/abs/2606.06416)     | coming soon                   |
+| **DataCOPE**          | Unsupervised verifier-guided skill discovery framework for data-analytic agents                              | [arXiv](https://arxiv.org/abs/2606.06416)     | [DataCOPE.md](./datacope/README.md)                   |
 
 
 

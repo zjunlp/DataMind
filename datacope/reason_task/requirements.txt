@@ -1,0 +1,32 @@
+# DSGym
+# Core dependencies
+setuptools>=45
+wheel
+numpy>=1.21.0
+pandas>=1.3.0
+requests>=2.25.0
+tqdm>=4.60.0
+omegaconf>=2.1.0
+# Evaluation and metrics
+scikit-learn>=1.0.0
+scipy>=1.7.0
+# Configuration and utilities
+pydantic>=1.8.0
+pyyaml>=5.4.0
+httpx>=0.24.0
+transformers>=4.51.0
+litellm
+kaggle
+kagglesdk
+beautifulsoup4
+selenium
+requests
+tenacity
+statistics
+pyarrow>=21.0.0
+scikit-image>=0.25.2
+matplotlib>=3.10.7
+seaborn>=0.13.2
+together>=1.5.30
+
+claude-agent-sdk==0.2.108

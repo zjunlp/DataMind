@@ -1,0 +1,6 @@
+{
+  "permissions": {
+    "deny": ["Agent"]
+  },
+  "defaultMode": "bypassPermissions"
+}

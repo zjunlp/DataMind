@@ -1,0 +1,109 @@
+version: '3.8'
+services:
+  executor-000:
+    image: python
+    command: python main.py
+    ports:
+    - 60000:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=0
+    - HOST_PORT=60000
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3
+    restart: unless-stopped
+    labels:
+    - container.id=0
+    - container.port=60000
+    - container.type=python
+    mem_limit: 100G
+    cpus: 8
+    mem_reservation: 24G
+    extra_hosts:
+    - host.docker.internal:host-gateway
+  executor-001:
+    image: python
+    command: python main.py
+    ports:
+    - 60001:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=1
+    - HOST_PORT=60001
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3
+    restart: unless-stopped
+    labels:
+    - container.id=1
+    - container.port=60001
+    - container.type=python
+    mem_limit: 100G
+    cpus: 8
+    mem_reservation: 24G
+    extra_hosts:
+    - host.docker.internal:host-gateway
+  executor-002:
+    image: python2
+    command: python main.py
+    ports:
+    - 60002:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=2
+    - HOST_PORT=60002
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3
+    restart: unless-stopped
+    labels:
+    - container.id=2
+    - container.port=60002
+    - container.type=python2
+    mem_limit: 100G
+    cpus: 8
+    mem_reservation: 24G
+    extra_hosts:
+    - host.docker.internal:host-gateway
+  executor-003:
+    image: python2
+    command: python main.py
+    ports:
+    - 60003:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=3
+    - HOST_PORT=60003
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=3
+    restart: unless-stopped
+    labels:
+    - container.id=3
+    - container.port=60003
+    - container.type=python2
+    mem_limit: 100G
+    cpus: 8
+    mem_reservation: 24G
+    extra_hosts:
+    - host.docker.internal:host-gateway
+  manager:
+    image: manager-prebuilt
+    command: python main.py
+    ports:
+    - 5001:5000
+    environment:
+    - PORT=5000
+    - CONTAINER_CONFIG_PATH=container_config.json
+    volumes:
+    - ./container_config.json:/app/container_config.json:ro
+    depends_on:
+    - executor-000
+    - executor-001
+    - executor-002
+    - executor-003
+    restart: unless-stopped
+networks:
+  default:
+    driver: bridge

@@ -1,0 +1,258 @@
+{
+  "0": {
+    "url": "http://executor-000:8432",
+    "type": "executor-prebuilt"
+  },
+  "1": {
+    "url": "http://executor-001:8432",
+    "type": "executor-prebuilt"
+  },
+  "2": {
+    "url": "http://executor-002:8432",
+    "type": "executor-prebuilt"
+  },
+  "3": {
+    "url": "http://executor-003:8432",
+    "type": "executor-prebuilt"
+  },
+  "4": {
+    "url": "http://executor-004:8432",
+    "type": "executor-prebuilt"
+  },
+  "5": {
+    "url": "http://executor-005:8432",
+    "type": "executor-prebuilt"
+  },
+  "6": {
+    "url": "http://executor-006:8432",
+    "type": "executor-prebuilt"
+  },
+  "7": {
+    "url": "http://executor-007:8432",
+    "type": "executor-prebuilt"
+  },
+  "8": {
+    "url": "http://executor-008:8432",
+    "type": "executor-prebuilt"
+  },
+  "9": {
+    "url": "http://executor-009:8432",
+    "type": "executor-prebuilt"
+  },
+  "10": {
+    "url": "http://executor-010:8432",
+    "type": "executor-prebuilt"
+  },
+  "11": {
+    "url": "http://executor-011:8432",
+    "type": "executor-prebuilt"
+  },
+  "12": {
+    "url": "http://executor-012:8432",
+    "type": "executor-prebuilt"
+  },
+  "13": {
+    "url": "http://executor-013:8432",
+    "type": "executor-prebuilt"
+  },
+  "14": {
+    "url": "http://executor-014:8432",
+    "type": "executor-prebuilt"
+  },
+  "15": {
+    "url": "http://executor-015:8432",
+    "type": "executor-prebuilt"
+  },
+  "16": {
+    "url": "http://executor-016:8432",
+    "type": "executor-prebuilt"
+  },
+  "17": {
+    "url": "http://executor-017:8432",
+    "type": "executor-prebuilt"
+  },
+  "18": {
+    "url": "http://executor-018:8432",
+    "type": "executor-prebuilt"
+  },
+  "19": {
+    "url": "http://executor-019:8432",
+    "type": "executor-prebuilt"
+  },
+  "20": {
+    "url": "http://executor-020:8432",
+    "type": "executor-prebuilt"
+  },
+  "21": {
+    "url": "http://executor-021:8432",
+    "type": "executor-prebuilt"
+  },
+  "22": {
+    "url": "http://executor-022:8432",
+    "type": "executor-prebuilt"
+  },
+  "23": {
+    "url": "http://executor-023:8432",
+    "type": "executor-prebuilt"
+  },
+  "24": {
+    "url": "http://executor-024:8432",
+    "type": "executor-prebuilt"
+  },
+  "25": {
+    "url": "http://executor-025:8432",
+    "type": "executor-prebuilt"
+  },
+  "26": {
+    "url": "http://executor-026:8432",
+    "type": "executor-prebuilt"
+  },
+  "27": {
+    "url": "http://executor-027:8432",
+    "type": "executor-prebuilt"
+  },
+  "28": {
+    "url": "http://executor-028:8432",
+    "type": "executor-prebuilt"
+  },
+  "29": {
+    "url": "http://executor-029:8432",
+    "type": "executor-prebuilt"
+  },
+  "30": {
+    "url": "http://executor-030:8432",
+    "type": "executor-prebuilt"
+  },
+  "31": {
+    "url": "http://executor-031:8432",
+    "type": "executor-prebuilt"
+  },
+  "32": {
+    "url": "http://executor-032:8432",
+    "type": "executor-prebuilt"
+  },
+  "33": {
+    "url": "http://executor-033:8432",
+    "type": "executor-prebuilt"
+  },
+  "34": {
+    "url": "http://executor-034:8432",
+    "type": "executor-prebuilt"
+  },
+  "35": {
+    "url": "http://executor-035:8432",
+    "type": "executor-prebuilt"
+  },
+  "36": {
+    "url": "http://executor-036:8432",
+    "type": "executor-prebuilt"
+  },
+  "37": {
+    "url": "http://executor-037:8432",
+    "type": "executor-prebuilt"
+  },
+  "38": {
+    "url": "http://executor-038:8432",
+    "type": "executor-prebuilt"
+  },
+  "39": {
+    "url": "http://executor-039:8432",
+    "type": "executor-prebuilt"
+  },
+  "40": {
+    "url": "http://executor-040:8432",
+    "type": "executor-prebuilt"
+  },
+  "41": {
+    "url": "http://executor-041:8432",
+    "type": "executor-prebuilt"
+  },
+  "42": {
+    "url": "http://executor-042:8432",
+    "type": "executor-prebuilt"
+  },
+  "43": {
+    "url": "http://executor-043:8432",
+    "type": "executor-prebuilt"
+  },
+  "44": {
+    "url": "http://executor-044:8432",
+    "type": "executor-prebuilt"
+  },
+  "45": {
+    "url": "http://executor-045:8432",
+    "type": "executor-prebuilt"
+  },
+  "46": {
+    "url": "http://executor-046:8432",
+    "type": "executor-prebuilt"
+  },
+  "47": {
+    "url": "http://executor-047:8432",
+    "type": "executor-prebuilt"
+  },
+  "48": {
+    "url": "http://executor-048:8432",
+    "type": "executor-prebuilt"
+  },
+  "49": {
+    "url": "http://executor-049:8432",
+    "type": "executor-prebuilt"
+  },
+  "50": {
+    "url": "http://executor-050:8432",
+    "type": "executor-prebuilt"
+  },
+  "51": {
+    "url": "http://executor-051:8432",
+    "type": "executor-prebuilt"
+  },
+  "52": {
+    "url": "http://executor-052:8432",
+    "type": "executor-prebuilt"
+  },
+  "53": {
+    "url": "http://executor-053:8432",
+    "type": "executor-prebuilt"
+  },
+  "54": {
+    "url": "http://executor-054:8432",
+    "type": "executor-prebuilt"
+  },
+  "55": {
+    "url": "http://executor-055:8432",
+    "type": "executor-prebuilt"
+  },
+  "56": {
+    "url": "http://executor-056:8432",
+    "type": "executor-prebuilt"
+  },
+  "57": {
+    "url": "http://executor-057:8432",
+    "type": "executor-prebuilt"
+  },
+  "58": {
+    "url": "http://executor-058:8432",
+    "type": "executor-prebuilt"
+  },
+  "59": {
+    "url": "http://executor-059:8432",
+    "type": "executor-prebuilt"
+  },
+  "60": {
+    "url": "http://executor-060:8432",
+    "type": "executor-prebuilt"
+  },
+  "61": {
+    "url": "http://executor-061:8432",
+    "type": "executor-prebuilt"
+  },
+  "62": {
+    "url": "http://executor-062:8432",
+    "type": "executor-prebuilt"
+  },
+  "63": {
+    "url": "http://executor-063:8432",
+    "type": "executor-prebuilt"
+  }
+}

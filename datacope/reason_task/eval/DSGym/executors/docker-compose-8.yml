@@ -1,0 +1,225 @@
+version: '3.8'
+services:
+  executor-000:
+    image: executor-prebuilt
+    command: python main.py
+    ports:
+    - 60000:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=0
+    - HOST_PORT=60000
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=360
+    - WORKSPACE_FOLDER=/data
+    restart: unless-stopped
+    labels:
+    - container.id=0
+    - container.port=60000
+    - container.type=executor-prebuilt
+    mem_limit: 2G
+    cpus: 0.5
+    mem_reservation: 512M
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    volumes:
+    - ../data/data:/data:ro
+  executor-001:
+    image: executor-prebuilt
+    command: python main.py
+    ports:
+    - 60001:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=1
+    - HOST_PORT=60001
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=360
+    - WORKSPACE_FOLDER=/data
+    restart: unless-stopped
+    labels:
+    - container.id=1
+    - container.port=60001
+    - container.type=executor-prebuilt
+    mem_limit: 2G
+    cpus: 0.5
+    mem_reservation: 512M
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    volumes:
+    - ../data/data:/data:ro
+  executor-002:
+    image: executor-prebuilt
+    command: python main.py
+    ports:
+    - 60002:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=2
+    - HOST_PORT=60002
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=360
+    - WORKSPACE_FOLDER=/data
+    restart: unless-stopped
+    labels:
+    - container.id=2
+    - container.port=60002
+    - container.type=executor-prebuilt
+    mem_limit: 2G
+    cpus: 0.5
+    mem_reservation: 512M
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    volumes:
+    - ../data/data:/data:ro
+  executor-003:
+    image: executor-prebuilt
+    command: python main.py
+    ports:
+    - 60003:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=3
+    - HOST_PORT=60003
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=360
+    - WORKSPACE_FOLDER=/data
+    restart: unless-stopped
+    labels:
+    - container.id=3
+    - container.port=60003
+    - container.type=executor-prebuilt
+    mem_limit: 2G
+    cpus: 0.5
+    mem_reservation: 512M
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    volumes:
+    - ../data/data:/data:ro
+  executor-004:
+    image: executor-prebuilt
+    command: python main.py
+    ports:
+    - 60004:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=4
+    - HOST_PORT=60004
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=360
+    - WORKSPACE_FOLDER=/data
+    restart: unless-stopped
+    labels:
+    - container.id=4
+    - container.port=60004
+    - container.type=executor-prebuilt
+    mem_limit: 2G
+    cpus: 0.5
+    mem_reservation: 512M
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    volumes:
+    - ../data/data:/data:ro
+  executor-005:
+    image: executor-prebuilt
+    command: python main.py
+    ports:
+    - 60005:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=5
+    - HOST_PORT=60005
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=360
+    - WORKSPACE_FOLDER=/data
+    restart: unless-stopped
+    labels:
+    - container.id=5
+    - container.port=60005
+    - container.type=executor-prebuilt
+    mem_limit: 2G
+    cpus: 0.5
+    mem_reservation: 512M
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    volumes:
+    - ../data/data:/data:ro
+  executor-006:
+    image: executor-prebuilt
+    command: python main.py
+    ports:
+    - 60006:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=6
+    - HOST_PORT=60006
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=360
+    - WORKSPACE_FOLDER=/data
+    restart: unless-stopped
+    labels:
+    - container.id=6
+    - container.port=60006
+    - container.type=executor-prebuilt
+    mem_limit: 2G
+    cpus: 0.5
+    mem_reservation: 512M
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    volumes:
+    - ../data/data:/data:ro
+  executor-007:
+    image: executor-prebuilt
+    command: python main.py
+    ports:
+    - 60007:8432
+    environment:
+    - PORT=8432
+    - CONTAINER_ID=7
+    - HOST_PORT=60007
+    - PYTHONUNBUFFERED=1
+    - PYTHONDONTWRITEBYTECODE=1
+    - EXECUTION_TIMEOUT=360
+    - WORKSPACE_FOLDER=/data
+    restart: unless-stopped
+    labels:
+    - container.id=7
+    - container.port=60007
+    - container.type=executor-prebuilt
+    mem_limit: 2G
+    cpus: 0.5
+    mem_reservation: 512M
+    extra_hosts:
+    - host.docker.internal:host-gateway
+    volumes:
+    - ../data/data:/data:ro
+  manager:
+    image: manager-prebuilt
+    command: python main.py
+    ports:
+    - 5001:5000
+    environment:
+    - PORT=5000
+    - CONTAINER_CONFIG_PATH=container_config.json
+    volumes:
+    - ./container_config.json:/app/container_config.json:ro
+    depends_on:
+    - executor-000
+    - executor-001
+    - executor-002
+    - executor-003
+    - executor-004
+    - executor-005
+    - executor-006
+    - executor-007
+    restart: unless-stopped
+networks:
+  default:
+    driver: bridge

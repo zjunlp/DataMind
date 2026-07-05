@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="220" viewBox="0 0 720 220" role="img" aria-labelledby="title desc">
+  <title id="title">Project-level skills demo</title>
+  <desc id="desc">A minimal play button for the project-level skills demo video.</desc>
+  <rect width="720" height="220" fill="#ffffff"/>
+  <circle cx="360" cy="110" r="56" fill="#2563eb"/>
+  <path d="M344 77 L344 143 L398 110 Z" fill="#ffffff"/>
+</svg>

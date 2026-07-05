@@ -1,0 +1,31 @@
+run:
+  dry_run: false
+
+model:
+  model: qwen3.5-397b-a17b
+  api_key: "your_api_key_here"
+  base_url: "your_base_url_here"
+  manager_url: http://localhost:5005
+  max_workers: 30
+
+paths:
+  results_dir: DSGym/examples/results/dabstep_test
+  skill_dir: skill/0/iter2
+  category_file: DSGym/data/task/DABStep/all_query_category.json
+  all_jsonl: DSGym/data/task/DABStep/all.jsonl
+  gt_file: DSGym/data/task/DABStep/test.jsonl
+  eval_script_dir: DSGym/examples
+  val_script_dir: val/dabstep_benchmark
+  output_jsonl: results/dabstep_test.jsonl
+
+pipeline:
+  target_categories:
+    - Applicable_Fee_IDs
+    - Average_Fee_Estimation
+    - Average_Transaction_Value_Stats
+    - Dataset_Metadata_and_Business_Rules
+    - Fee_Delta_and_Impact_Simulation
+    - Fraud_and_General_Macro_Analysis
+    - Highest_Cost_Scenario_Identification
+    - Routing_and_Cost_Optimization
+    - Total_Fees_Calculation

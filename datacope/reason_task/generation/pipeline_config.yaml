@@ -1,0 +1,42 @@
+# Config for reason-task generation pipeline.
+# Relative paths are resolved from this directory: reason_task/generation.
+
+task:
+  name: dabstep
+
+  # Edit this list to select which categories the pipeline should process.
+  target_categories:
+    - Applicable_Fee_IDs
+    - Average_Fee_Estimation
+    - Average_Transaction_Value_Stats
+    - Dataset_Metadata_and_Business_Rules
+    - Fee_Delta_and_Impact_Simulation
+    - Fraud_and_General_Macro_Analysis
+    - Highest_Cost_Scenario_Identification
+    - Routing_and_Cost_Optimization
+    - Total_Fees_Calculation
+
+model:
+  name: qwen3.5-397b-a17b
+  api_key: your_api_key_here
+  base_url: your_base_url_here
+  manager_url: http://localhost:5005
+
+runtime:
+  num_runs: 3
+  max_workers: 30
+  max_concurrent_skill_tasks: 3
+  temperature: 1.0
+  max_tokens: 16384
+  no_skill_explore_output_name: dabstep_qwen3_5_397b_nothiking_t1_explore_run_{run_idx}
+  with_skill_explore_output_name: dabstep_qwen3_5_397b_nothiking_t1_explore_{category}_run_{run_idx}
+
+paths:
+  # Output run name under dataagent/DSGym/examples/results/.
+  results_run_name: dabstep_explore_test_0
+  category_file: dataagent/DSGym/data/task/DABStep/all_query_category.json
+  skill_save_dir: skill_manager/skills
+  verifier_traj_output_base_dir: verifier
+  skill_manager_workspace_dir: skill_manager/workspace
+  data_dir: dataagent/DSGym/data/data/dabstep
+  evaluate_script_dir: dataagent/DSGym/examples

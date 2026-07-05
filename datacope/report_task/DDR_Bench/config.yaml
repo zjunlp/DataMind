@@ -1,0 +1,68 @@
+# DDR_Bench Configuration File
+# Copy this file to config.yaml and customize for your environment
+
+# Base directories
+base_data_dir: "./data"  # Base directory for all data files
+base_log_dir: "./logs"  # Base directory for log outputs
+
+# Provider configuration
+provider:
+  default_provider: "openai"  # Options: gemini, vllm, minimax, openai
+  default_model: "qwen3.5-397b-a17b"
+  
+  # VLLM settings (for local model serving)
+  vllm_base_url: "http://localhost:8422"
+  vllm_port: 8422
+
+# Agent configuration
+agent:
+  max_turns: 50  # Maximum conversation turns, only in case for dead loop in LLMs
+  max_retries: 2  # Retry failed analyses
+  auto_finish: true  # Auto-finish when task complete
+  log_level: "INFO"  # Logging level
+
+# Evaluation configuration
+evaluation:
+  provider: "openai"  # LLM provider for evaluation
+  model: "gpt-5-mini"  # Model for LLM-as-judge
+  max_retries: 5  # Retry failed analyses
+  retry_delay: 2.0  # Retry delay in seconds
+
+# Scenario configurations
+scenarios:
+  mimic:
+    # MIMIC-IV patient data analysis
+    # NOTE: db_path points to external MIMIC-IV database (READ-ONLY, do not modify)
+    db_path: "PATH_TO_MIMIC_IV_DB/DDRBench_mimic/mimic_iv.db" # Follow instructions in README.md to get the data
+    id_file: "./data/mimic/entity_ids.json"  # List of 100 entity (patient) IDs
+    qa_file: "./data/mimic/qa.json"  # QA file for evaluation
+    log_dir: "./logs/mimic"
+    identifier_prefix: "patient"
+  
+  10k:
+    # SEC 10-K financial report analysis
+    # NOTE: db_path points to external 10-K database (READ-ONLY, do not modify)
+    db_path: "PATH_TO_10K_DB/DDRBench_10K/raw/10k_financial_data.db" # Download from https://huggingface.co/datasets/thinkwee/DDRBench_10K/tree/main/raw
+    id_file: "./data/10k/entity_ids.json"  # List of 100 entity (company) CIKs
+    qa_file: "./data/10k/qa.json"  # QA file for evaluation
+    log_dir: "./logs/10k"
+    identifier_prefix: "company"
+  
+  globem:
+    # GLOBEM behavioral data analysis
+    # NOTE: data_path points to external GLOBEM processed data (READ-ONLY, do not modify)
+    data_path: "PATH_TO_GLOBEM_DB/DDRBench_globem/" # Follow instructions in README.md to get the data
+    id_file: "./data/globem/entity_ids.json"  # List of 91 entity (user) IDs
+    qa_file: "./data/globem/qa.json"  # QA file for evaluation
+    log_dir: "./logs/globem"
+    identifier_prefix: "user"
+
+# Environment variables (set these in your shell or .env file):
+# GEMINI_API_KEY - Google Gemini API key
+# OPENAI_API_KEY - OpenAI API key (if not using Azure)
+# AZURE_OPENAI_API_KEY - Azure OpenAI API key
+# AZURE_OPENAI_ENDPOINT - Azure OpenAI endpoint URL
+# AZURE_OPENAI_API_VERSION - Azure API version (default: 2024-12-01-preview)
+# MINIMAX_API_KEY - MiniMax API key
+# VLLM_BASE_URL - VLLM server URL
+# VLLM_PORT - VLLM server port

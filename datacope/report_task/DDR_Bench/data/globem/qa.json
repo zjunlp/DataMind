@@ -1,0 +1,2644 @@
+{
+  "metadata": {
+    "total_users_processed": 155,
+    "processing_timestamp": "2025-09-15 22:22:22",
+    "source_files": [
+      "pre.csv",
+      "post.csv"
+    ],
+    "dataset": "GLOBEM INS-W_1",
+    "description": "Q&A pairs generated from pre/post survey data changes"
+  },
+  "results": [
+    {
+      "entity_id": "INS-W_001",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=3.00, Post=21.00"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=4.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=23.00, Post=19.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=4.00, Post=4.50"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=61.00, Post=74.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_002",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=5.50, Post=4.50"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=4.83, Post=5.50"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=2.00, Post=4.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=27.00, Post=32.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=72.00, Post=73.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_003",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=6.00, Post=18.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=10.00, Post=25.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=12.00, Post=25.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=41.00, Post=70.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=54.00, Post=61.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_004",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=3.50, Post=2.25"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=19.00, Post=25.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=8.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=6.67, Post=5.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "CHIPS: Pre=15.00, Post=17.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_005",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=17.00, Post=25.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=28.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=6.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=9.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=73.00, Post=79.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_006",
+      "qa_pairs": [
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "UCLA_10items: Pre=16.00, Post=11.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=4.57, Post=5.71"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=3.00, Post=6.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=80.00, Post=85.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_007",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=5.00, Post=4.50"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=4.83, Post=5.17"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=21.00, Post=40.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=9.00, Post=14.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=84.00, Post=86.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_008",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=5.50, Post=6.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=5.00, Post=15.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=3.50, Post=5.25"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=83.00, Post=76.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_009",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=5.00, Post=17.00"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=4.00, Post=9.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=3.83, Post=3.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=5.75, Post=6.25"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=73.00, Post=72.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_010",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=7.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=31.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=3.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "UCLA_10items: Pre=13.00, Post=24.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=86.00, Post=89.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_011",
+      "qa_pairs": [
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "BRS: Pre=2.50, Post=3.50"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=10.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=14.00, Post=8.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_emotional: Pre=20.00, Post=14.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "PSS_10items: Pre=14.00, Post=18.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_012",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=5.00, Post=10.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "BRS: Pre=3.00, Post=3.50"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=6.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_emotional: Pre=24.00, Post=22.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=65.00, Post=73.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_013",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=16.00, Post=24.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=5.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=4.00, Post=10.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=22.00, Post=43.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=82.00, Post=80.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_014",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=46.00, Post=9.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=2.29, Post=3.14"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=19.00, Post=14.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=5.50, Post=6.25"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "STAIS: Pre=44.00, Post=47.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_015",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=8.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=5.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=5.17, Post=3.67"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=31.00, Post=40.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=85.00, Post=75.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_016",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=18.00, Post=0.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=4.67, Post=6.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=4.00, Post=6.00"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=18.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=81.00, Post=90.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_019",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=3.00, Post=5.50"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "BRS: Pre=2.00, Post=2.83"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "MAAS_7items: Pre=5.00, Post=4.14"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=25.00, Post=23.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=54.00, Post=62.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_020",
+      "qa_pairs": [
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "STAIS: Pre=58.00, Post=43.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=3.57, Post=4.43"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=5.00, Post=16.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=6.00, Post=5.83"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=78.00, Post=69.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_022",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=12.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=20.00, Post=27.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=30.00, Post=60.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=7.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "BRS: Pre=4.67, Post=4.33"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_023",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=4.00, Post=3.50"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "STAIS: Pre=40.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=13.00, Post=23.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=4.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=74.00, Post=83.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_024",
+      "qa_pairs": [
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "SocialFit: Pre=57.00, Post=77.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=4.33, Post=5.67"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=2.00, Post=9.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=11.00, Post=14.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "PSS_10items: Pre=34.00, Post=30.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_025",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=21.00, Post=24.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=22.00, Post=25.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=1.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "UCLA_10items: Pre=13.00, Post=21.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=84.00, Post=82.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_028",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=23.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=14.00, Post=16.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=29.00, Post=34.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_emotional: Pre=32.00, Post=28.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=82.00, Post=77.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_030",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=24.00, Post=29.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=6.25, Post=5.25"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=4.00, Post=11.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=12.00, Post=18.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=83.00, Post=85.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_031",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=23.00, Post=11.00"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "UCLA_10items: Pre=20.00, Post=14.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=5.50, Post=4.67"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=19.00, Post=18.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=88.00, Post=89.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_032",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=10.00, Post=25.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=10.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=4.00, Post=6.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "MAAS_7items: Pre=4.29, Post=3.86"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=83.00, Post=89.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_033",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=4.50, Post=5.17"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "STAIS: Pre=53.00, Post=47.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=8.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_instrumental: Pre=12.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=73.00, Post=71.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_034",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=19.00, Post=25.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=3.43, Post=4.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=4.00, Post=5.25"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=45.00, Post=51.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=75.00, Post=77.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_035",
+      "qa_pairs": [
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=2.86, Post=4.86"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=14.00, Post=18.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "BRS: Pre=2.83, Post=2.33"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=23.00, Post=21.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=80.00, Post=86.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_036",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=11.00, Post=14.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=57.00, Post=45.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=7.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=30.00, Post=48.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=80.00, Post=86.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_037",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=12.00, Post=20.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=2.57, Post=4.29"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=7.00, Post=11.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=5.50, Post=3.17"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "PSS_10items: Pre=19.00, Post=23.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_038",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=21.00, Post=6.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=2.83, Post=4.83"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "BRS: Pre=3.50, Post=3.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "MAAS_7items: Pre=4.57, Post=4.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=74.00, Post=72.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_039",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=2.33, Post=5.33"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=5.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=3.25, Post=4.50"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=80.00, Post=75.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_040",
+      "qa_pairs": [
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "BRS: Pre=2.67, Post=3.67"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=27.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=28.00, Post=39.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=39.00, Post=54.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=85.00, Post=79.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_042",
+      "qa_pairs": [
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "PSS_10items: Pre=19.00, Post=8.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=8.00, Post=4.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "MAAS_7items: Pre=5.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=4.00, Post=4.25"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=69.00, Post=72.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_043",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=15.00, Post=5.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=9.00, Post=5.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=23.00, Post=41.00"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "UCLA_10items: Pre=20.00, Post=23.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=71.00, Post=80.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_044",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=2.75, Post=2.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=5.00, Post=6.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=1.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_instrumental: Pre=21.00, Post=18.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_045",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=30.00, Post=10.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=9.00, Post=6.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "BRS: Pre=3.17, Post=2.50"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=4.75, Post=5.25"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=70.00, Post=69.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_046",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=2.17, Post=3.83"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=2.00, Post=1.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=20.00, Post=61.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=6.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=92.00, Post=94.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_048",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=4.50, Post=5.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=3.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=1.00, Post=2.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=85.00, Post=90.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_049",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=14.00, Post=18.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=24.00, Post=30.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=9.00, Post=15.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=23.00, Post=28.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=82.00, Post=77.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_050",
+      "qa_pairs": [
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "BRS: Pre=2.33, Post=2.83"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=14.00, Post=11.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "MAAS_7items: Pre=4.43, Post=2.29"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=20.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=70.00, Post=65.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_051",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=3.50, Post=5.50"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=14.00, Post=8.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=2.25, Post=4.00"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=18.00, Post=17.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=84.00, Post=80.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_052",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=5.75, Post=5.25"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=4.00, Post=11.00"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=12.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "STAIS: Pre=28.00, Post=31.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_054",
+      "qa_pairs": [
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=2.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=14.00, Post=20.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=11.00, Post=22.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=4.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "BRS: Pre=4.67, Post=5.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_055",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=12.00, Post=18.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=21.00, Post=27.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=15.00, Post=30.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=5.00, Post=2.83"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "PSS_10items: Pre=19.00, Post=23.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_057",
+      "qa_pairs": [
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=10.00, Post=4.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=11.00, Post=5.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "BRS: Pre=4.50, Post=3.17"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "MAAS_7items: Pre=4.43, Post=3.29"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=73.00, Post=76.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_058",
+      "qa_pairs": [
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "STAIS: Pre=50.00, Post=31.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=3.57, Post=4.86"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=4.83, Post=4.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_emotional: Pre=34.00, Post=31.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=76.00, Post=87.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_060",
+      "qa_pairs": [
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=1.43, Post=2.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_instrumental: Pre=17.00, Post=8.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "BRS: Pre=3.67, Post=1.83"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=78.00, Post=70.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_061",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=52.00, Post=20.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=13.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=4.67, Post=3.83"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=75.00, Post=78.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_062",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=17.00, Post=27.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "BRS: Pre=2.83, Post=3.33"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=12.00, Post=18.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=8.00, Post=11.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=82.00, Post=77.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_064",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=21.00, Post=1.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=3.14, Post=5.14"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=4.00, Post=6.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=5.17, Post=4.50"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=79.00, Post=70.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_065",
+      "qa_pairs": [
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "UCLA_10items: Pre=22.00, Post=15.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=4.29, Post=4.71"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=4.17, Post=4.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_066",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=22.00, Post=28.00"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=14.00, Post=16.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=6.00, Post=10.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=5.17, Post=3.33"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=73.00, Post=68.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_068",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=11.00, Post=24.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=2.14, Post=4.57"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=5.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=27.00, Post=31.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=67.00, Post=81.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_070",
+      "qa_pairs": [
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=29.00, Post=55.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=10.00, Post=17.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=75.00, Post=79.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_072",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=4.75, Post=2.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "PSS_10items: Pre=27.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=18.00, Post=26.00"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "UCLA_10items: Pre=24.00, Post=29.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "STAIS: Pre=39.00, Post=42.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_073",
+      "qa_pairs": [
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "UCLA_10items: Pre=26.00, Post=14.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=19.00, Post=23.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=19.00, Post=37.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=38.00, Post=53.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=83.00, Post=77.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_074",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=5.00, Post=25.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=13.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "BRS: Pre=3.83, Post=3.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "MAAS_7items: Pre=3.57, Post=3.14"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=75.00, Post=84.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_075",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=11.00, Post=16.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=13.00, Post=9.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=14.00, Post=20.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=20.00, Post=16.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=73.00, Post=76.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_076",
+      "qa_pairs": [
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "SocialFit: Pre=72.00, Post=103.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=14.00, Post=20.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=14.00, Post=17.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=38.00, Post=44.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "CHIPS: Pre=2.00, Post=4.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_077",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=3.75, Post=2.25"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "UCLA_10items: Pre=18.00, Post=15.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=1.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=13.00, Post=22.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=87.00, Post=81.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_078",
+      "qa_pairs": [
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=18.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=3.50, Post=4.50"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=18.00, Post=28.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=48.00, Post=60.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "BRS: Pre=2.83, Post=3.17"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_079",
+      "qa_pairs": [
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "BRS: Pre=1.50, Post=3.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=25.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=22.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=12.00, Post=8.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=63.00, Post=67.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_080",
+      "qa_pairs": [
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "STAIS: Pre=51.00, Post=43.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=2.83, Post=3.17"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=27.00, Post=33.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_emotional: Pre=28.00, Post=22.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "CESD_10items: Pre=12.00, Post=14.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_082",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=3.50, Post=2.50"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=4.71, Post=5.57"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=5.00, Post=18.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=11.00, Post=19.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=73.00, Post=79.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_086",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=28.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=20.00, Post=25.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=3.00, Post=6.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=4.50, Post=5.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=72.00, Post=68.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_088",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=2.50, Post=1.50"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "UCLA_10items: Pre=22.00, Post=17.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=21.00, Post=28.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "MAAS_7items: Pre=5.71, Post=4.29"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "CHIPS: Pre=2.00, Post=4.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_089",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=3.50, Post=3.67"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "UCLA_10items: Pre=30.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_instrumental: Pre=15.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "CHIPS: Pre=18.00, Post=20.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_090",
+      "qa_pairs": [
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=4.00, Post=8.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=25.00, Post=45.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=74.00, Post=72.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_093",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=16.00, Post=18.00"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=12.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=19.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=6.00, Post=8.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=85.00, Post=79.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_094",
+      "qa_pairs": [
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=20.00, Post=16.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=3.83, Post=4.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=44.00, Post=70.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=3.75, Post=4.75"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "BRS: Pre=1.67, Post=2.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_096",
+      "qa_pairs": [
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=3.00, Post=1.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=5.50, Post=4.25"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "MAAS_7items: Pre=5.43, Post=4.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=5.83, Post=5.33"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=75.00, Post=74.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_098",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=9.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=12.00, Post=15.00"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "UCLA_10items: Pre=25.00, Post=31.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "CESD_10items: Pre=12.00, Post=14.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_099",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=8.00, Post=2.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=5.25, Post=4.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=3.00, Post=5.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_instrumental: Pre=15.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=77.00, Post=76.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_102",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=47.00, Post=14.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=20.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=25.00, Post=20.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_instrumental: Pre=23.00, Post=19.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=76.00, Post=75.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_104",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=20.00, Post=24.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=32.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=5.00, Post=8.00"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "UCLA_10items: Pre=15.00, Post=19.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=75.00, Post=74.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_106",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=16.00, Post=20.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=25.00, Post=21.00"
+        },
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_reappraisal: Pre=4.33, Post=3.50"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "UCLA_10items: Pre=23.00, Post=26.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=46.00, Post=51.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_108",
+      "qa_pairs": [
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=2.57, Post=3.57"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=9.00, Post=11.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=9.00, Post=14.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=43.00, Post=57.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=71.00, Post=69.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_109",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=3.17, Post=5.00"
+        },
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "UCLA_10items: Pre=23.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=6.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=4.00, Post=4.50"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=79.00, Post=83.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_111",
+      "qa_pairs": [
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CHIPS: Pre=90.00, Post=66.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=12.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=12.00, Post=17.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "SocialFit: Pre=85.00, Post=51.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_115",
+      "qa_pairs": [
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=4.00, Post=1.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=5.00, Post=3.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=23.00, Post=37.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_instrumental: Pre=23.00, Post=20.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "PSS_10items: Pre=11.00, Post=15.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_116",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=5.50, Post=6.67"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=3.25, Post=2.75"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=22.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=10.00, Post=15.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "CHIPS: Pre=0.00, Post=2.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_117",
+      "qa_pairs": [
+        {
+          "question": "How did the user's loneliness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "UCLA_10items: Pre=25.00, Post=13.00"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=14.00, Post=20.00"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=26.00, Post=41.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=4.25, Post=5.50"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "PSS_10items: Pre=26.00, Post=30.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_118",
+      "qa_pairs": [
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=3.57, Post=5.14"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "STAIS: Pre=35.00, Post=28.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=5.00, Post=16.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_instrumental: Pre=14.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=89.00, Post=81.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_120",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_emotional: Pre=16.00, Post=24.00"
+        },
+        {
+          "question": "How did the user's emotional support received change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_receiving_emotional: Pre=26.00, Post=35.00"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=4.00, Post=6.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=68.00, Post=75.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_122",
+      "qa_pairs": [
+        {
+          "question": "How did the user's cognitive reappraisal ability change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_reappraisal: Pre=4.33, Post=5.17"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=3.00, Post=3.43"
+        },
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CESD_10items: Pre=6.00, Post=11.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=20.00, Post=7.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=74.00, Post=63.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_123",
+      "qa_pairs": [
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=8.00, Post=5.00"
+        },
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=20.00, Post=24.00"
+        },
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "ERQ_suppression: Pre=3.00, Post=4.00"
+        },
+        {
+          "question": "How did the user's emotional support given change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_giving_emotional: Pre=25.00, Post=22.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=90.00, Post=85.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_124",
+      "qa_pairs": [
+        {
+          "question": "How did the user's instrumental support given change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "2waySSS_giving_instrumental: Pre=8.00, Post=12.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=2.43, Post=3.29"
+        },
+        {
+          "question": "How did the user's instrumental support received change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "2waySSS_receiving_instrumental: Pre=15.00, Post=8.00"
+        },
+        {
+          "question": "How did the user's anxiety levels change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "STAIS: Pre=37.00, Post=51.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=68.00, Post=70.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_125",
+      "qa_pairs": [
+        {
+          "question": "How did the user's depressive symptoms change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "CESD_10items: Pre=17.00, Post=10.00"
+        },
+        {
+          "question": "How did the user's mindful awareness change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "MAAS_7items: Pre=2.57, Post=3.43"
+        },
+        {
+          "question": "How did the user's physical symptoms change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "CHIPS: Pre=15.00, Post=59.00"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It worsened.",
+          "source_text": "PSS_10items: Pre=20.00, Post=29.00"
+        },
+        {
+          "question": "How did the user's social adaptation change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "SocialFit: Pre=69.00, Post=59.00"
+        }
+      ]
+    },
+    {
+      "entity_id": "INS-W_126",
+      "qa_pairs": [
+        {
+          "question": "How did the user's emotion suppression change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "ERQ_suppression: Pre=2.50, Post=1.50"
+        },
+        {
+          "question": "How did the user's perceived stress change during the experiment?",
+          "answer": "It improved.",
+          "source_text": "PSS_10items: Pre=26.00, Post=17.00"
+        },
+        {
+          "question": "How did the user's resilience change during the experiment?",
+          "answer": "It remained almost the same.",
+          "source_text": "BRS: Pre=3.00, Post=3.33"
+        }
+      ]
+    }
+  ]
+}

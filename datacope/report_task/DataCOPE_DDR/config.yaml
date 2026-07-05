@@ -1,0 +1,31 @@
+# DataCOPE_DDR Configuration File
+# Copy or edit this file for your environment before running the pipeline.
+
+# Scenario configuration
+scenario: "10k"  # Options: mimic, 10k, globem
+
+# Provider configuration
+provider:
+  default_provider: "openai"  # Options: gemini, vllm, minimax, openai
+  default_model: "qwen3.5-397b-a17b"
+
+# Agent configuration
+agent:
+  max_workers: 25  # Number of entities to process in parallel
+
+# Evaluation configuration
+evaluation:
+  provider: "openai"  # LLM provider for evaluation
+  model: "gpt-5-mini"  # Model for LLM-as-judge
+
+# Path configuration
+paths:
+  # DDR_Bench directory. If blank, ../DDR_Bench is used.
+  ddr_bench_dir: ""
+
+  # DDRBench_data directory. If blank, ../DDRBench_data is used.
+  # Expected split artifacts:
+  #   mimic:  {ddr_data_dir}/DDRBench_mimic/mimic_iv_explore.db
+  #   10k:    {ddr_data_dir}/DDRBench_10K/raw/10k_financial_data_explore.db
+  #   globem: {ddr_data_dir}/DDRBench_globem_explore
+  ddr_data_dir: ""

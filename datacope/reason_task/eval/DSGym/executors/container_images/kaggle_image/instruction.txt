@@ -1,0 +1,1 @@
+- **Submission**: We have simplified all competition types to use a simple CSV submission format. Regardless of what the competition instructions say, you MUST produce a submission file at '/submission/submission.csv'. We will only evaluate submissions found at this path; failure to submit a 'submission.csv' at this path will result in a failed attempt.
