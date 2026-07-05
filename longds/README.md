@@ -15,8 +15,12 @@
   - 🐳 [Execution Environment](#-execution-environment)
 - 📦 [Data](#data)
 - 💻 [Running LongDS using DSGym](#running-longds-using-dsgym)
-- 📁 [Outputs](#outputs)
+  - [1. Configure Model Access](#1-configure-model-access)
+  - [2. Run Evaluation](#2-run-evaluation)
+  - [3. Outputs](#3-outputs)
 - 💻 [Running LongDS using Agent-Agnostic Runner](#running-longds-using-agent-agnostic-runner)
+- 💻 [Running LongDS using Codex](#running-longds-using-codex)
+- 💻 [Running LongDS using Claude Code](#running-longds-using-claude-code)
 - 🙏 [Acknowledgements](#acknowledgements)
 - 📖 [Citation](#citation)
 
@@ -65,6 +69,7 @@ Further analysis reveals consistent degradation as tasks become longer and more 
 
 The paper experiments use [DSGym](https://arxiv.org/abs/2601.16344), which provides Docker-based execution infrastructure for code-based data analysis.
 LongDS also includes an agent-agnostic runner based on the LDC Labs [longds-bench](https://github.com/ldclabs/longds-bench) skill for evaluating agents that execute the benchmark with their own shell/code tools; see [runners/agent_agnostic/README.md](runners/agent_agnostic/README.md).
+LongDS also provides direct Codex and Claude Code runners for evaluating agents through their own CLI runtimes.
 
 Follow the [DSGym](https://github.com/fannie1208/DSGym) setup instructions to configure the evaluation environment.
 
@@ -212,7 +217,7 @@ Useful options:
 --judge-model NAME    Judge model name. Default: deepseek-v4-pro.
 ```
 
-## 📁 Outputs
+### 3. Outputs
 
 For each task, LongDS writes results under:
 
@@ -232,6 +237,75 @@ The main evaluation score is stored in `results_eval.json`, where each turn rece
 If you want the agent itself to act as the runtime under test, use the agent-agnostic runner instead of DSGym. This method does not start Docker executors or call a model through LiteLLM; the agent reads `runners/agent_agnostic/longds_bench/SKILL.md`, uses its own tools and a persistent Python session, and writes answers for later judging.
 
 For setup, pilot runs, scoring, and comparability notes, see [runners/agent_agnostic/README.md](runners/agent_agnostic/README.md).
+
+## 💻 Running LongDS using Codex
+
+Use the Codex runner when you want the Codex CLI itself to execute LongDS tasks without DSGym Docker executors or LiteLLM. The runner starts `codex exec` sessions, resumes the same session across turns in a task, copies each task's released data into an isolated workspace, and stores per-turn outputs for later judging.
+
+Quick start:
+
+```bash
+cd DataMind/longds/runners/codex
+
+conda create -n longds python=3.12 -y
+conda activate longds
+pip install --upgrade pip
+pip install -r requirements-environment.txt
+
+codex login
+
+python run_codex_longds.py \
+  --task-limit 1 \
+  --turn-limit 1
+```
+
+After a run finishes, you can reopen the codex session from `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/workspace`; the session ID is recorded in `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/summary.json`.
+
+You can also configure the judge endpoint and score the Codex outputs:
+
+```bash
+export JUDGE_API_KEY="<your_judge_api_key>"
+export JUDGE_BASE_URL="<your_judge_base_url>"
+
+python judge.py
+```
+
+The runner writes results under `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/`. The judge skips runs that already have `results_eval.json` unless `--overwrite` is passed. For full setup, options, output layout, and judge behavior, see [runners/codex/README.md](runners/codex/README.md).
+
+## 💻 Running LongDS using Claude Code
+
+Use the Claude Code runner when you want Claude Code itself to execute LongDS tasks without DSGym Docker executors or LiteLLM. The runner starts `claude -p` sessions, reuses the same Claude session id across turns in a task, copies each task's released data into an isolated workspace, and stores per-turn outputs for later judging.
+
+Quick start:
+
+```bash
+cd DataMind/longds/runners/claude_code
+
+conda create -n longds python=3.12 -y
+conda activate longds
+pip install --upgrade pip
+pip install -r requirements-environment.txt
+
+claude
+
+python run_claude_longds.py \
+  --task-limit 1 \
+  --turn-limit 1
+```
+
+After a run finishes, you can reopen the claude code session from `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/workspace`; the session ID is recorded in `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/summary.json`.
+
+You can also configure the judge endpoint and score the Claude Code outputs:
+
+```bash
+export JUDGE_API_KEY="<your_judge_api_key>"
+export JUDGE_BASE_URL="<your_judge_base_url>"
+
+python judge.py
+```
+
+The runner writes results under `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/`. The judge skips runs that already have `results_eval.json` unless `--overwrite` is passed. For full setup, options, output layout, and judge behavior, see [runners/claude_code/README.md](runners/claude_code/README.md).
+
 
 ## 🙏 Acknowledgements
 
