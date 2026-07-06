@@ -3,7 +3,7 @@
 
 task: dabstep
 dataset: explore
-workspace_dir: outputs/dabstep_cc
+workspace_dir: outputs/dabstep
 
 category_list: 
   - "Average_Transaction_Value_Stats"
@@ -17,26 +17,27 @@ manager_url: http://localhost:5005
 backend: openai
 
 da_agent:
-  # react
-  agent_type: react
+  agent_type: react   # react, claude_code, codex
   model: your_model_name
   api_key: your_api_key
   base_url: your_base_url
+
+  max_workers: 3
+  sample_nums: 3
   
+  # react style parameters
+  max_turns: 20
   temperature: 1.0
   top_p: 1.0
   max_tokens: 16384
-
-  max_turns: 20
-  max_workers: 3
-  sample_nums: 3
 
 verifier:
   name: supervised
   
 skill_manager:
-  agent_type: claude_code
-  model: claude-sonnet-4-6
+  agent_type: claude_code # claude_code, codex
+  model: your_model_name
   api_key: your_api_key
   base_url: your_base_url
+
   max_workers: 3

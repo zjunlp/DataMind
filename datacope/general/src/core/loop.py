@@ -28,27 +28,27 @@ from src.core.config import (
 
 DEFAULT_CONFIG_PATH = REPO_ROOT / "config.yaml"
 
-def _format_skill_base_dir(base_dir: Optional[str], category: Optional[str]) -> Optional[str]:
+def _format_skill_base_dir(base_dir: Optional[str], category: Optional[str] = None) -> Optional[str]:
     if base_dir is None:
         return None
 
-    if category is None:
-        return os.path.abspath(base_dir)
-    else:
+    tmp_base_dir = os.path.abspath(base_dir)
+
+    if category is not None:
         tmp_base_dir = os.path.join(os.path.abspath(base_dir), category)
         
-        if not os.path.isdir(tmp_base_dir):
-            return None
-        
-        skill_path = os.path.join(tmp_base_dir, "SKILL.md")
-        if os.path.isfile(skill_path):
-            return tmp_base_dir
-
-        for root, _, files in os.walk(tmp_base_dir):
-            if "SKILL.md" in files:
-                return root
-
+    if not os.path.isdir(tmp_base_dir):
         return None
+    
+    skill_path = os.path.join(tmp_base_dir, "SKILL.md")
+    if os.path.isfile(skill_path):
+        return tmp_base_dir
+
+    for root, _, files in os.walk(tmp_base_dir):
+        if "SKILL.md" in files:
+            return root
+
+    return None
     
 def _build_agent_kwargs(
     *,
@@ -169,13 +169,14 @@ def run_da_stage(
                 print(f"[{da_run_name} sample {i}] Finished {len(result['results'])} tasks in {result['total_time']:.2f}s")
 
         else:
+            current_skills_base_dir = _format_skill_base_dir(skills_base_dir)
             samples = load_dataset(
                 task_name=task_name,
                 dataset_name=dataset_name,
                 limit=limit,
                 start_index=start_index,
                 use_skill=use_skill,
-                skills_base_dir=skills_base_dir,
+                skills_base_dir=current_skills_base_dir,
                 virtual_data_root=virtual_data_root,
             )
 
@@ -219,56 +220,6 @@ def run_verifier_stage(
     print(f"Verification output: {output_dir}")
     return verifier_results or {}
 
-
-def _replace_path(path: Path) -> None:
-    if path.is_symlink() or path.is_file():
-        path.unlink()
-    elif path.is_dir():
-        shutil.rmtree(path)
-
-
-def _prepare_skill_manager_working_dir(
-    *,
-    task_name: str,
-    working_dir: Path,
-) -> Path:
-    working_dir.mkdir(parents=True, exist_ok=True)
-
-    source_data_dir = get_data_path(task_name)
-    if not source_data_dir.is_dir():
-        raise FileNotFoundError(f"Data directory not found: {source_data_dir}")
-
-    target_data_dir = working_dir / "data" / task_name
-    target_data_dir.parent.mkdir(parents=True, exist_ok=True)
-    _replace_path(target_data_dir)
-    target_data_dir.symlink_to(source_data_dir, target_is_directory=True)
-
-    source_skill_creator_dir = REPO_ROOT / "skills" / "skill-creator"
-    if not source_skill_creator_dir.is_dir():
-        raise FileNotFoundError(f"skill-creator skill not found: {source_skill_creator_dir}")
-
-    target_skill_creator_dir = working_dir / "skills" / "skill-creator"
-    target_skill_creator_dir.parent.mkdir(parents=True, exist_ok=True)
-    _replace_path(target_skill_creator_dir)
-    shutil.copytree(source_skill_creator_dir, target_skill_creator_dir)
-
-    source_claude_code_config_dir = REPO_ROOT / ".claude"
-    if source_claude_code_config_dir.is_dir():
-        target_claude_code_config_dir = working_dir / ".claude"
-        target_claude_code_config_dir.parent.mkdir(parents=True, exist_ok=True)
-        _replace_path(target_claude_code_config_dir)
-        shutil.copytree(source_claude_code_config_dir, target_claude_code_config_dir)
-    
-    source_codex_config_dir = REPO_ROOT / ".codex"
-    if source_codex_config_dir.is_dir():
-        target_codex_config_dir = working_dir / ".codex"
-        target_codex_config_dir.parent.mkdir(parents=True, exist_ok=True)
-        _replace_path(target_codex_config_dir)
-        shutil.copytree(source_codex_config_dir, target_codex_config_dir)
-
-    return target_data_dir
-
-
 def run_skill_manager_stage(
     *,
     task_name: str,
@@ -287,24 +238,19 @@ def run_skill_manager_stage(
     category_list: Optional[list[str]],
 ) -> None:
     skill_output_dir.mkdir(parents=True, exist_ok=True)
-    skill_manager_working_dir = Path(working_dir) if working_dir else skill_output_dir.parent
-    data_dir = _prepare_skill_manager_working_dir(
-        task_name=task_name,
-        working_dir=skill_manager_working_dir,
-    )
 
     skill_agent_kwargs = {
         "backend": skill_manager_backend,
         "api_key": skill_manager_api_key,
         "base_url": skill_manager_base_url,
-        "working_dir": str(skill_manager_working_dir),
+        "working_dir": working_dir
     }
 
     manager = SkillManager(
         model=skill_manager_model,
         agent_type=skill_manager_agent_type,
         task=task_name,
-        data_dir=str(data_dir),
+        data_dir=get_data_path(task_name),
         current_skill_dir=str(skill_output_dir),
         category_list=category_list,
         parallel_workers=skill_manager_max_workers,
@@ -502,7 +448,7 @@ def run(
                 shutil.copytree(
                     previous_skill_output_dir,
                     skill_manager_output_dir,
-                    ignore=shutil.ignore_patterns("prediction_*.json", "data", "task", "skills"),
+                    ignore=shutil.ignore_patterns("prediction_*.json"),
                 )
 
             run_skill_manager_stage(
@@ -518,7 +464,7 @@ def run(
                 skill_manager_backend=backend,
                 skill_manager_max_workers=skill_manager_max_workers,
                 skill_manager_use_category=bool(category_list),
-                working_dir=str(skill_manager_iter_dir),
+                working_dir=str(agent_working_dir),
                 category_list=category_list,
             )
             stage_success_status[f"skill_manager_iter_{iteration}"] = {
