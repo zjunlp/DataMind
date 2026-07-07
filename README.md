@@ -25,6 +25,8 @@
 <div align=center><img src="./figs/architecture.png" width="100%" height="60%" /></div>
 
 ## 📢 News
+- **[2026-07]** 🚀 Based on the DataCOPE project, we provide a [Practical Framework](./datacope/general/README.md) for generating data-analysis Skills. We warmly welcome everyone to try it out!
+
 - **[2026-06]** 🚀 We release a new paper: "[Unsupervised Skill Discovery for Agentic Data Analysis](https://arxiv.org/abs/2606.06416)".
   
 - **[2026-06]** 🚀 We release a [tutorial](docs/project-level-skills-guide.md) on using data-analysis skills in Claude Code and Codex. We welcome users to try it.
@@ -53,8 +55,7 @@ This repository hosts multiple data analysis projects. The table below provides 
 | **DataMind**          | Scalable data synthesis and agent training recipe for building generalist data-analytic agents               | [ICLR 2026](https://arxiv.org/abs/2509.25084) | [DataMind.md](./datamind/README.md)                   |
 | **DataPRM**           | Environment-aware process reward model for reliable multi-step data analysis                                 | [KDD 2026](https://arxiv.org/abs/2604.24198)     | [DataPRM.md](./dataprm/README.md)                     |
 | **LongDS-Bench**      | Long-horizon benchmark for evaluating analytical state management in multi-turn data analysis                | [arXiv](https://arxiv.org/abs/2605.30434)     | [LongDS-Bench.md](./longds/README.md)           |
-| **DataCOPE**          | Unsupervised verifier-guided skill discovery framework for data-analytic agents                              | [arXiv](https://arxiv.org/abs/2606.06416)     | [DataCOPE.md](./datacope/README.md)                   |
-
+| **DataCOPE**          | Unsupervised verifier-guided skill discovery framework for data-analytic agents. Meanwhile, we also provide a [User-Friendly Framework](./datacope/general/README.md) for generating data analysis skills.                             | [arXiv](https://arxiv.org/abs/2606.06416)     | [DataCOPE.md](./datacope/README.md)                   |
 
 
 ## 🎉Contributors
