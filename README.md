@@ -14,6 +14,8 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![](https://img.shields.io/github/last-commit/zjunlp/DataMind?color=green) 
 
+<div align=center><img src="./figs/logo.png" width="100%" height="90%" /></div>
+
 </div>
 
 <h5 align="center"> ⭐ If you like our project, please give us a star on GitHub for the latest updates!</h5>
