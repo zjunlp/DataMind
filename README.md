@@ -27,6 +27,8 @@
 <div align=center><img src="./figs/architecture.png" width="100%" height="60%" /></div>
 
 ## 📢 News
+- **[2026-07]** 🚀 We released two technical blogs [evaluating Codex’s real-world data analysis capabilities](https://huggingface.co/blog/Ningyu/codex-data-analysis) and [exploring how reusable Skills can improve its reliability on unseen tasks](https://huggingface.co/blog/Ningyu/skills-improve-codex-data-analysis).
+
 - **[2026-07]** 🚀 Based on the DataCOPE project, we provide a [Practical Framework](./datacope/general/README.md) for generating data-analysis Skills. We warmly welcome everyone to try it out!
 
 - **[2026-06]** 🚀 We release a new paper: "[Unsupervised Skill Discovery for Agentic Data Analysis](https://arxiv.org/abs/2606.06416)".
