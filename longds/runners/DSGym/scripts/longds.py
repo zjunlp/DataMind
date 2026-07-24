@@ -86,6 +86,13 @@ def llm_judge_evaluate(task_trajectories, api_key=None, base_url=None, judge_mod
                 reasoning = reasoning_m.group(1).strip() if reasoning_m else ''
                 error_detail = error_m.group(1).strip() if error_m else ''
                 return {'score': score, 'reasoning': reasoning, 'error_detail': error_detail, 'judge_response': text, 'error': None}
+            return {
+                'score': None,
+                'reasoning': '',
+                'error_detail': 'Judge response parsing failed after 3 attempts',
+                'judge_response': text,
+                'error': 'Judge response parsing failed after 3 attempts',
+            }
         except Exception as e:
             return {'score': None, 'judge_response': None, 'error': str(e)}
 
@@ -153,8 +160,10 @@ def create_parser():
                        help="API key (uses environment variable if not provided)")
     parser.add_argument("--judge-model", type=str, default="deepseek-v4-pro",
                        help="Model name used by the LLM-as-judge evaluator")
-    parser.add_argument("--max-workers", type=int, default=1,
-                       help="Maximum number of parallel workers (auto-set based on backend if not provided)")
+    parser.add_argument("--judge-max-workers", type=int, default=15,
+                       help="Maximum number of parallel judge requests per task. Default: 15")
+    parser.add_argument("--run-parallel", type=int, default=1, metavar="N",
+                       help="Number of LongDS tasks to run concurrently. Default: 1")
     parser.add_argument("--max-model-len", type=int, default=32768,
                        help="Maximum model sequence length for vLLM backend (default: 32768)")
     
@@ -254,40 +263,122 @@ def load_dataset(args):
     return "Success", task_list
 
 
+def run_one_task(args, agent_type, task_info):
+    """Run and judge one LongDS task in an isolated agent session."""
+    turns = task_info["tasks"]
+    domain = task_info["task_domain"]
+    dataset_name = task_info["dataset_name"]
+    task_id = task_info["task_id"]
+    task_key = f"{domain}/{dataset_name}/{task_id}"
+
+    timestamp = datetime.now().strftime("%m%d_%H%M%S")
+    model_name = args.model.replace("/", "_")
+    output_dir = (
+        f"{args.output_dir}/{args.dataset}/{domain}/{dataset_name}/{task_id}/"
+        f"{model_name}_{timestamp}"
+    )
+
+    print(f"📝 Starting task {task_key} with {len(turns)} turns...")
+    print(f"🤖 Initializing agent for {task_key}...")
+    agent = create_agent(args, agent_type)
+
+    bak_path = f"{output_dir}/bak"
+    os.makedirs(bak_path, exist_ok=True)
+    result = agent.solve_task(
+        turns,
+        bak_path=bak_path,
+        reset_env_times=args.reset_env_times,
+    )
+
+    traj_path = f"{output_dir}/traj.json"
+    with open(traj_path, "w") as f:
+        json.dump(result, f, indent=2, ensure_ascii=False)
+
+    conversation = result.get("conversation", [])
+    solutions = result.get("solutions", [])
+    task_trajectories = []
+    msg_idx = 0
+    for solution in solutions:
+        turn_msgs = []
+        assistant_count = 0
+        while msg_idx < len(conversation) and assistant_count < solution["steps"]:
+            message = conversation[msg_idx]
+            turn_msgs.append(message)
+            if message["role"] == "assistant":
+                assistant_count += 1
+            msg_idx += 1
+        task_trajectories.append({
+            "turn_id": solution["turn_id"],
+            "question": f"{solution['context']}\nQuestion: {solution['question']}",
+            "ground_truth": solution["ground_truth"],
+            "solution": solution["solution"],
+            "success": solution["success"],
+            "steps": solution["steps"],
+            "trajectory": turn_msgs,
+        })
+
+    all_result_path = f"{output_dir}/results.json"
+    with open(all_result_path, "w") as f:
+        json.dump(task_trajectories, f, indent=2, ensure_ascii=False)
+    print(f"📁 Results for {task_key} saved to: {all_result_path}")
+
+    code_lines = []
+    for trajectory in task_trajectories:
+        code_lines.append(f"############## turn {trajectory['turn_id']}")
+        for message in trajectory["trajectory"]:
+            if message.get("role") == "assistant":
+                for match in re.finditer(
+                    r"<python>(.*?)</python>",
+                    message.get("content", ""),
+                    re.DOTALL,
+                ):
+                    code_lines.append(match.group(1).strip())
+                    code_lines.append("")
+    code_path = f"{output_dir}/code.py"
+    with open(code_path, "w") as f:
+        f.write("\n".join(code_lines))
+    print(f"📁 Code for {task_key} saved to: {code_path}")
+
+    print(f"⚖️ Running LLM judge for {task_key}...")
+    evaluated_trajectories = llm_judge_evaluate(
+        task_trajectories,
+        judge_model=args.judge_model,
+        max_workers=args.judge_max_workers,
+    )
+    all_eval_path = f"{output_dir}/results_eval.json"
+    with open(all_eval_path, "w") as f:
+        json.dump(evaluated_trajectories, f, indent=2, ensure_ascii=False)
+    print(f"✅ Completed task {task_key}")
+    print(f"📁 Judged results saved to: {all_eval_path}")
+
+    return {
+        "task": task_key,
+        "output_dir": output_dir,
+        "avg_score": evaluated_trajectories[-1]["summary"]["avg_score"],
+    }
+
 
 def main():
     parser = create_parser()
     args = parser.parse_args()
 
-
     dataset_config = DATASET_CONFIG[args.dataset]
-    
+
+    if args.run_parallel < 1:
+        parser.error("--run-parallel must be at least 1")
+    if args.judge_max_workers < 1:
+        parser.error("--judge-max-workers must be at least 1")
+
     print(f"🚀 Starting {args.dataset.upper()} Evaluation with DSGym")
     print(f"Model: {args.model}")
     print(f"Backend: {args.backend}")
     print(f"Task limit: {args.task_limit if args.task_limit is not None else 'all'}")
     print(f"Turn limit: {args.turn_limit}")
     print(f"Start index: {args.start_index}")
-    
-    # Set default max_workers based on backend
-    if args.max_workers is None:
-        if args.backend == "litellm":
-            args.max_workers = 24
-        else:  # vllm or sglang
-            args.max_workers = 1
-    
-    print(f"Max workers: {args.max_workers}")
+    print(f"Parallel task workers: {args.run_parallel}")
+    print(f"Judge workers per task: {args.judge_max_workers}")
     print("-" * 50)
-    
-    # Initialize agent
-    print("🤖 Initializing agent...")
-    try:
-        agent = create_agent(args, dataset_config['agent_type'])
-        print("✅ Agent initialized successfully")
-    except Exception as e:
-        print(f"❌ Failed to initialize agent: {e}")
-        return 1
-    
+
     # Load dataset
     print(f"📊 Loading {args.dataset} dataset...")
     try:
@@ -299,84 +390,67 @@ def main():
 
     if args.reset_env_times > 0:
         args.output_dir += f"_reset_{args.reset_env_times}"
-    for task_info in all_tasks:
-        turns = task_info['tasks']
-        
-        domain = task_info['task_domain']
-        dataset_name = task_info['dataset_name']
-        task_id = task_info['task_id']
 
-        timestamp = datetime.now().strftime("%m%d_%H%M%S")
+    if not all_tasks:
+        print("No tasks selected.")
+        return 0
 
-        output_dir = f"{args.output_dir}/{args.dataset}/{domain}/{dataset_name}/{task_id}/{args.model.replace('/', '_')}_{timestamp}"
-  
-        print(f"📝  Agent begin to solve {domain}/{dataset_name}/{task_id} with {len(turns)} turns...")
- 
- 
-        bak_path = f"{output_dir}/bak"
-        os.makedirs(bak_path, exist_ok=True)
-        result = agent.solve_task(turns, bak_path=bak_path, reset_env_times=args.reset_env_times)
-        os.makedirs(output_dir, exist_ok=True)
-        traj_path = f"{output_dir}/traj.json"
-        with open(traj_path, "w") as f:
-            json.dump(result, f, indent=2, ensure_ascii=False)
-        
-        traj_path = f"{output_dir}/traj.json"
-        with open(traj_path, "r") as f:
-            result = json.load(f)
-        
-        # Extract per-task trajectories from the flat conversation
-        conversation = result.get('conversation', [])
-        solutions = result.get('solutions', [])
-        task_trajectories = []
-        msg_idx = 0
-        for sol in solutions:
-            turn_msgs = []
-            assistant_count = 0
-            while msg_idx < len(conversation) and assistant_count < sol['steps']:
-                msg = conversation[msg_idx]
-                turn_msgs.append(msg)
-                if msg['role'] == 'assistant':
-                    assistant_count += 1
-                msg_idx += 1
-            task_trajectories.append({
-                'turn_id': sol['turn_id'],
-                'question': f"{sol['context']}\nQuestion: {sol['question']}",
-                'ground_truth': sol['ground_truth'],
-                'solution': sol['solution'],
-                'success': sol['success'],
-                'steps': sol['steps'],
-                'trajectory': turn_msgs,
-            })
-        
-        all_result_path = f"{output_dir}/results.json"
-        with open(all_result_path, "w") as f:
-            json.dump(task_trajectories, f, indent=2, ensure_ascii=False)
-        print(f"📁 Per-task trajectories saved to: {all_result_path}")
+    worker_count = min(args.run_parallel, len(all_tasks))
+    failures = []
+    completed = 0
 
-        # Extract python code from all task trajectories
-        code_lines = []
-        for t in task_trajectories:
-            code_lines.append(f"############## turn {t['turn_id']}")
-            for msg in t['trajectory']:
-                if msg.get('role') == 'assistant':
-                    for m in re.finditer(r'<python>(.*?)</python>', msg.get('content', ''), re.DOTALL):
-                        code_lines.append(m.group(1).strip())
-                        code_lines.append('')
-        code_path = f"{output_dir}/code.py"
-        with open(code_path, "w") as f:
-            f.write('\n'.join(code_lines))
-        print(f"📁 Extracted code saved to: {code_path}")
+    if worker_count == 1:
+        for task_info in all_tasks:
+            task_key = (
+                f"{task_info['task_domain']}/"
+                f"{task_info['dataset_name']}/"
+                f"{task_info['task_id']}"
+            )
+            try:
+                run_one_task(args, dataset_config["agent_type"], task_info)
+                completed += 1
+            except Exception as exc:
+                failures.append((task_key, str(exc)))
+                print(f"❌ Task {task_key} failed: {exc}")
+    else:
+        with ThreadPoolExecutor(max_workers=worker_count) as pool:
+            futures = {
+                pool.submit(
+                    run_one_task,
+                    args,
+                    dataset_config["agent_type"],
+                    task_info,
+                ): (
+                    f"{task_info['task_domain']}/"
+                    f"{task_info['dataset_name']}/"
+                    f"{task_info['task_id']}"
+                )
+                for task_info in all_tasks
+            }
+            for future in as_completed(futures):
+                task_key = futures[future]
+                try:
+                    future.result()
+                    completed += 1
+                    print(
+                        f"📊 Progress: {completed}/{len(all_tasks)} tasks completed "
+                        f"({task_key})"
+                    )
+                except Exception as exc:
+                    failures.append((task_key, str(exc)))
+                    print(f"❌ Task {task_key} failed: {exc}")
 
-        # LLM as judge evaluation
-        print("⚖️ Running LLM judge evaluation...")
-        all_eval_path = f"{output_dir}/results_eval.json"
-        task_trajectories = llm_judge_evaluate(task_trajectories, judge_model=args.judge_model)
-        with open(all_eval_path, "w") as f:
-            json.dump(task_trajectories, f, indent=2, ensure_ascii=False)
-        print(f"📁 Results with judge scores saved to: {all_eval_path}")
+    print("-" * 50)
+    print(f"Completed tasks: {completed}/{len(all_tasks)}")
+    if failures:
+        print(f"Failed tasks: {len(failures)}")
+        for task_key, error in failures:
+            print(f"  - {task_key}: {error}")
+        return 1
 
-  
+    return 0
+
+
 if __name__ == "__main__":
     exit_code = main()
     sys.exit(exit_code)

@@ -30,5 +30,93 @@
   "7": {
     "url": "http://executor-007:8432",
     "type": "executor-prebuilt"
+  },
+  "8": {
+    "url": "http://executor-008:8432",
+    "type": "executor-prebuilt"
+  },
+  "9": {
+    "url": "http://executor-009:8432",
+    "type": "executor-prebuilt"
+  },
+  "10": {
+    "url": "http://executor-010:8432",
+    "type": "executor-prebuilt"
+  },
+  "11": {
+    "url": "http://executor-011:8432",
+    "type": "executor-prebuilt"
+  },
+  "12": {
+    "url": "http://executor-012:8432",
+    "type": "executor-prebuilt"
+  },
+  "13": {
+    "url": "http://executor-013:8432",
+    "type": "executor-prebuilt"
+  },
+  "14": {
+    "url": "http://executor-014:8432",
+    "type": "executor-prebuilt"
+  },
+  "15": {
+    "url": "http://executor-015:8432",
+    "type": "executor-prebuilt"
+  },
+  "16": {
+    "url": "http://executor-016:8432",
+    "type": "executor-prebuilt"
+  },
+  "17": {
+    "url": "http://executor-017:8432",
+    "type": "executor-prebuilt"
+  },
+  "18": {
+    "url": "http://executor-018:8432",
+    "type": "executor-prebuilt"
+  },
+  "19": {
+    "url": "http://executor-019:8432",
+    "type": "executor-prebuilt"
+  },
+  "20": {
+    "url": "http://executor-020:8432",
+    "type": "executor-prebuilt"
+  },
+  "21": {
+    "url": "http://executor-021:8432",
+    "type": "executor-prebuilt"
+  },
+  "22": {
+    "url": "http://executor-022:8432",
+    "type": "executor-prebuilt"
+  },
+  "23": {
+    "url": "http://executor-023:8432",
+    "type": "executor-prebuilt"
+  },
+  "24": {
+    "url": "http://executor-024:8432",
+    "type": "executor-prebuilt"
+  },
+  "25": {
+    "url": "http://executor-025:8432",
+    "type": "executor-prebuilt"
+  },
+  "26": {
+    "url": "http://executor-026:8432",
+    "type": "executor-prebuilt"
+  },
+  "27": {
+    "url": "http://executor-027:8432",
+    "type": "executor-prebuilt"
+  },
+  "28": {
+    "url": "http://executor-028:8432",
+    "type": "executor-prebuilt"
+  },
+  "29": {
+    "url": "http://executor-029:8432",
+    "type": "executor-prebuilt"
   }
 }

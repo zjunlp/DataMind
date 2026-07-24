@@ -18,6 +18,7 @@
   - [1. Configure Model Access](#1-configure-model-access)
   - [2. Run Evaluation](#2-run-evaluation)
   - [3. Outputs](#3-outputs)
+  - 🚀 [4. Run in Parallel](#4-run-in-parallel)
 - 💻 [Running LongDS using Agent-Agnostic Runner](#running-longds-using-agent-agnostic-runner)
 - 💻 [Running LongDS using Codex](#running-longds-using-codex)
 - 💻 [Running LongDS using Claude Code](#running-longds-using-claude-code)
@@ -103,8 +104,8 @@ docker build -t executor-prebuilt ./container_images/longds_image
 docker build -t manager-prebuilt ./manager
 
 python generate_compose.py \
-  -n 8 \
-  --types "executor-prebuilt:8" \
+  -n 16 \
+  --types "executor-prebuilt:16" \
   -m ../../../dataset/data
 
 docker compose -f docker-compose.yml up -d --build
@@ -189,7 +190,7 @@ cd DataMind/longds/runners/DSGym/scripts
 
 uv run python longds.py \
   --dataset longds \
-  --model openai/<your_model_name> \
+  --model openai/gpt-5.4 \
   --backend litellm \
   --output-dir ./results
 ```
@@ -215,6 +216,8 @@ Useful options:
 --turn-limit N        Evaluate at most N turns per task.
 --max-steps N         Maximum agent steps per turn. Default: 40.
 --judge-model NAME    Judge model name. Default: deepseek-v4-pro.
+--judge-max-workers N Maximum parallel judge requests per task. Default: 15.
+--run-parallel N      Run N LongDS tasks concurrently. Default: 1.
 ```
 
 ### 3. Outputs
@@ -231,6 +234,53 @@ For each task, LongDS writes results under:
 ```
 
 The main evaluation score is stored in `results_eval.json`, where each turn receives a judge score and the final element contains a summary with the average score.
+
+### 🚀 4. Run in Parallel
+
+We recommend running LongDS in parallel to reduce the total evaluation time. A
+full run with `8` parallel workers takes approximately 10 hours, although the
+actual runtime depends on model latency, API stability, and executor performance.
+The number of parallel workers must not exceed the number of running Docker
+executors.
+
+Use `--run-parallel` to dynamically schedule tasks across the requested number
+of workers. Because each active task can also issue concurrent judge requests,
+use a smaller `--judge-max-workers` value for parallel runs:
+
+```bash
+cd DataMind/longds/runners/DSGym/scripts
+
+uv run python longds.py \
+  --dataset longds \
+  --model openai/deepseek-v4-pro \
+  --backend litellm \
+  --output-dir ./results_deepseek-v4-pro \
+  --run-parallel 8 
+```
+
+For a long-running evaluation, use `nohup` so it continues after the terminal
+disconnects:
+
+```bash
+mkdir -p logs
+
+nohup uv run python longds.py \
+  --dataset longds \
+  --model openai/gpt-5.4 \
+  --backend litellm \
+  --output-dir ./results_gpt54 \
+  --run-parallel 8 \
+  --judge-max-workers 2 \
+  > logs/longds_parallel.log 2>&1 &
+
+echo $! > logs/longds_parallel.pid
+```
+
+Follow the overall progress with:
+
+```bash
+tail -f logs/longds_parallel.log
+```
 
 ## 💻 Running LongDS using Agent-Agnostic Runner
 

@@ -5,8 +5,11 @@ This agent provides a self-contained implementation using the new DSGym
 backend and environment components.
 """
 
+import os
+import json
 import time
 import traceback
+import re
 from typing import Dict, Any, List
 
 from .base_agent import BaseAgent
@@ -153,7 +156,6 @@ class MultiTurnReActDSAgent(BaseAgent):
                             print(f"⚠️ {color.YELLOW}Turn {turn_idx + 1}, Step {turn + 1}: No postprocessed action, using raw response{color.END}")
                             step_output['postprocessed_action'] = "<reasoning>no postprocessed action</reasoning>"
                             with open(f"{bak_path}/turn_{turn_idx + 1}_step_{turn + 1}_no_postprocess.json", "w") as f:
-                                import json
                                 json.dump({
                                     'response': response,
                                     'step_output': step_output
@@ -205,7 +207,6 @@ class MultiTurnReActDSAgent(BaseAgent):
                 all_results.append(turn_result)
                 if bak_path:
                     with open(f"{bak_path}/turn_{turn_idx + 1}_result.json", "w") as f:
-                        import json
                         json.dump(accumulated_conversation, f, indent=4)
                 
                 if turn_result['success']:
