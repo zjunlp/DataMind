@@ -5,6 +5,8 @@ runners/codex/results/
 runners/codex/__pycache__/
 runners/claude_code/results/
 runners/claude_code/__pycache__/
+runners/qoder_cli/results/
+runners/qoder_cli/__pycache__/
 dataset/*
 .codex
 .agents

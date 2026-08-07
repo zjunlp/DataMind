@@ -12,6 +12,7 @@ import subprocess
 import sys
 import threading
 import time
+from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -83,6 +84,23 @@ def parse_args() -> argparse.Namespace:
         help="Model passed to `codex exec -m`. Omit to use Codex config default.",
     )
     parser.add_argument(
+        "--codex-base-url",
+        default=os.environ.get("CODEX_BASE_URL"),
+        help=(
+            "OpenAI-compatible Responses API base URL. Defaults to CODEX_BASE_URL. "
+            "The provider reads its API key from CODEX_API_KEY."
+        ),
+    )
+    parser.add_argument(
+        "--model-supports-reasoning-summaries",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help=(
+            "Temporarily force Codex reasoning-summary support for this run. "
+            "Use --no-model-supports-reasoning-summaries to force-disable it."
+        ),
+    )
+    parser.add_argument(
         "--analysis-python",
         default=sys.executable,
         help="Python executable Codex should use for data analysis commands.",
@@ -109,9 +127,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--turn-limit", type=int, default=None, help="Maximum turns per task.")
     parser.add_argument("--timeout", type=int, default=3600, help="Timeout per Codex turn, seconds.")
     parser.add_argument(
+        "--run-parallel",
+        type=int,
+        default=1,
+        metavar="N",
+        help="Number of tasks to run concurrently. Turns within each task remain sequential. Default: 1.",
+    )
+    parser.add_argument(
         "--run-name",
         default=None,
-        help="Optional run directory name. Defaults to codex_YYYYmmdd_HHMMSS.",
+        help="Optional run directory name. Defaults to codex_<model>_YYYYmmdd_HHMMSS.",
     )
     parser.add_argument(
         "--dry-run",
@@ -122,6 +147,11 @@ def parse_args() -> argparse.Namespace:
         "--continue-on-error",
         action="store_true",
         help="Continue to the next task if a turn fails.",
+    )
+    parser.add_argument(
+        "--judge",
+        action="store_true",
+        help="Run judge.py immediately after each successfully completed task.",
     )
     return parser.parse_args()
 
@@ -166,6 +196,24 @@ def codex_command(
     cmd = [args.codex_bin]
     if args.approval_policy:
         cmd.extend(["--ask-for-approval", args.approval_policy])
+    if args.codex_base_url:
+        cmd.extend(
+            [
+                "-c",
+                'model_provider="longds_env"',
+                "-c",
+                'model_providers.longds_env.name="LongDS API"',
+                "-c",
+                f"model_providers.longds_env.base_url={json.dumps(args.codex_base_url)}",
+                "-c",
+                'model_providers.longds_env.env_key="CODEX_API_KEY"',
+                "-c",
+                'model_providers.longds_env.wire_api="responses"',
+            ]
+        )
+    if args.model_supports_reasoning_summaries is not None:
+        value = str(args.model_supports_reasoning_summaries).lower()
+        cmd.extend(["-c", f"model_supports_reasoning_summaries={value}"])
     cmd.extend(["exec"])
 
     if session_id:
@@ -234,6 +282,135 @@ def parse_thread_id(stdout: str, fallback: str | None) -> tuple[str | None, dict
     return thread_id, usage
 
 
+def format_codex_steps(
+    stdout: str,
+    *,
+    prompt: str,
+    turn_label: str,
+    previous_thread_id: str | None,
+) -> dict[str, Any]:
+    """Convert raw Codex JSONL events into the compact step format shown in the terminal."""
+    trace: dict[str, Any] = {
+        "session": {},
+        "turn": int(turn_label) if turn_label.isdigit() else turn_label,
+        "user_request": prompt,
+        "steps": [],
+    }
+    steps: dict[int, dict[str, Any]] = {}
+    next_step = 0
+
+    for line in stdout.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(event, dict):
+            continue
+
+        event_type = str(event.get("type", ""))
+        if event_type == "thread.started":
+            thread_id = event.get("thread_id")
+            trace["session"] = {
+                "thread_id": thread_id,
+                "session_state": (
+                    "new"
+                    if previous_thread_id is None
+                    else "same_as_previous_turn"
+                    if thread_id == previous_thread_id
+                    else "changed_from_previous_turn"
+                ),
+            }
+            continue
+        if event_type == "turn.completed":
+            trace["usage"] = event.get("usage") or {}
+            continue
+
+        item = event.get("item")
+        if not isinstance(item, dict) or item.get("status") == "in_progress":
+            continue
+
+        item_id = str(item.get("id") or "")
+        match = re.fullmatch(r"item_(\d+)", item_id)
+        step = int(match.group(1)) if match else next_step
+        next_step = max(next_step, step + 1)
+        item_type = item.get("type")
+        formatted: dict[str, Any] = {"step": step}
+
+        if item_type == "command_execution":
+            if not event_type.endswith(".completed"):
+                continue
+            formatted["command"] = str(item.get("command") or "")
+            formatted["output"] = str(item.get("aggregated_output") or "")
+        elif item_type == "agent_message":
+            text = str(item.get("text") or "")
+            try:
+                payload = json.loads(text)
+            except json.JSONDecodeError:
+                payload = None
+            if isinstance(payload, dict):
+                formatted["response"] = str(payload.get("answer") or "")
+                formatted["reasoning_summary"] = str(payload.get("reasoning_summary") or "")
+                if payload.get("files_used"):
+                    formatted["files_used"] = payload["files_used"]
+            else:
+                formatted["message"] = text
+        else:
+            formatted["item_type"] = item_type
+            formatted["item_data"] = {
+                key: value
+                for key, value in item.items()
+                if key not in {"id", "type", "status"}
+            }
+
+        steps[step] = formatted
+
+    trace["steps"] = [steps[step] for step in sorted(steps)]
+    return trace
+
+
+def normalize_turn_payload(payload: Any) -> dict[str, Any] | None:
+    if not isinstance(payload, dict) or not isinstance(payload.get("answer"), str):
+        return None
+
+    reasoning_summary = payload.get("reasoning_summary", "")
+    files_used = payload.get("files_used", [])
+    if not isinstance(reasoning_summary, str):
+        reasoning_summary = str(reasoning_summary)
+    if not isinstance(files_used, list):
+        files_used = []
+
+    return {
+        "answer": payload["answer"],
+        "reasoning_summary": reasoning_summary,
+        "files_used": [str(file_path) for file_path in files_used],
+    }
+
+
+def parse_embedded_json(text: str) -> dict[str, Any] | None:
+    candidates = re.findall(r"```(?:json)?\s*(.*?)```", text, flags=re.IGNORECASE | re.DOTALL)
+    candidates.append(text)
+    decoder = json.JSONDecoder()
+
+    for candidate in candidates:
+        try:
+            payload = json.loads(candidate.strip())
+        except json.JSONDecodeError:
+            payload = None
+        normalized = normalize_turn_payload(payload)
+        if normalized is not None:
+            return normalized
+
+        for match in re.finditer(r"\{", candidate):
+            try:
+                payload, _ = decoder.raw_decode(candidate, match.start())
+            except json.JSONDecodeError:
+                continue
+            normalized = normalize_turn_payload(payload)
+            if normalized is not None:
+                return normalized
+    return None
+
+
 def parse_last_message(path: Path) -> tuple[dict[str, Any] | None, str]:
     if not path.exists():
         return None, ""
@@ -242,11 +419,19 @@ def parse_last_message(path: Path) -> tuple[dict[str, Any] | None, str]:
         return None, ""
     try:
         payload = json.loads(text)
-        if isinstance(payload, dict):
-            return payload, text
     except json.JSONDecodeError:
-        pass
-    return None, text
+        payload = None
+    normalized = normalize_turn_payload(payload)
+    if normalized is not None:
+        return normalized, text
+    embedded = parse_embedded_json(text)
+    if embedded is not None:
+        return embedded, text
+    return {
+        "answer": text,
+        "reasoning_summary": "",
+        "files_used": [],
+    }, text
 
 
 def use_color() -> bool:
@@ -506,6 +691,7 @@ def stream_pipe(pipe: Any, chunks: list[str], target: Any, *, formatter: Any | N
 def run_command_streaming(
     cmd: list[str],
     *,
+    cwd: Path,
     prompt: str,
     turn_label: str,
     previous_thread_id: str | None,
@@ -519,6 +705,7 @@ def run_command_streaming(
         stderr=subprocess.PIPE,
         text=True,
         bufsize=1,
+        cwd=str(cwd),
         env=env,
     )
     if proc.stdout is None or proc.stderr is None or proc.stdin is None:
@@ -610,6 +797,7 @@ def run_codex_turn(
     start = time.time()
     returncode, stdout, stderr = run_command_streaming(
         cmd,
+        cwd=work_dir,
         timeout=args.timeout,
         env=os.environ.copy(),
         prompt=prompt,
@@ -620,6 +808,15 @@ def run_codex_turn(
 
     (turn_dir / "codex_stdout.jsonl").write_text(stdout, encoding="utf-8")
     (turn_dir / "codex_stderr.txt").write_text(stderr, encoding="utf-8")
+    write_json(
+        turn_dir / "formatted_steps.json",
+        format_codex_steps(
+            stdout,
+            prompt=prompt,
+            turn_label=turn_label,
+            previous_thread_id=session_id,
+        ),
+    )
     thread_id, usage = parse_thread_id(stdout, session_id)
     payload, raw_message = parse_last_message(last_message_path)
 
@@ -639,7 +836,7 @@ def run_codex_turn(
     if returncode != 0:
         raise RuntimeError(f"Codex exited with code {returncode}; see {turn_dir}")
     if payload is None:
-        raise RuntimeError(f"Codex did not produce schema JSON; see {turn_dir}")
+        raise RuntimeError(f"Codex did not produce a final answer; see {turn_dir}")
     if not thread_id:
         raise RuntimeError(f"Could not determine Codex thread id; see {turn_dir}")
 
@@ -770,25 +967,39 @@ def task_run_dir(args: argparse.Namespace, task_info: dict[str, str], run_name: 
     )
 
 
-def write_summary_to_task_dirs(summary: dict[str, Any]) -> list[Path]:
-    paths: list[Path] = []
-    for task_result in summary.get("tasks", []):
-        run_dir = Path(task_result["run_dir"])
-        path = run_dir / "summary.json"
-        write_json(path, summary)
-        paths.append(path)
+def evaluate_completed_task(task_result: dict[str, Any]) -> dict[str, Any]:
+    judge_script = Path(__file__).resolve().with_name("judge.py")
+    run_dir = Path(task_result["run_dir"])
+    print("", flush=True)
+    print(paint(f"======= Evaluating {run_dir} ... =======", COLOR_RED), flush=True)
+    completed = subprocess.run(
+        [sys.executable, str(judge_script), "--run-dir", str(run_dir)],
+        cwd=judge_script.parent,
+        env=os.environ.copy(),
+        check=False,
+    )
+    return {"run_dir": str(run_dir), "returncode": completed.returncode}
 
-    for error in summary.get("errors", []):
-        run_dir_text = error.get("run_dir")
-        if not run_dir_text:
-            continue
-        run_dir = Path(run_dir_text)
-        run_dir.mkdir(parents=True, exist_ok=True)
-        path = run_dir / "summary.json"
-        write_json(path, summary)
-        paths.append(path)
 
-    return paths
+def run_task_pipeline(
+    *,
+    args: argparse.Namespace,
+    task_info: dict[str, str],
+    run_name: str,
+) -> tuple[dict[str, Any], dict[str, Any] | None]:
+    task_result = run_task(args=args, task_info=task_info, run_name=run_name)
+    if not args.judge:
+        return task_result, None
+
+    try:
+        evaluation = evaluate_completed_task(task_result)
+    except Exception as exc:
+        evaluation = {
+            "run_dir": task_result["run_dir"],
+            "returncode": 1,
+            "error": str(exc),
+        }
+    return task_result, evaluation
 
 
 def print_run_config(
@@ -806,6 +1017,13 @@ def print_run_config(
     print(f"  output_dir: {results_root}", flush=True)
     print(f"  codex_bin: {args.codex_bin}", flush=True)
     print(f"  codex_model: {args.codex_model or 'config-default'}", flush=True)
+    print(f"  codex_base_url: {args.codex_base_url or 'config-default'}", flush=True)
+    print(
+        "  model_supports_reasoning_summaries: "
+        f"{args.model_supports_reasoning_summaries if args.model_supports_reasoning_summaries is not None else 'config-default'}",
+        flush=True,
+    )
+    print(f"  codex_api_key: {'set' if os.environ.get('CODEX_API_KEY') else 'not set'}", flush=True)
     print(f"  analysis_python: {args.analysis_python}", flush=True)
     print(f"  sandbox: {args.sandbox}", flush=True)
     print(f"  approval_policy: {args.approval_policy}", flush=True)
@@ -813,19 +1031,32 @@ def print_run_config(
     print(f"  task_limit: {'all' if args.all_tasks else args.task_limit}", flush=True)
     print(f"  turn_limit: {args.turn_limit if args.turn_limit is not None else 'all'}", flush=True)
     print(f"  timeout: {args.timeout}", flush=True)
+    print(f"  run_parallel: {args.run_parallel}", flush=True)
     print(f"  selected_tasks: {selected_count} / {total_count}", flush=True)
     print(f"  dry_run: {args.dry_run}", flush=True)
     print(f"  continue_on_error: {args.continue_on_error}", flush=True)
+    print(f"  judge: {args.judge}", flush=True)
 
 
 def main() -> int:
     args = parse_args()
+    args.task_root = args.task_root.resolve()
+    args.data_root = args.data_root.resolve()
+    args.output_dir = args.output_dir.resolve()
     if args.task_limit is not None and args.task_limit < 0:
         raise ValueError("--task-limit must be non-negative")
     if args.turn_limit is not None and args.turn_limit < 0:
         raise ValueError("--turn-limit must be non-negative")
+    if args.run_parallel < 1:
+        raise ValueError("--run-parallel must be at least 1")
+    if args.dry_run and args.judge:
+        raise ValueError("--judge cannot be combined with --dry-run")
+    if args.codex_base_url and not args.dry_run and not os.environ.get("CODEX_API_KEY"):
+        raise ValueError("CODEX_API_KEY must be set when CODEX_BASE_URL is configured")
 
-    run_name = args.run_name or datetime.now().strftime("codex_%Y%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    model_slug = slugify(args.codex_model or "default")
+    run_name = args.run_name or f"codex_{model_slug}_{timestamp}"
     results_root = args.output_dir
     results_root.mkdir(parents=True, exist_ok=True)
 
@@ -842,39 +1073,115 @@ def main() -> int:
         total_count=len(task_list),
     )
 
-    summary = {
-        "run_name": run_name,
-        "codex_model": args.codex_model or "config-default",
-        "analysis_python": args.analysis_python,
-        "task_root": str(args.task_root),
-        "data_root": str(args.data_root),
-        "results_root": str(results_root),
-        "tasks": [],
-    }
-    for task_info in selected:
+    completed_tasks = 0
+    failed_tasks = 0
+
+    def record_success(
+        task_result: dict[str, Any],
+        evaluation: dict[str, Any] | None,
+    ) -> bool:
+        nonlocal completed_tasks, failed_tasks
+        completed_tasks += 1
+        if evaluation is not None:
+            task_result["evaluation"] = evaluation
+            write_json(Path(task_result["run_dir"]) / "task_metadata.json", task_result)
+        if evaluation is not None and evaluation["returncode"] != 0:
+            failed_tasks += 1
+            print(f"ERROR: evaluation failed: {evaluation}", file=sys.stderr)
+            return False
+        return True
+
+    def record_error(task_info: dict[str, str], exc: Exception) -> None:
+        nonlocal failed_tasks
+        failed_tasks += 1
+        run_dir = task_run_dir(args, task_info, run_name)
+        error = {"task": task_info, "run_dir": str(run_dir), "error": str(exc)}
+        write_json(run_dir / "error.json", error)
+        print(f"ERROR: {error}", file=sys.stderr)
+
+    def execute(task_info: dict[str, str]) -> bool:
         try:
-            task_result = run_task(
+            task_result, evaluation = run_task_pipeline(
                 args=args,
                 task_info=task_info,
                 run_name=run_name,
             )
-            summary["tasks"].append(task_result)
-            write_summary_to_task_dirs(summary)
+            return record_success(task_result, evaluation)
         except Exception as exc:
-            run_dir = task_run_dir(args, task_info, run_name)
-            error = {"task": task_info, "run_dir": str(run_dir), "error": str(exc)}
-            summary.setdefault("errors", []).append(error)
-            write_summary_to_task_dirs(summary)
-            print(f"ERROR: {error}", file=sys.stderr)
-            if not args.continue_on_error:
-                return 1
+            record_error(task_info, exc)
+            return False
 
-    summary_paths = write_summary_to_task_dirs(summary)
-    if summary_paths:
-        print(f"Saved Codex LongDS run summary under task result directories, e.g. {summary_paths[-1]}")
-    else:
-        print("No tasks selected; no Codex LongDS run summary was written.")
-    return 0
+    def print_final_status() -> None:
+        print(
+            "Finished Codex LongDS run: "
+            f"completed_tasks={completed_tasks}, "
+            f"failed_tasks={failed_tasks}, "
+            f"selected_tasks={len(selected)}",
+            flush=True,
+        )
+
+    failed = False
+    if args.run_parallel == 1:
+        for task_info in selected:
+            succeeded = execute(task_info)
+            if not succeeded:
+                failed = True
+                if not args.continue_on_error:
+                    print_final_status()
+                    return 1
+    elif selected:
+        max_workers = min(args.run_parallel, len(selected))
+        next_index = 0
+        futures: dict[
+            Future[tuple[dict[str, Any], dict[str, Any] | None]],
+            tuple[int, dict[str, str]],
+        ] = {}
+
+        with ThreadPoolExecutor(max_workers=max_workers) as pool:
+            while next_index < max_workers:
+                task_info = selected[next_index]
+                future = pool.submit(
+                    run_task_pipeline,
+                    args=args,
+                    task_info=task_info,
+                    run_name=run_name,
+                )
+                futures[future] = (next_index, task_info)
+                next_index += 1
+
+            stop_scheduling = False
+            while futures:
+                completed, _ = wait(futures, return_when=FIRST_COMPLETED)
+                for future in completed:
+                    index, task_info = futures.pop(future)
+                    try:
+                        task_result, evaluation = future.result()
+                        succeeded = record_success(task_result, evaluation)
+                    except Exception as exc:
+                        record_error(task_info, exc)
+                        succeeded = False
+
+                    if not succeeded:
+                        failed = True
+                        if not args.continue_on_error:
+                            stop_scheduling = True
+
+                if not stop_scheduling:
+                    for _ in completed:
+                        if next_index >= len(selected):
+                            break
+                        next_task = selected[next_index]
+                        next_future = pool.submit(
+                            run_task_pipeline,
+                            args=args,
+                            task_info=next_task,
+                            run_name=run_name,
+                        )
+                        futures[next_future] = (next_index, next_task)
+                        next_index += 1
+
+    print_final_status()
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":

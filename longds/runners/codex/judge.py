@@ -177,7 +177,7 @@ def judge_one(client: Any, judge_model: str, retries: int, turn: dict[str, Any])
         except Exception as exc:  # noqa: BLE001
             if attempt == retries:
                 return {
-                    "score": None,
+                    "score": 0,
                     "reasoning": "",
                     "error_detail": "",
                     "judge_response": last_response,
@@ -186,7 +186,7 @@ def judge_one(client: Any, judge_model: str, retries: int, turn: dict[str, Any])
                 }
 
     return {
-        "score": None,
+        "score": 0,
         "reasoning": "",
         "error_detail": "",
         "judge_response": last_response,
@@ -233,6 +233,70 @@ def summarize(turns: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def build_dsgym_eval_payload(turns: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    evaluated: list[dict[str, Any]] = []
+    correct: list[int] = []
+    incorrect: list[int] = []
+    scores: list[int | float] = []
+
+    for turn in turns:
+        turn_dir = str(turn.get("turn_dir") or "")
+        trace_path = Path(turn_dir) / "formatted_steps.json" if turn_dir else None
+        trace = (
+            read_json(trace_path)
+            if trace_path is not None and trace_path.is_file()
+            else {}
+        )
+        trajectory = trace.get("steps", []) if isinstance(trace, dict) else []
+        if not isinstance(trajectory, list):
+            trajectory = []
+
+        context = str(turn.get("context") or "").strip()
+        question = str(turn.get("question") or "").strip()
+        combined_question = (
+            f"{context}\nQuestion: {question}" if context and question else question or context
+        )
+        judge = dict(turn.get("judge") or {})
+        score = judge.get("score")
+        turn_id = int(turn["turn_id"])
+        if score == 1:
+            correct.append(turn_id)
+        elif score == 0:
+            incorrect.append(turn_id)
+        if score is not None:
+            scores.append(score)
+
+        evaluated.append(
+            {
+                "turn_id": turn_id,
+                "question": combined_question,
+                "ground_truth": turn.get("ground_truth"),
+                "solution": turn.get("solution", ""),
+                "success": turn.get("success"),
+                "steps": len(trajectory),
+                "trajectory": trajectory,
+                "judge": {
+                    "score": judge.get("score"),
+                    "reasoning": judge.get("reasoning", ""),
+                    "error_detail": judge.get("error_detail", ""),
+                    "judge_response": judge.get("judge_response"),
+                    "error": judge.get("error"),
+                },
+            }
+        )
+
+    evaluated.append(
+        {
+            "summary": {
+                "correct": sorted(correct),
+                "incorrect": sorted(incorrect),
+                "avg_score": sum(scores) / len(scores) if scores else 0.0,
+            }
+        }
+    )
+    return evaluated
+
+
 def write_run_outputs(turns: list[dict[str, Any]]) -> list[Path]:
     written: list[Path] = []
     by_run_dir: dict[str, list[dict[str, Any]]] = {}
@@ -241,19 +305,8 @@ def write_run_outputs(turns: list[dict[str, Any]]) -> list[Path]:
 
     for run_dir_text, run_turns in sorted(by_run_dir.items()):
         run_dir = Path(run_dir_text)
-        payload = {
-            "task": {
-                "task_domain": run_turns[0]["task_domain"],
-                "dataset_name": run_turns[0]["dataset_name"],
-                "task_id": run_turns[0]["task_id"],
-                "run_name": run_turns[0]["run_name"],
-                "run_dir": run_dir_text,
-            },
-            "turns": run_turns,
-            "summary": summarize(run_turns),
-        }
         path = run_dir / "results_eval.json"
-        write_json(path, payload)
+        write_json(path, build_dsgym_eval_payload(run_turns))
         written.append(path)
     return written
 
@@ -261,7 +314,12 @@ def write_run_outputs(turns: list[dict[str, Any]]) -> list[Path]:
 def load_existing_eval_turns(run_dir: Path) -> list[dict[str, Any]]:
     eval_path = run_dir / "results_eval.json"
     payload = read_json(eval_path)
-    turns = payload.get("turns")
+    if isinstance(payload, list):
+        turns = [item for item in payload if isinstance(item, dict) and "summary" not in item]
+    elif isinstance(payload, dict):
+        turns = payload.get("turns")
+    else:
+        turns = None
     if not isinstance(turns, list):
         raise ValueError(f"Invalid results_eval.json format: {eval_path}")
 
@@ -333,7 +391,7 @@ def main() -> int:
 
     if args.run_dir is not None:
         run_dirs = [args.run_dir]
-        out_path = args.out or args.run_dir / "results_eval.json"
+        out_path = args.out
     else:
         run_dirs = discover_run_dirs(args.results_root)
         out_path = args.out
