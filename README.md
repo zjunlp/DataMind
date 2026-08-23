@@ -27,6 +27,8 @@
 <div align=center><img src="./figs/architecture.png" width="100%" height="60%" /></div>
 
 ## 📢 News
+- **[2026-08]** 🎉🎉🎉 Our paper "LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis" has been accepted to EMNLP 2026.
+
 - **[2026-07]** 🚀 We released two technical blogs [evaluating Codex’s real-world data analysis capabilities](https://huggingface.co/blog/Ningyu/codex-data-analysis) and [exploring how reusable Skills can improve its reliability on unseen tasks](https://huggingface.co/blog/Ningyu/skills-improve-codex-data-analysis).
 
 - **[2026-07]** 🚀 Based on the DataCOPE project, we provide a [Practical Framework](./datacope/general/README.md) for generating data-analysis Skills. We warmly welcome everyone to try it out!
