@@ -29,37 +29,42 @@ const POSITIONS = {
   composition: [2.85, 0.52, -0.35],
 };
 
-const LABELS = [
-  { key: "clean", type: "code" },
-  { key: "mean", type: "code" },
-  { key: "filter", type: "code" },
-  { key: "median", type: "code" },
-  { key: "initial", type: "request" },
-  { key: "newData", type: "code" },
-  { key: "composition", type: "request" },
+const TURNS = ["turn1", "turn2", "turn3", "turn4", "turn5"];
+
+const NODE_LABELS = [
+  { key: "clean", height: 0.62, offsetX: -8, offsetY: 3 },
+  { key: "mean", height: 1.02, offsetX: -6, offsetY: -2 },
+  { key: "filter", height: 1.1, offsetX: -10, offsetY: 4 },
+  { key: "median", height: 1.2, offsetX: 2, offsetY: -2 },
+  { key: "agent", height: 1.22, offsetX: 0, offsetY: 5 },
+  { key: "initial", height: 1.12, offsetX: 6, offsetY: 5 },
+  { key: "newData", height: 1.0, offsetX: 7, offsetY: 1 },
+  { key: "composition", height: 1.2, offsetX: 5, offsetY: 5 },
 ];
 
 const ACTIVE_TRACKS = [
-  [],
   [3, 6],
-  [0, 5],
-  [1, 4],
-  [3, 4, 8],
-  [2, 5, 6, 7],
+  [0, 5, 6],
+  [1, 4, 5],
+  [4, 8],
   [2, 5, 6, 7, 9],
 ];
 
 const ACTIVE_NODES = [
-  ["clean"],
   ["clean", "mean", "agent"],
-  ["clean", "filter", "agent"],
-  ["mean", "median", "agent"],
-  ["clean", "median", "initial", "agent"],
-  ["mean", "filter", "newData", "agent"],
+  ["clean", "filter", "mean", "agent"],
+  ["filter", "median", "agent"],
+  ["median", "initial", "agent"],
   ["mean", "filter", "newData", "agent", "composition"],
 ];
 
-const ACTION_NODES = LABELS.map(({ key }) => key);
+const ACTION_NODES = [
+  ["clean", "mean"],
+  ["filter"],
+  ["median"],
+  ["initial"],
+  ["newData", "composition"],
+];
 
 function roundedBox(width, height, depth, radius, color, materialOptions = {}) {
   return new THREE.Mesh(
@@ -392,7 +397,7 @@ function createNewDataStack(position) {
   return group;
 }
 
-function createRobot(position) {
+function createStateRouter(position) {
   const group = new THREE.Group();
   group.position.set(...position);
 
@@ -401,58 +406,86 @@ function createRobot(position) {
   pedestal.receiveShadow = true;
   group.add(pedestal);
 
-  const router = roundedBox(0.72, 0.48, 0.52, 0.12, COLORS.white, { roughness: 0.5 });
-  router.position.y = 0.45;
-  router.userData.baseY = router.position.y;
-  router.castShadow = true;
-  group.add(router);
+  const consoleBody = roundedBox(0.76, 0.34, 0.62, 0.1, COLORS.white, { roughness: 0.5 });
+  consoleBody.position.y = 0.36;
+  consoleBody.castShadow = true;
+  group.add(consoleBody);
 
-  const eyes = [];
-  [-0.14, 0.14].forEach((x) => {
-    const eye = new THREE.Mesh(
-      new THREE.SphereGeometry(0.055, 18, 12),
-      new THREE.MeshStandardMaterial({ color: COLORS.ink, roughness: 0.4 }),
+  const selectorRing = new THREE.Mesh(
+    new THREE.TorusGeometry(0.27, 0.035, 12, 36),
+    new THREE.MeshStandardMaterial({ color: COLORS.blue, roughness: 0.38 }),
+  );
+  selectorRing.rotation.x = Math.PI / 2;
+  selectorRing.position.y = 0.58;
+  group.add(selectorRing);
+
+  const selector = new THREE.Group();
+  selector.position.y = 0.6;
+  const pointer = roundedBox(0.075, 0.055, 0.28, 0.018, COLORS.coral, {
+    emissive: COLORS.coral,
+    emissiveIntensity: 0.28,
+    roughness: 0.36,
+  });
+  pointer.position.z = 0.12;
+  selector.add(pointer);
+  const pivot = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.075, 0.075, 0.08, 18),
+    new THREE.MeshStandardMaterial({ color: COLORS.ink, roughness: 0.42 }),
+  );
+  selector.add(pivot);
+  group.add(selector);
+
+  const stateStops = [];
+  [COLORS.blue, COLORS.cyan, COLORS.coral, COLORS.yellow, COLORS.leaf].forEach((color, index) => {
+    const angle = -Math.PI * 0.62 + index * (Math.PI * 1.24 / 4);
+    const stop = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.045, 0.045, 0.055, 14),
+      new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.04, roughness: 0.4 }),
     );
-    eye.position.set(x, 0.51, 0.27);
-    group.add(eye);
-    eyes.push(eye);
+    stop.position.set(Math.sin(angle) * 0.27, 0.61, Math.cos(angle) * 0.27);
+    group.add(stop);
+    stateStops.push({ stop, angle });
   });
 
-  [-0.2, 0, 0.2].forEach((x, index) => {
-    const slot = roundedBox(0.12, 0.05, 0.035, 0.015, [COLORS.blue, COLORS.coral, COLORS.leaf][index]);
-    slot.position.set(x, 0.34, 0.275);
-    group.add(slot);
-  });
-
-  const tips = [];
-  [-0.22, 0.22].forEach((x) => {
-    const antenna = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.022, 0.022, 0.24, 12),
-      new THREE.MeshStandardMaterial({ color: COLORS.ink, roughness: 0.5 }),
-    );
-    antenna.position.set(x, 0.81, 0);
-    antenna.castShadow = true;
-    group.add(antenna);
-
-    const tip = new THREE.Mesh(
-      new THREE.SphereGeometry(0.05, 16, 12),
-      new THREE.MeshStandardMaterial({ color: COLORS.coral, roughness: 0.42 }),
-    );
-    tip.position.set(x, 0.94, 0);
-    group.add(tip);
-    tips.push(tip);
-  });
-
-  group.userData.animate = (active, time, blend) => {
-    const bob = active ? Math.sin(time * 5) * 0.025 : 0;
-    router.position.y += (router.userData.baseY + bob - router.position.y) * blend;
-    const blink = active && (time % 2.1) > 1.94 ? 0.18 : 1;
-    eyes.forEach((eye) => { eye.scale.y += (blink - eye.scale.y) * blend; });
-    tips.forEach((tip, index) => {
-      tip.material.emissive.copy(tip.material.color);
-      const glow = active ? 0.35 + Math.max(0, Math.sin(time * 7 + index * Math.PI)) * 0.65 : 0;
-      tip.material.emissiveIntensity += (glow - tip.material.emissiveIntensity) * blend;
+  const inputPorts = [];
+  [-0.22, 0, 0.22].forEach((x, index) => {
+    const color = [COLORS.blue, COLORS.cyan, COLORS.leaf][index];
+    const port = roundedBox(0.14, 0.055, 0.045, 0.015, color, {
+      emissive: color,
+      emissiveIntensity: 0.04,
+      roughness: 0.4,
     });
+    port.position.set(x, 0.3, 0.335);
+    group.add(port);
+    inputPorts.push(port);
+  });
+
+  const outputPort = roundedBox(0.18, 0.07, 0.05, 0.018, COLORS.yellow, {
+    emissive: COLORS.yellow,
+    emissiveIntensity: 0.08,
+    roughness: 0.4,
+  });
+  outputPort.position.set(0.405, 0.34, 0);
+  outputPort.rotation.y = Math.PI / 2;
+  group.add(outputPort);
+
+  group.userData.animate = (active, time, blend, stepIndex = 0) => {
+    const targetAngle = stateStops[stepIndex]?.angle ?? 0;
+    selector.rotation.y += (targetAngle - selector.rotation.y) * blend;
+    selectorRing.material.emissive.copy(selectorRing.material.color);
+    selectorRing.material.emissiveIntensity += ((active ? 0.2 : 0.03) - selectorRing.material.emissiveIntensity) * blend;
+    stateStops.forEach(({ stop }, index) => {
+      const selected = index === stepIndex;
+      const targetScale = selected && active ? 1.35 + Math.sin(time * 5) * 0.08 : 1;
+      stop.scale.setScalar(stop.scale.x + (targetScale - stop.scale.x) * blend);
+      stop.material.emissiveIntensity += (((selected && active) ? 0.8 : 0.04) - stop.material.emissiveIntensity) * blend;
+    });
+    inputPorts.forEach((port, index) => {
+      const glow = active ? 0.18 + Math.max(0, Math.sin(time * 6 - index * 0.9)) * 0.55 : 0.04;
+      port.material.emissiveIntensity += (glow - port.material.emissiveIntensity) * blend;
+    });
+    const outputGlow = active && stepIndex === TURNS.length - 1 ? 0.8 + Math.sin(time * 7) * 0.16 : 0.08;
+    outputPort.material.emissiveIntensity += (outputGlow - outputPort.material.emissiveIntensity) * blend;
   };
 
   return group;
@@ -644,33 +677,39 @@ export default function StateAtlas({ content, label }) {
   const figureRef = useRef(null);
   const mountRef = useRef(null);
   const labelRefs = useRef([]);
+  const nodeLabelRefs = useRef({});
   const activeStepRef = useRef(0);
   const stepStartedAtRef = useRef(0);
   const reduceMotionRef = useRef(false);
 
   useGSAP(() => {
     const labels = labelRefs.current.filter(Boolean);
+    const nodeLabels = nodeLabelRefs.current;
     const media = gsap.matchMedia();
     gsap.set(labels, { clearProps: "transform" });
 
     media.add(
       {
-        desktop: "(min-width: 761px)",
+        all: "all",
         reduceMotion: "(prefers-reduced-motion: reduce)",
       },
       (context) => {
-        const { desktop, reduceMotion } = context.conditions;
+        const { reduceMotion } = context.conditions;
         const activateStep = (index) => {
           activeStepRef.current = index;
           stepStartedAtRef.current = performance.now() / 1000;
+          const activeNodes = ACTIVE_NODES[index] ?? [];
+          const actionNodes = ACTION_NODES[index] ?? [];
+          NODE_LABELS.forEach(({ key }) => {
+            const element = nodeLabels[key];
+            if (!element) return;
+            element.dataset.state = actionNodes.includes(key)
+              ? "action"
+              : activeNodes.includes(key) ? "context" : "inactive";
+          });
         };
         reduceMotionRef.current = reduceMotion;
         gsap.set(labels, { autoAlpha: 0, clipPath: "inset(0 0% 0 0)" });
-        if (!desktop) {
-          activateStep(labels.length - 1);
-          return undefined;
-        }
-
         if (reduceMotion) {
           activateStep(labels.length - 1);
           gsap.set(labels.at(-1), { autoAlpha: 1 });
@@ -687,7 +726,7 @@ export default function StateAtlas({ content, label }) {
 
         labels.forEach((element, index) => {
           const step = `state-${index}`;
-          const hold = index === labels.length - 1 ? 1.9 : 1.25;
+          const hold = index === labels.length - 1 ? 2.8 : 2.2;
           timeline
             .addLabel(step)
             .call(() => { activateStep(index); }, [], step)
@@ -800,7 +839,7 @@ export default function StateAtlas({ content, label }) {
       };
 
       Object.values(labelAnchors).forEach((object) => world.add(object));
-      const agent = createRobot(POSITIONS.agent);
+      const agent = createStateRouter(POSITIONS.agent);
       world.add(agent);
       sceneNodes = { ...labelAnchors, agent };
       Object.values(sceneNodes).forEach((object) => { object.userData.baseWorldY = object.position.y; });
@@ -887,7 +926,7 @@ export default function StateAtlas({ content, label }) {
         previousElapsed = elapsed;
         const activeTrackIndexes = ACTIVE_TRACKS[activeStepRef.current] ?? [];
         const activeNodeKeys = ACTIVE_NODES[activeStepRef.current] ?? [];
-        const actionNodeKey = ACTION_NODES[activeStepRef.current];
+        const actionNodeKeys = ACTION_NODES[activeStepRef.current] ?? [];
         const stepElapsed = Math.max(0, performance.now() / 1000 - stepStartedAtRef.current);
         const actionElapsed = Math.max(0, stepElapsed - 0.5);
 
@@ -903,7 +942,7 @@ export default function StateAtlas({ content, label }) {
 
         Object.entries(sceneNodes).forEach(([key, object]) => {
           const isContextNode = activeNodeKeys.includes(key);
-          const isActionNode = key === actionNodeKey;
+          const isActionNode = actionNodeKeys.includes(key);
           const targetScale = isActionNode ? 1.12 : isContextNode ? 1.01 : 0.94;
           const scale = object.scale.x + (targetScale - object.scale.x) * blend;
           object.scale.setScalar(scale);
@@ -912,7 +951,17 @@ export default function StateAtlas({ content, label }) {
           const shouldAnimate = key === "agent"
             ? isContextNode
             : isActionNode && stepElapsed >= 0.5;
-          object.userData.animate?.(!reduceMotionRef.current && shouldAnimate, actionElapsed, blend);
+          object.userData.animate?.(!reduceMotionRef.current && shouldAnimate, actionElapsed, blend, activeStepRef.current);
+        });
+
+        NODE_LABELS.forEach(({ key, height, offsetX, offsetY }) => {
+          const element = nodeLabelRefs.current[key];
+          const object = sceneNodes[key];
+          if (!element || !object) return;
+          const anchor = object.localToWorld(new THREE.Vector3(0, height, 0));
+          anchor.project(camera);
+          element.style.left = `${mount.offsetLeft + (anchor.x * 0.5 + 0.5) * mount.clientWidth + offsetX}px`;
+          element.style.top = `${mount.offsetTop + (-anchor.y * 0.5 + 0.5) * mount.clientHeight + offsetY}px`;
         });
 
         tokens.forEach((token) => {
@@ -979,13 +1028,24 @@ export default function StateAtlas({ content, label }) {
     <figure className="state-atlas" aria-label={label} ref={figureRef}>
       <div className="state-atlas-canvas" ref={mountRef} />
       <strong className="atlas-heading">{content.heading}</strong>
-      {LABELS.map(({ key, type }, index) => (
+      {TURNS.map((key, index) => (
         <span
-          className={`atlas-label atlas-label-${type}`}
+          className="atlas-label atlas-label-request"
           key={key}
           ref={(element) => { labelRefs.current[index] = element; }}
         >
           {content[key]}
+        </span>
+      ))}
+      {NODE_LABELS.map(({ key }) => (
+        <span
+          className="atlas-node-label"
+          data-node={key}
+          data-state="inactive"
+          key={key}
+          ref={(element) => { nodeLabelRefs.current[key] = element; }}
+        >
+          {content.nodes[key]}
         </span>
       ))}
     </figure>

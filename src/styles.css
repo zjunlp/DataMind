@@ -371,17 +371,18 @@ h1 {
 .atlas-label {
   position: absolute;
   top: 52px;
-  left: 18px;
+  right: 18px;
   z-index: 2;
   display: inline-flex;
   align-items: center;
-  padding: 7px 9px;
+  max-width: 270px;
+  padding: 9px 12px;
   background: color-mix(in srgb, var(--paper) 94%, transparent);
   box-shadow: 0 7px 18px color-mix(in srgb, var(--ink) 8%, transparent);
   backdrop-filter: blur(6px);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 650;
-  line-height: 1.25;
+  line-height: 1.35;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -389,19 +390,50 @@ h1 {
   white-space: nowrap;
 }
 
-.atlas-label-code {
-  color: var(--ink);
-  border-bottom: 2px solid var(--blue);
-  font-family: var(--font-mono);
-  white-space: pre-line;
-}
-
 .atlas-label-request {
-  max-width: 225px;
   color: var(--ink);
   border-left: 3px solid var(--yellow);
   background: color-mix(in srgb, var(--yellow-soft) 76%, var(--paper));
   white-space: normal;
+}
+
+.atlas-node-label {
+  position: absolute;
+  z-index: 3;
+  max-width: 145px;
+  padding: 3px 6px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 520;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  transition: color 220ms ease, opacity 220ms ease, background-color 220ms ease;
+}
+
+.atlas-node-label[data-state="inactive"] {
+  opacity: 0;
+}
+
+.atlas-node-label[data-state="context"] {
+  color: var(--blue);
+  opacity: 0;
+}
+
+.atlas-node-label[data-node="agent"][data-state="context"] {
+  opacity: 0.84;
+}
+
+.atlas-node-label[data-state="action"] {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 -2px var(--coral);
+  font-weight: 650;
+  opacity: 1;
 }
 
 .performance-figure figcaption {
@@ -1529,13 +1561,38 @@ footer {
     display: block;
     width: calc(100% + 16px);
     max-width: none;
-    height: 125px;
+    height: 370px;
     margin: 0 -8px;
   }
 
-  .atlas-heading,
-  .atlas-label {
+  .atlas-heading {
     display: none;
+  }
+
+  .state-atlas-canvas {
+    inset: 60px 0 0;
+  }
+
+  .atlas-label {
+    top: 6px;
+    right: auto;
+    left: 8px;
+    display: inline-flex;
+    max-width: calc(100% - 16px);
+    font-size: 15px;
+  }
+
+  .atlas-node-label {
+    font-size: 15px;
+    opacity: 0;
+  }
+
+  .atlas-node-label[data-state="action"] {
+    opacity: 1;
+  }
+
+  .atlas-node-label[data-node="agent"] {
+    margin-top: 28px;
   }
 
   h1 {
