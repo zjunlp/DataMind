@@ -416,7 +416,7 @@ const translations = {
       types: { open: "Open-source", proprietary: "Proprietary" },
     },
     benchmark: {
-      title: "State-evolution patterns in LongDS.",
+      title: "State-evolution patterns in LongDS",
       patterns: [
         ["Initial", "Establishes a reusable analytical object, such as a cohort, metric, rule, or intermediate result."],
         ["Inheritance", "Reuses the most recent valid analytical state without restating it."],
@@ -427,7 +427,7 @@ const translations = {
       ],
     },
     findings: {
-      title: "Long-horizon performance degradation in LongDS.",
+      title: "Long-horizon performance degradation in LongDS",
       figureCaption: "Long-horizon performance degradation in LongDS. Accuracy drops across three increasing demands: (a) later task progress, averaged within each 10% progress interval; (b) larger dependency breadth, with n denoting the number of turns per group; and (c) more complex state-evolution patterns.",
       metrics: [
         ["−46.8 pts", "Long-Horizon Performance", "Accuracy decreases as tasks progress."],
@@ -501,7 +501,7 @@ const translations = {
       types: { open: "开源", proprietary: "专有" },
     },
     benchmark: {
-      title: "LongDS 中的状态演化模式。",
+      title: "LongDS 中的状态演化模式",
       patterns: [
         ["初始", "建立一个可复用的分析对象，例如用户群体、指标、规则或中间结果。"],
         ["继承", "无需重述，复用最近一次有效的分析状态。"],
@@ -512,7 +512,7 @@ const translations = {
       ],
     },
     findings: {
-      title: "LongDS 中的长程性能退化。",
+      title: "LongDS 中的长程性能退化",
       figureCaption: "LongDS 中的长程性能退化。准确率随着三类需求增加而下降：（a）任务进度后移，以每 10% 的进度区间取平均；（b）依赖广度增大，其中 n 表示每组的轮次数；（c）状态演化模式更加复杂。",
       metrics: [
         ["−46.8 分", "长程性能", "准确率随着任务推进而下降。"],
