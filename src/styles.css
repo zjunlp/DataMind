@@ -424,10 +424,6 @@ h1 {
   opacity: 0;
 }
 
-.atlas-node-label[data-node="agent"][data-state="context"] {
-  opacity: 0.84;
-}
-
 .atlas-node-label[data-state="action"] {
   color: var(--ink);
   background: var(--paper);
