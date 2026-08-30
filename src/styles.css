@@ -680,6 +680,24 @@ h1 {
   background: var(--ink);
 }
 
+.leaderboard-version-control {
+  border-color: var(--line-strong);
+  background: var(--ink);
+}
+
+.leaderboard-version-control button {
+  color: color-mix(in srgb, var(--paper) 68%, transparent);
+}
+
+.leaderboard-version-control button.is-selected {
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.leaderboard-filter-control {
+  margin-left: 2px;
+}
+
 .tool-spacer {
   flex: 1;
 }
@@ -866,6 +884,14 @@ tbody tr:first-child .score-track span {
   color: var(--muted);
   font-size: 15px;
   font-variant-numeric: tabular-nums;
+}
+
+.leaderboard-empty {
+  height: 150px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 15px;
+  letter-spacing: 0.01em;
 }
 
 .empty-state {

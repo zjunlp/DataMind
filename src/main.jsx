@@ -362,6 +362,13 @@ const models = [
   },
 ];
 
+// Keep benchmark releases separate so a new release can ship its own scores
+// without changing the published snapshot for the original benchmark.
+const leaderboardModels = {
+  v1: models,
+  v1_1: [],
+};
+
 const translations = {
   en: {
     pageTitle: "LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis",
@@ -411,6 +418,9 @@ const translations = {
       contact: "Get listed",
       filterLabel: "Model type filter",
       filters: { all: "All Models", proprietary: "Proprietary Models", open: "Open-source Models" },
+      versionLabel: "Benchmark version",
+      versions: { v1: "LongDS v1", v1_1: "LongDS v1.1" },
+      emptyState: "LongDS v1.1 results will be published soon.",
       domainLabel: "Score domain",
       columns: { rank: "Rank", model: "Model", type: "Model Type", score: "Score", steps: "Avg Step" },
       types: { open: "Open-source", proprietary: "Proprietary" },
@@ -496,6 +506,9 @@ const translations = {
       contact: "联系上榜",
       filterLabel: "模型类型筛选",
       filters: { all: "全部模型", proprietary: "专有模型", open: "开源模型" },
+      versionLabel: "评测版本",
+      versions: { v1: "LongDS v1", v1_1: "LongDS v1.1" },
+      emptyState: "LongDS v1.1 的评测结果即将发布。",
       domainLabel: "得分领域",
       columns: { rank: "排名", model: "模型", type: "模型类型", score: "得分", steps: "平均步数" },
       types: { open: "开源", proprietary: "专有" },
@@ -538,6 +551,7 @@ const translations = {
 function App() {
   const [language, setLanguage] = useState("en");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [leaderboardVersion, setLeaderboardVersion] = useState("v1");
   const [modelType, setModelType] = useState("all");
   const [domain, setDomain] = useState("overall");
   const [visitorCount, setVisitorCount] = useState(null);
@@ -560,10 +574,10 @@ function App() {
   }, []);
 
   const filteredModels = useMemo(() => {
-    return models
+    return leaderboardModels[leaderboardVersion]
       .filter((item) => modelType === "all" || item.type === modelType)
       .sort((a, b) => b.scores[domain] - a.scores[domain]);
-  }, [domain, modelType]);
+  }, [domain, modelType, leaderboardVersion]);
 
   const maxScore = filteredModels[0]?.scores[domain] || 100;
 
@@ -656,7 +670,23 @@ function App() {
           </div>
 
           <div className="leaderboard-tools">
-            <div className="segmented-control" aria-label={t.leaderboard.filterLabel}>
+            <div className="segmented-control leaderboard-version-control" role="tablist" aria-label={t.leaderboard.versionLabel}>
+              {Object.entries(t.leaderboard.versions).map(([value, label]) => (
+                <button
+                  type="button"
+                  role="tab"
+                  key={value}
+                  id={`leaderboard-version-tab-${value}`}
+                  aria-selected={leaderboardVersion === value}
+                  aria-controls="leaderboard-table"
+                  className={leaderboardVersion === value ? "is-selected" : ""}
+                  onClick={() => setLeaderboardVersion(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="segmented-control leaderboard-filter-control" aria-label={t.leaderboard.filterLabel}>
               {[
                 ["all", t.leaderboard.filters.all],
                 ["proprietary", t.leaderboard.filters.proprietary],
@@ -682,7 +712,13 @@ function App() {
             </label>
           </div>
 
-          <div className="table-wrap">
+          <div
+            className="table-wrap"
+            id="leaderboard-table"
+            role="tabpanel"
+            aria-labelledby={`leaderboard-version-tab-${leaderboardVersion}`}
+            aria-live="polite"
+          >
             <table>
               <thead>
                 <tr>
@@ -694,25 +730,29 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {filteredModels.map((item, index) => {
-                  const score = item.scores[domain];
-                  return (
-                    <tr key={item.model}>
-                      <td><span className={`rank rank-${index + 1}`}>{String(index + 1).padStart(2, "0")}</span></td>
-                      <td>
-                        <strong className="model-name">{item.model}</strong>
-                      </td>
-                      <td><span className={`model-type-pill model-type-${item.type}`}>{t.leaderboard.types[item.type]}</span></td>
-                      <td className="score-cell">
-                        <div className="score-number">{score.toFixed(2)}%</div>
-                        <div className="score-track" aria-hidden="true">
-                          <span style={{ width: `${(score / maxScore) * 100}%` }} />
-                        </div>
-                      </td>
-                      <td className="steps-cell">{item.avgSteps.toFixed(2)}</td>
+                {filteredModels.length > 0 ? filteredModels.map((item, index) => {
+                    const score = item.scores[domain];
+                    return (
+                      <tr key={item.model}>
+                        <td><span className={`rank rank-${index + 1}`}>{String(index + 1).padStart(2, "0")}</span></td>
+                        <td>
+                          <strong className="model-name">{item.model}</strong>
+                        </td>
+                        <td><span className={`model-type-pill model-type-${item.type}`}>{t.leaderboard.types[item.type]}</span></td>
+                        <td className="score-cell">
+                          <div className="score-number">{score.toFixed(2)}%</div>
+                          <div className="score-track" aria-hidden="true">
+                            <span style={{ width: `${(score / maxScore) * 100}%` }} />
+                          </div>
+                        </td>
+                        <td className="steps-cell">{item.avgSteps.toFixed(2)}</td>
+                      </tr>
+                    );
+                  }) : (
+                    <tr>
+                      <td className="leaderboard-empty" colSpan={5}>{t.leaderboard.emptyState}</td>
                     </tr>
-                  );
-                })}
+                  )}
               </tbody>
             </table>
           </div>
