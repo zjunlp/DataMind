@@ -1,0 +1,12 @@
+{
+  "autoMemoryEnabled": true,
+  "model": {
+    "name": "Qwen3.8-Max",
+    "reasoningEffort": "xhigh",
+    "contextWindow": 1000000,
+    "maxSessionTurns": -1
+  },
+  "general": {
+    "enableAutoUpdate": false
+  }
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run LongDS tasks directly with Claude Code, without importing DSGym."""
+"""Run LongDS tasks directly with Kimi Code, without importing DSGym."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ import subprocess
 import sys
 import threading
 import time
-import uuid
+import tomllib
 from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from datetime import datetime
 from pathlib import Path
@@ -48,7 +48,6 @@ TURN_SCHEMA = {
 COLOR_RESET = "\033[0m"
 COLOR_BOLD = "\033[1m"
 COLOR_DIM = "\033[2m"
-COLOR_BLUE = "\033[34m"
 COLOR_GREEN = "\033[32m"
 COLOR_YELLOW = "\033[33m"
 COLOR_RED = "\033[31m"
@@ -57,20 +56,18 @@ COLOR_CYAN = "\033[36m"
 
 CONTAINER_WORKSPACE = "/workspace"
 CONTAINER_HOME = f"{CONTAINER_WORKSPACE}/.home"
-CONTAINER_CLAUDE_SETTINGS = "/tmp/longds_claude_settings.json"
+CONTAINER_KIMI_HOME = "/tmp/longds_kimi_home"
+CONTAINER_KIMI_CONFIG = f"{CONTAINER_KIMI_HOME}/config.toml"
 FIXED_DOCKER_ENV = {
     "HOME": CONTAINER_HOME,
+    "KIMI_CODE_HOME": CONTAINER_KIMI_HOME,
     "PYTHONUNBUFFERED": "1",
     "PYTHONDONTWRITEBYTECODE": "1",
     "PYTHONWARNINGS": "ignore::FutureWarning",
 }
 DEFAULT_DOCKER_ENV_KEYS = (
-    "ANTHROPIC_API_KEY",
-    "ANTHROPIC_BASE_URL",
-    "ANTHROPIC_AUTH_TOKEN",
-    "CLAUDE_CODE_OAUTH_TOKEN",
-    "CLAUDE_CODE_USE_BEDROCK",
-    "CLAUDE_CODE_USE_VERTEX",
+    "KIMI_CODE_EXPERIMENTAL_FLAG",
+    "KIMI_CODE_LEGACY_FLAG",
     "HTTP_PROXY",
     "HTTPS_PROXY",
     "NO_PROXY",
@@ -78,17 +75,13 @@ DEFAULT_DOCKER_ENV_KEYS = (
     "https_proxy",
     "no_proxy",
 )
-HARBOR_DOCKER_ENV_ALIASES = {
-    "ANTHROPIC_API_KEY": ("HARBOR_ANTHROPIC_KEY",),
-    "ANTHROPIC_BASE_URL": ("HARBOR_ANTHROPIC_BASE_URL",),
-}
 
 
 def parse_args() -> argparse.Namespace:
     script_dir = Path(__file__).resolve().parent
     longds_root = Path(__file__).resolve().parents[2]
     parser = argparse.ArgumentParser(
-        description="Run LongDS-Bench directly with Claude Code sessions."
+        description="Run LongDS-Bench directly with Kimi Code sessions."
     )
     parser.add_argument(
         "--task-root",
@@ -108,48 +101,41 @@ def parse_args() -> argparse.Namespace:
         default=script_dir / "results",
         help="Result root. Task runs are saved as <domain>/<dataset>/<task_id>/<run_name>/.",
     )
-    parser.add_argument("--claude-bin", default="claude", help="Claude Code CLI executable.")
+    parser.add_argument("--kimi-bin", default="kimi", help="Kimi Code CLI executable.")
     parser.add_argument(
-        "--claude-model",
+        "--kimi-model",
         default=None,
-        help="Model passed to `claude --model`. Omit to use Claude Code config default.",
+        help="Model passed to `kimi --model`. Omit to use Kimi Code config default.",
     )
     parser.add_argument(
-        "--claude-settings",
+        "--kimi-config",
         type=Path,
-        default=script_dir / "settings.json",
+        default=script_dir / "config.toml",
         help=(
-            "Claude Code settings JSON file passed to `claude --settings`. "
-            "Defaults to settings.json in this directory. "
-            f"With --use-docker it is copied to {CONTAINER_CLAUDE_SETTINGS}."
+            "Kimi Code config.toml. Defaults to config.toml in this directory. "
+            f"With --use-docker it is copied to {CONTAINER_KIMI_CONFIG}."
         ),
     )
     parser.add_argument(
         "--analysis-python",
         default=None,
         help=(
-            "Python executable Claude Code should use for data analysis commands. "
+            "Python executable Kimi Code should use for data analysis commands. "
             "Defaults to the current Python locally and /usr/local/bin/python with --use-docker."
         ),
-    )
-    parser.add_argument(
-        "--permission-mode",
-        default="bypassPermissions",
-        choices=["acceptEdits", "auto", "bypassPermissions", "manual", "dontAsk", "plan"],
-        help="Claude Code permission mode. Default: bypassPermissions.",
     )
     parser.add_argument(
         "--use-docker",
         action="store_true",
         help=(
-            "Run Claude Code inside one Docker container per task. Task data is copied into "
-            f"{CONTAINER_WORKSPACE}; Claude Code tools are otherwise left unrestricted."
+            "Run Kimi Code inside one Docker container per task. Task data is copied into "
+            f"{CONTAINER_WORKSPACE}; Kimi Code tools are otherwise left unrestricted."
         ),
     )
     parser.add_argument("--docker-bin", default="docker", help="Docker CLI executable.")
     parser.add_argument(
         "--docker-image",
-        default="longds-claude-code:latest",
+        default="longds-kimi-code:latest",
         help="Docker image used with --use-docker.",
     )
     parser.add_argument(
@@ -174,7 +160,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--docker-container-prefix",
-        default="longds-claude",
+        default="longds-kimi",
         help="Prefix for per-task Docker container names.",
     )
     parser.add_argument(
@@ -204,14 +190,11 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
-        "--bare",
-        action="store_true",
-        help="Run Claude Code in bare mode to reduce external context and hooks.",
-    )
-    parser.add_argument(
-        "--max-budget-usd",
-        default=None,
-        help="Optional Claude Code API budget cap for each turn.",
+        "--kimi-arg",
+        action="append",
+        default=[],
+        metavar="ARG",
+        help="Extra raw argument appended to every Kimi Code invocation. Repeatable.",
     )
     parser.add_argument(
         "--task-limit",
@@ -221,7 +204,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--start-index", type=int, default=0, help="Start index in task_list.json.")
     parser.add_argument("--turn-limit", type=int, default=None, help="Maximum turns per task.")
-    parser.add_argument("--timeout", type=int, default=3600, help="Timeout per Claude Code turn, seconds.")
+    parser.add_argument("--timeout", type=int, default=3600, help="Timeout per Kimi Code turn, seconds.")
     parser.add_argument(
         "--run-parallel",
         type=int,
@@ -233,7 +216,7 @@ def parse_args() -> argparse.Namespace:
         "--run-name",
         default=None,
         help=(
-            "Optional run directory name. Defaults to claude_code_<model>_YYYYmmdd_HHMMSS. "
+            "Optional run directory name. Defaults to kimi_code_<model>_YYYYmmdd_HHMMSS. "
             "A task is skipped when its run directory already exists."
         ),
     )
@@ -251,7 +234,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Write prompts and metadata without invoking Claude Code or copying task data.",
+        help="Write prompts and metadata without invoking Kimi Code or copying task data.",
     )
     parser.add_argument(
         "--judge",
@@ -263,7 +246,7 @@ def parse_args() -> argparse.Namespace:
 
 def slugify(value: str) -> str:
     value = value.replace("/", "_")
-    return re.sub(r"[^A-Za-z0-9_.-]+", "_", value).strip("_") or "claude_code"
+    return re.sub(r"[^A-Za-z0-9_.-]+", "_", value).strip("_") or "kimi_code"
 
 
 def validate_run_name(run_name: str) -> None:
@@ -282,20 +265,16 @@ def write_json(path: Path, payload: Any) -> None:
         json.dump(payload, f, indent=2, ensure_ascii=False)
 
 
-def claude_settings_model(path: Path | None) -> str | None:
+def kimi_config_model(path: Path | None) -> str | None:
     if path is None or not path.is_file():
         return None
-    payload = load_json(path)
+    with path.open("rb") as f:
+        payload = tomllib.load(f)
     if not isinstance(payload, dict):
         return None
-    model = payload.get("model")
+    model = payload.get("default_model")
     if isinstance(model, str) and model.strip():
         return model.strip()
-    env = payload.get("env")
-    if isinstance(env, dict):
-        env_model = env.get("ANTHROPIC_MODEL")
-        if isinstance(env_model, str) and env_model.strip():
-            return env_model.strip()
     return None
 
 
@@ -375,38 +354,24 @@ def finalize_workspace_data(
     return cleanup
 
 
-def claude_command(
+def kimi_command(
     *,
     args: argparse.Namespace,
+    prompt: str,
     session_id: str | None,
-    resume: bool,
-    settings_path: str | None = None,
 ) -> list[str]:
     cmd = [
-        args.claude_bin,
+        args.kimi_bin,
         "-p",
-        "--input-format",
-        "text",
+        prompt,
         "--output-format",
         "stream-json",
-        "--verbose",
-        "--permission-mode",
-        args.permission_mode,
-        "--json-schema",
-        json.dumps(TURN_SCHEMA, ensure_ascii=False),
     ]
-    if args.bare:
-        cmd.append("--bare")
-    if settings_path:
-        cmd.extend(["--settings", settings_path])
-    if args.claude_model and getattr(args, "claude_model_explicit", True):
-        cmd.extend(["--model", args.claude_model])
-    if args.max_budget_usd:
-        cmd.extend(["--max-budget-usd", str(args.max_budget_usd)])
-    if session_id and resume:
-        cmd.extend(["--resume", session_id])
-    elif session_id:
-        cmd.extend(["--session-id", session_id])
+    if args.kimi_model and getattr(args, "kimi_model_explicit", True):
+        cmd.extend(["--model", args.kimi_model])
+    if session_id:
+        cmd.extend(["--session", session_id])
+    cmd.extend(args.kimi_arg)
     return cmd
 
 
@@ -448,14 +413,6 @@ def docker_client_env(args: argparse.Namespace) -> dict[str, str]:
         key = key.strip()
         if key:
             env[key] = value
-
-    for target, aliases in HARBOR_DOCKER_ENV_ALIASES.items():
-        if env.get(target):
-            continue
-        for alias in aliases:
-            if env.get(alias):
-                env[target] = env[alias]
-                break
 
     return env
 
@@ -529,7 +486,10 @@ def docker_run_detached_command(
         [
             "/bin/sh",
             "-lc",
-            f"mkdir -p {CONTAINER_WORKSPACE}/data {CONTAINER_HOME}/.claude && tail -f /dev/null",
+            (
+                f"mkdir -p {CONTAINER_WORKSPACE}/data {CONTAINER_HOME} "
+                f"{CONTAINER_KIMI_HOME} && tail -f /dev/null"
+            ),
         ]
     )
     return cmd
@@ -620,12 +580,12 @@ def copy_task_data_to_container(
         )
 
 
-def copy_claude_settings_to_container(
+def copy_kimi_config_to_container(
     *,
     args: argparse.Namespace,
     container_name: str,
 ) -> None:
-    if args.claude_settings is None:
+    if args.kimi_config is None:
         return
 
     run_docker_control(
@@ -633,8 +593,8 @@ def copy_claude_settings_to_container(
         [
             args.docker_bin,
             "cp",
-            str(args.claude_settings.resolve()),
-            f"{container_name}:{CONTAINER_CLAUDE_SETTINGS}",
+            str(args.kimi_config.resolve()),
+            f"{container_name}:{CONTAINER_KIMI_CONFIG}",
         ],
     )
     chown_user = docker_chown_user(args)
@@ -649,9 +609,48 @@ def copy_claude_settings_to_container(
                 container_name,
                 "chown",
                 chown_user,
-                CONTAINER_CLAUDE_SETTINGS,
+                CONTAINER_KIMI_CONFIG,
             ],
         )
+
+
+def prepare_local_kimi_home(*, args: argparse.Namespace, run_dir: Path) -> Path:
+    kimi_home = run_dir / "kimi_home"
+    kimi_home.mkdir(parents=True, exist_ok=True)
+    if args.kimi_config is not None:
+        shutil.copy2(args.kimi_config, kimi_home / "config.toml")
+    return kimi_home
+
+
+def scrub_kimi_config(kimi_home: Path) -> None:
+    (kimi_home / "config.toml").unlink(missing_ok=True)
+
+
+def sync_kimi_home_from_container(
+    *,
+    args: argparse.Namespace,
+    container_name: str,
+    kimi_home: Path,
+) -> dict[str, Any]:
+    kimi_home.mkdir(parents=True, exist_ok=True)
+    completed = subprocess.run(
+        [
+            args.docker_bin,
+            "cp",
+            f"{container_name}:{CONTAINER_KIMI_HOME}/.",
+            str(kimi_home),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+        env=docker_client_env(args),
+    )
+    scrub_kimi_config(kimi_home)
+    return {
+        "returncode": completed.returncode,
+        "stdout": completed.stdout,
+        "stderr": completed.stderr,
+    }
 
 
 def sync_workspace_from_container(
@@ -730,10 +729,7 @@ def build_manual_resume_metadata(
         }
 
     if args.use_docker and container_name and not args.dry_run:
-        inner_cmd = [args.claude_bin]
-        if args.claude_settings:
-            inner_cmd.extend(["--settings", CONTAINER_CLAUDE_SETTINGS])
-        inner_cmd.extend(["--resume", session_id])
+        inner_cmd = [args.kimi_bin, "--session", session_id]
         return {
             "manual_resume_note": (
                 "Run manual_resume_command while the per-task Docker container exists. "
@@ -749,22 +745,70 @@ def build_manual_resume_metadata(
             ),
         }
 
-    local_cmd = [args.claude_bin]
-    if args.claude_settings:
-        local_cmd.extend(["--settings", str(args.claude_settings)])
-    local_cmd.extend(["--resume", session_id])
+    kimi_home = run_dir / "kimi_home"
+    local_cmd = ["env", f"KIMI_CODE_HOME={kimi_home}", args.kimi_bin, "--session", session_id]
     return {
-        "manual_resume_note": "Run manual_resume_command to open the Claude Code interactive session for this task.",
+        "manual_resume_note": (
+            "Run manual_resume_command to open the Kimi Code interactive session for this task. "
+            "The saved config is removed after the run, so restore config.toml first if needed."
+        ),
         "manual_resume_command": shlex.join(local_cmd),
     }
 
 
-def parse_claude_output(stdout: str, fallback: str | None) -> tuple[str | None, dict[str, Any] | None, dict[str, Any] | None, str]:
+def event_role(event: dict[str, Any]) -> str:
+    role = event.get("role") or event.get("type")
+    if isinstance(role, str):
+        return role.lower()
+    message = event.get("message")
+    if isinstance(message, dict) and isinstance(message.get("role"), str):
+        return message["role"].lower()
+    return ""
+
+
+def event_text(event: dict[str, Any]) -> str:
+    content = event.get("content")
+    if content is None and isinstance(event.get("message"), dict):
+        content = event["message"].get("content")
+    if isinstance(content, str):
+        return content
+    if not isinstance(content, list):
+        return ""
+    parts: list[str] = []
+    for block in content:
+        if isinstance(block, str):
+            parts.append(block)
+        elif isinstance(block, dict) and isinstance(block.get("text"), str):
+            parts.append(block["text"])
+    return "\n".join(part for part in parts if part).strip()
+
+
+def event_tool_calls(event: dict[str, Any]) -> list[dict[str, Any]]:
+    calls = event.get("tool_calls")
+    if calls is None and isinstance(event.get("message"), dict):
+        calls = event["message"].get("tool_calls")
+    return [call for call in calls if isinstance(call, dict)] if isinstance(calls, list) else []
+
+
+def parse_tool_arguments(call: dict[str, Any]) -> tuple[str, Any]:
+    function = call.get("function")
+    if not isinstance(function, dict):
+        function = {}
+    name = str(function.get("name") or call.get("name") or "unknown")
+    arguments = function.get("arguments", call.get("arguments", {}))
+    if isinstance(arguments, str):
+        parsed = _loads_or_none(arguments)
+        arguments = parsed if parsed is not None else {"raw": arguments}
+    return name, arguments
+
+
+def parse_kimi_output(
+    stdout: str,
+    fallback: str | None,
+) -> tuple[str | None, dict[str, Any] | None, dict[str, Any] | None, str]:
     session_id = fallback
     usage = None
     final_text = ""
-    structured_payload = None
-    structured_raw = ""
     for line in stdout.splitlines():
         try:
             event = json.loads(line)
@@ -778,32 +822,23 @@ def parse_claude_output(stdout: str, fallback: str | None) -> tuple[str | None, 
             usage = event.get("usage")
         message = event.get("message")
         if isinstance(message, dict) and isinstance(message.get("usage"), dict):
-            usage = message.get("usage")
+            usage = message["usage"]
 
-        extracted_structured = extract_structured_output(event)
-        if extracted_structured is not None:
-            structured_payload = normalize_turn_payload(extracted_structured)
-            structured_raw = json.dumps(structured_payload, ensure_ascii=False)
-
-        if "result" in event:
-            result = event.get("result")
-            if isinstance(result, str):
-                final_text = result
-            elif isinstance(result, dict):
-                payload = normalize_turn_payload(result)
-                return session_id, usage, payload, json.dumps(payload, ensure_ascii=False)
-
-        text = extract_text_from_message(message)
-        if text:
+        text = event_text(event)
+        if event_role(event) == "assistant" and text:
             final_text = text
-
-    if structured_payload is not None:
-        return session_id, usage, structured_payload, structured_raw
 
     payload, raw_message = parse_structured_message(final_text)
     if payload is not None:
         payload = normalize_turn_payload(payload)
         raw_message = json.dumps(payload, ensure_ascii=False)
+    elif final_text.strip():
+        payload = {
+            "answer": final_text.strip(),
+            "reasoning_summary": "none",
+            "files_used": ["none"],
+        }
+        raw_message = final_text.strip()
     return session_id, usage, payload, raw_message
 
 
@@ -861,57 +896,11 @@ def parse_embedded_json(text: str) -> dict[str, Any] | None:
     return None
 
 
-def extract_structured_output(event: dict[str, Any]) -> dict[str, Any] | None:
-    structured_output = event.get("structured_output")
-    if isinstance(structured_output, dict):
-        return structured_output
-
-    message = event.get("message")
-    if not isinstance(message, dict):
-        return None
-    content = message.get("content")
-    if not isinstance(content, list):
-        return None
-
-    for block in content:
-        if not isinstance(block, dict):
-            continue
-        if block.get("type") == "tool_use" and block.get("name") == "StructuredOutput":
-            tool_input = block.get("input")
-            if isinstance(tool_input, dict):
-                return tool_input
-    return None
-
-
-def extract_text_from_message(message: Any) -> str:
-    if not isinstance(message, dict):
-        return ""
-    content = message.get("content")
-    if isinstance(content, str):
-        return content
-    if not isinstance(content, list):
-        return ""
-    parts = []
-    for block in content:
-        if isinstance(block, dict) and block.get("type") == "text":
-            parts.append(str(block.get("text") or ""))
-    return "\n".join(part for part in parts if part).strip()
-
-
 def parse_structured_message(text: str) -> tuple[dict[str, Any] | None, str]:
     raw = (text or "").strip()
     if not raw:
         return None, ""
     return parse_embedded_json(raw), raw
-
-
-def parse_last_message(path: Path) -> tuple[dict[str, Any] | None, str]:
-    if not path.exists():
-        return None, ""
-    text = path.read_text(encoding="utf-8").strip()
-    if not text:
-        return None, ""
-    return parse_embedded_json(text), text
 
 
 def describe_agent_text(text: str) -> dict[str, Any]:
@@ -929,29 +918,14 @@ def describe_agent_text(text: str) -> dict[str, Any]:
     return formatted
 
 
-def tool_result_output(block: dict[str, Any]) -> str:
-    output = block.get("content")
-    if isinstance(output, list):
-        return "\n".join(
-            str(part.get("text") or "")
-            for part in output
-            if isinstance(part, dict) and part.get("type") == "text"
-        )
-    if output is None:
-        return ""
-    if isinstance(output, (dict, list)):
-        return json.dumps(output, ensure_ascii=False)
-    return str(output)
-
-
-def format_claude_steps(
+def format_kimi_steps(
     stdout: str,
     *,
     prompt: str,
     turn_label: str,
     previous_session_id: str | None,
 ) -> dict[str, Any]:
-    """Convert raw Claude Code stream-json events into the compact judge trajectory format."""
+    """Convert raw Kimi Code stream-json events into the compact judge trajectory format."""
     trace: dict[str, Any] = {
         "session": {},
         "turn": int(turn_label) if turn_label.isdigit() else turn_label,
@@ -967,7 +941,7 @@ def format_claude_steps(
         if not isinstance(event, dict):
             continue
 
-        event_type = str(event.get("type", ""))
+        role = event_role(event)
         session_id = event.get("session_id")
         if session_id and not trace["session"]:
             trace["session"] = {
@@ -981,52 +955,39 @@ def format_claude_steps(
                 ),
             }
 
-        if event_type == "result":
-            if isinstance(event.get("usage"), dict):
-                trace["usage"] = event["usage"]
-            if event.get("total_cost_usd") is not None:
-                trace["total_cost_usd"] = event.get("total_cost_usd")
-            if isinstance(event.get("result"), str):
-                result_text = event["result"]
-            continue
+        if isinstance(event.get("usage"), dict):
+            trace["usage"] = event["usage"]
 
-        message = event.get("message")
-        if not isinstance(message, dict):
-            continue
-        content = message.get("content")
-        if isinstance(content, str):
-            content = [{"type": "text", "text": content}]
-        if not isinstance(content, list):
-            continue
+        if role == "assistant":
+            text = event_text(event)
+            if text:
+                result_text = text
+                steps.append({"step": len(steps), **describe_agent_text(text)})
 
-        for block in content:
-            if not isinstance(block, dict):
-                continue
-            block_type = block.get("type")
-            if block_type == "text":
-                steps.append({"step": len(steps), **describe_agent_text(str(block.get("text") or ""))})
-            elif block_type == "tool_use":
-                formatted: dict[str, Any] = {"step": len(steps), "tool": block.get("name")}
-                tool_input = block.get("input")
-                if isinstance(tool_input, dict) and "command" in tool_input:
-                    formatted["command"] = str(tool_input.get("command") or "")
-                elif tool_input is not None:
-                    formatted["input"] = tool_input
+            for call in event_tool_calls(event):
+                name, arguments = parse_tool_arguments(call)
+                formatted: dict[str, Any] = {"step": len(steps), "tool": name}
+                if isinstance(arguments, dict) and "command" in arguments:
+                    formatted["command"] = str(arguments.get("command") or "")
+                elif arguments not in ({}, None):
+                    formatted["input"] = arguments
                 formatted["output"] = ""
                 steps.append(formatted)
-                tool_id = str(block.get("id") or "")
+                tool_id = str(call.get("id") or "")
                 if tool_id:
                     pending[tool_id] = len(steps) - 1
-            elif block_type == "tool_result":
-                tool_use_id = str(block.get("tool_use_id") or "")
-                output = tool_result_output(block)
-                index = pending.pop(tool_use_id, None)
-                if index is not None:
-                    steps[index]["output"] = output
-                    if block.get("is_error"):
-                        steps[index]["is_error"] = True
-                elif output:
-                    steps.append({"step": len(steps), "output": output})
+            continue
+
+        if role == "tool":
+            tool_use_id = str(event.get("tool_call_id") or event.get("tool_use_id") or "")
+            output = event_text(event)
+            index = pending.pop(tool_use_id, None)
+            if index is not None:
+                steps[index]["output"] = output
+                if event.get("is_error"):
+                    steps[index]["is_error"] = True
+            elif output:
+                steps.append({"step": len(steps), "output": output})
 
     if result_text.strip():
         final_step = describe_agent_text(result_text)
@@ -1080,21 +1041,7 @@ def print_agent_text(text: str) -> None:
         print_text_block("files_used", "\n".join(str(path) for path in files_used), color_code=COLOR_MAGENTA)
 
 
-def event_color(event_type: str, item_type: str | None) -> str:
-    if "error" in event_type:
-        return COLOR_RED
-    if item_type == "command_execution":
-        return COLOR_YELLOW
-    if item_type == "agent_message":
-        return COLOR_MAGENTA
-    if event_type.endswith(".started"):
-        return COLOR_BLUE
-    if event_type.endswith(".completed"):
-        return COLOR_GREEN
-    return COLOR_CYAN
-
-
-class ClaudeEventFormatter:
+class KimiEventFormatter:
     def __init__(
         self,
         *,
@@ -1108,7 +1055,8 @@ class ClaudeEventFormatter:
         self.previous_session_id = previous_session_id
         self.user_request_printed = False
         self.session_printed = False
-        self.pending_tool_uses: dict[str, dict[str, Any]] = {}
+        self.finished = False
+        self.pending_tool_uses: dict[str, tuple[str, Any]] = {}
 
     def __call__(self, line: str) -> None:
         text = line.rstrip("\n")
@@ -1157,31 +1105,24 @@ class ClaudeEventFormatter:
         self.session_printed = True
 
     def print_event(self, event: dict[str, Any]) -> None:
-        event_type = str(event.get("type", "unknown"))
+        role = event_role(event)
         color_code = COLOR_CYAN
-        if event_type == "assistant":
+        if role == "assistant":
             color_code = COLOR_MAGENTA
-        elif event_type == "user":
+        elif role == "tool":
             color_code = COLOR_YELLOW
-        elif event_type == "result":
-            color_code = COLOR_GREEN
-        elif event_type == "error" or event.get("is_error"):
+        elif role == "error" or event.get("is_error"):
             color_code = COLOR_RED
 
         self.print_session(event, color_code=color_code)
         self.print_user_request(color_code=color_code)
 
-        if event_type == "assistant":
+        if role == "assistant":
             self.print_assistant_event(event, color_code=color_code)
             return
-        if event_type == "user":
-            self.print_user_event(event, color_code=color_code)
+        if role == "tool":
+            self.print_tool_event(event, color_code=color_code)
             return
-        if event_type == "result":
-            self.print_result_event(event, color_code=color_code)
-            return
-        if event_type not in {"system"}:
-            self.print_generic_event(event, event_type, color_code=color_code)
 
     def print_step_header(self, color_code: str) -> int:
         step = self.next_step
@@ -1191,90 +1132,54 @@ class ClaudeEventFormatter:
         return step
 
     def print_assistant_event(self, event: dict[str, Any], *, color_code: str) -> None:
-        message = event.get("message")
-        if not isinstance(message, dict):
-            return
-        content = message.get("content")
-        if isinstance(content, str):
+        text = event_text(event)
+        if text:
             self.print_step_header(color_code)
-            print_agent_text(content)
-            return
-        if not isinstance(content, list):
-            return
+            print_agent_text(text)
+        for call in event_tool_calls(event):
+            tool_id = str(call.get("id") or "")
+            name, arguments = parse_tool_arguments(call)
+            if tool_id:
+                self.pending_tool_uses[tool_id] = (name, arguments)
+            else:
+                self.print_tool_step(name, arguments, output="", is_error=False)
 
-        for block in content:
-            if not isinstance(block, dict):
-                continue
-            block_type = block.get("type")
-            if block_type == "text":
-                text = str(block.get("text") or "")
-                if text:
-                    self.print_step_header(color_code)
-                    print_agent_text(text)
-            elif block_type == "tool_use":
-                tool_id = str(block.get("id") or "")
-                if tool_id:
-                    self.pending_tool_uses[tool_id] = block
-                else:
-                    self.print_tool_step(block, output="", is_error=False)
-
-    def print_user_event(self, event: dict[str, Any], *, color_code: str) -> None:
-        message = event.get("message")
-        if not isinstance(message, dict):
-            return
-        content = message.get("content")
-        if not isinstance(content, list):
-            return
-        for block in content:
-            if not isinstance(block, dict) or block.get("type") != "tool_result":
-                continue
-            tool_use_id = str(block.get("tool_use_id") or "")
-            tool_use = self.pending_tool_uses.pop(tool_use_id, None)
-            output = self.tool_result_output(block)
-            is_error = bool(block.get("is_error"))
-            if tool_use is not None:
-                self.print_tool_step(tool_use, output=output, is_error=is_error)
-            elif output:
+    def print_tool_event(self, event: dict[str, Any], *, color_code: str) -> None:
+        tool_id = str(event.get("tool_call_id") or event.get("tool_use_id") or "")
+        tool_use = self.pending_tool_uses.pop(tool_id, None)
+        output = event_text(event)
+        if tool_use is None:
+            if output:
                 self.print_step_header(color_code)
-                print_text_block("output", str(output), color_code=color_code)
+                print_text_block("output", output, color_code=color_code)
+            return
+        name, arguments = tool_use
+        self.print_tool_step(name, arguments, output=output, is_error=bool(event.get("is_error")))
 
-    def tool_result_output(self, block: dict[str, Any]) -> str:
-        return tool_result_output(block)
-
-    def print_tool_step(self, tool_use: dict[str, Any], *, output: str, is_error: bool) -> None:
+    def print_tool_step(self, name: str, arguments: Any, *, output: str, is_error: bool) -> None:
         color_code = COLOR_RED if is_error else COLOR_YELLOW
         self.print_step_header(color_code)
-        print_field("tool", tool_use.get("name"), color_code=color_code)
-        tool_input = tool_use.get("input")
-        if isinstance(tool_input, dict) and "command" in tool_input:
-            print_text_block("command", str(tool_input.get("command") or ""), color_code=color_code)
-        elif tool_input:
-            print_text_block("input", json.dumps(tool_input, ensure_ascii=False), color_code=color_code)
+        print_field("tool", name, color_code=color_code)
+        if isinstance(arguments, dict) and "command" in arguments:
+            print_text_block("command", str(arguments.get("command") or ""), color_code=color_code)
+        elif arguments:
+            print_text_block("input", json.dumps(arguments, ensure_ascii=False), color_code=color_code)
         print_text_block("output", output, color_code=color_code)
 
     def flush_pending_tool_uses(self) -> None:
         for tool_id in list(self.pending_tool_uses):
-            tool_use = self.pending_tool_uses.pop(tool_id)
-            self.print_tool_step(tool_use, output="", is_error=False)
+            name, arguments = self.pending_tool_uses.pop(tool_id)
+            self.print_tool_step(name, arguments, output="", is_error=False)
 
-    def print_result_event(self, event: dict[str, Any], *, color_code: str) -> None:
+    def finish(self, returncode: int) -> None:
+        if self.finished:
+            return
+        self.finished = True
         self.flush_pending_tool_uses()
         print("", flush=True)
+        color_code = COLOR_GREEN if returncode == 0 else COLOR_RED
         print(paint(f"turn {self.turn_label} finished", COLOR_BOLD + color_code), flush=True)
-        usage = event.get("usage")
-        if isinstance(usage, dict):
-            for key in ("input_tokens", "cache_read_input_tokens", "output_tokens"):
-                print_field(key, usage.get(key), color_code=color_code)
-        print_field("total_cost_usd", event.get("total_cost_usd"), color_code=color_code)
-
-        result = event.get("result")
-        if isinstance(result, str) and result.strip():
-            self.print_step_header(COLOR_MAGENTA)
-            print_agent_text(result)
-
-    def print_generic_event(self, event: dict[str, Any], event_type: str, *, color_code: str) -> None:
-        self.print_step_header(color_code)
-        print_text_block("event", json.dumps({"type": event_type, **event}, ensure_ascii=False), color_code=color_code)
+        print_field("returncode", returncode, color_code=color_code)
 
 
 def print_stderr_line(line: str) -> None:
@@ -1303,7 +1208,7 @@ def run_command_streaming(
 ) -> tuple[int, str, str]:
     proc = subprocess.Popen(
         cmd,
-        stdin=subprocess.PIPE,
+        stdin=subprocess.DEVNULL,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
@@ -1311,12 +1216,12 @@ def run_command_streaming(
         env=env,
         cwd=cwd,
     )
-    if proc.stdout is None or proc.stderr is None or proc.stdin is None:
-        raise RuntimeError("Failed to open Claude Code subprocess pipes.")
+    if proc.stdout is None or proc.stderr is None:
+        raise RuntimeError("Failed to open Kimi Code subprocess pipes.")
 
     stdout_chunks: list[str] = []
     stderr_chunks: list[str] = []
-    stdout_formatter = ClaudeEventFormatter(
+    stdout_formatter = KimiEventFormatter(
         turn_label=turn_label,
         user_request=prompt,
         previous_session_id=previous_session_id,
@@ -1337,17 +1242,6 @@ def run_command_streaming(
     stderr_thread.start()
 
     try:
-        try:
-            proc.stdin.write(prompt)
-        except BrokenPipeError:
-            pass
-    finally:
-        try:
-            proc.stdin.close()
-        except BrokenPipeError:
-            pass
-
-    try:
         returncode = proc.wait(timeout=timeout)
     except subprocess.TimeoutExpired:
         proc.kill()
@@ -1358,28 +1252,28 @@ def run_command_streaming(
 
     stdout_thread.join()
     stderr_thread.join()
+    stdout_formatter.finish(returncode)
     return returncode, "".join(stdout_chunks), "".join(stderr_chunks)
 
 
-def run_claude_turn(
+def run_kimi_turn(
     *,
     args: argparse.Namespace,
     prompt: str,
     turn_label: str,
     turn_dir: Path,
     work_dir: Path,
+    kimi_home: Path,
     session_id: str | None,
-    settings_path: str | None = None,
     container_name: str | None = None,
 ) -> tuple[str | None, dict[str, Any]]:
     turn_dir.mkdir(parents=True, exist_ok=True)
     (turn_dir / "prompt.md").write_text(prompt, encoding="utf-8")
     last_message_path = turn_dir / "last_message.json"
     previous_session_id = session_id
-    session_id = session_id or str(uuid.uuid4())
 
     if args.dry_run:
-        ClaudeEventFormatter(
+        KimiEventFormatter(
             turn_label=turn_label,
             user_request=prompt,
             previous_session_id=previous_session_id,
@@ -1394,13 +1288,12 @@ def run_claude_turn(
             "returncode": 0,
         }
         write_json(turn_dir / "result.json", result)
-        return session_id, result
+        return session_id or "dry-run-session", result
 
-    inner_cmd = claude_command(
+    inner_cmd = kimi_command(
         args=args,
+        prompt=prompt,
         session_id=session_id,
-        resume=previous_session_id is not None,
-        settings_path=settings_path,
     )
     if args.use_docker:
         if not container_name:
@@ -1413,11 +1306,15 @@ def run_claude_turn(
     else:
         cmd = inner_cmd
 
+    process_env = os.environ.copy()
+    if not args.use_docker:
+        process_env["KIMI_CODE_HOME"] = str(kimi_home)
+
     start = time.time()
     returncode, stdout, stderr = run_command_streaming(
         cmd,
         timeout=args.timeout,
-        env=os.environ.copy(),
+        env=process_env,
         prompt=prompt,
         turn_label=turn_label,
         previous_session_id=previous_session_id,
@@ -1425,18 +1322,18 @@ def run_claude_turn(
     )
     elapsed = time.time() - start
 
-    (turn_dir / "claude_stdout.jsonl").write_text(stdout, encoding="utf-8")
-    (turn_dir / "claude_stderr.txt").write_text(stderr, encoding="utf-8")
+    (turn_dir / "kimi_stdout.jsonl").write_text(stdout, encoding="utf-8")
+    (turn_dir / "kimi_stderr.txt").write_text(stderr, encoding="utf-8")
     write_json(
         turn_dir / "formatted_steps.json",
-        format_claude_steps(
+        format_kimi_steps(
             stdout,
             prompt=prompt,
             turn_label=turn_label,
             previous_session_id=previous_session_id,
         ),
     )
-    session_id, usage, payload, raw_message = parse_claude_output(stdout, session_id)
+    session_id, usage, payload, raw_message = parse_kimi_output(stdout, previous_session_id)
     if payload is not None:
         write_json(last_message_path, payload)
 
@@ -1454,11 +1351,11 @@ def run_claude_turn(
     write_json(turn_dir / "result.json", result)
 
     if returncode != 0:
-        raise RuntimeError(f"Claude Code exited with code {returncode}; see {turn_dir}")
+        raise RuntimeError(f"Kimi Code exited with code {returncode}; see {turn_dir}")
     if payload is None:
-        raise RuntimeError(f"Claude Code did not produce schema JSON; see {turn_dir}")
+        raise RuntimeError(f"Kimi Code did not produce schema JSON; see {turn_dir}")
     if not session_id:
-        raise RuntimeError(f"Could not determine Claude Code session id; see {turn_dir}")
+        raise RuntimeError(f"Could not determine Kimi Code session id; see {turn_dir}")
 
     return session_id, result
 
@@ -1510,27 +1407,23 @@ def run_task(
     if args.turn_limit is not None:
         turns = turns[: args.turn_limit]
 
-    model_slug = slugify(args.claude_model or "claude-code-default")
+    model_slug = slugify(args.kimi_model or "kimi-code-default")
     workspace_dir = run_dir / "workspace"
     workspace_dir.mkdir(parents=True, exist_ok=True)
+    kimi_home = run_dir / "kimi_home"
     container_name = (
         docker_container_name(args=args, task_info=task_info, run_name=run_name)
         if args.use_docker
         else None
     )
-    claude_settings_path = (
-        CONTAINER_CLAUDE_SETTINGS
-        if args.use_docker and args.claude_settings is not None
-        else str(args.claude_settings)
-        if args.claude_settings is not None
-        else None
-    )
+    if not args.use_docker and not args.dry_run:
+        prepare_local_kimi_home(args=args, run_dir=run_dir)
     local_data_dir = prepare_workspace_data(
         source_data_dir,
         workspace_dir,
         materialize=not args.dry_run and not args.use_docker,
     )
-    schema_path = run_dir / "claude_turn.schema.json"
+    schema_path = run_dir / "kimi_turn.schema.json"
     write_json(schema_path, TURN_SCHEMA)
 
     task_result: dict[str, Any] = {
@@ -1539,23 +1432,24 @@ def run_task(
         "task_id": task_id,
         "run_name": run_name,
         "model_slug": model_slug,
-        "claude_model": args.claude_model,
-        "claude_model_source": getattr(args, "claude_model_source", None),
-        "claude_model_cli_arg": (
-            args.claude_model if getattr(args, "claude_model_explicit", False) else None
+        "kimi_model": args.kimi_model,
+        "kimi_model_source": getattr(args, "kimi_model_source", None),
+        "kimi_model_cli_arg": (
+            args.kimi_model if getattr(args, "kimi_model_explicit", False) else None
         ),
         "execution_mode": "docker" if args.use_docker else "local",
         "docker_image": args.docker_image if args.use_docker else None,
         "container_workspace": CONTAINER_WORKSPACE if args.use_docker else None,
         "container_home": CONTAINER_HOME if args.use_docker else None,
-        "container_claude_settings": (
-            CONTAINER_CLAUDE_SETTINGS
-            if args.use_docker and args.claude_settings is not None
+        "container_kimi_config": (
+            CONTAINER_KIMI_CONFIG
+            if args.use_docker and args.kimi_config is not None
             else None
         ),
-        "claude_settings_file": str(args.claude_settings) if args.claude_settings else None,
+        "kimi_config_file": str(args.kimi_config) if args.kimi_config else None,
         "docker_container_name": container_name,
-        "claude_home_dir": str(workspace_dir / ".home" / ".claude") if args.use_docker else None,
+        "kimi_home_dir": CONTAINER_KIMI_HOME if args.use_docker else str(kimi_home),
+        "saved_kimi_home_dir": str(kimi_home),
         "local_data_dir": str(local_data_dir),
         "workspace_dir": str(workspace_dir),
         "run_dir": str(run_dir),
@@ -1585,7 +1479,7 @@ def run_task(
                 container_name=container_name,
                 source_data_dir=source_data_dir,
             )
-            copy_claude_settings_to_container(args=args, container_name=container_name)
+            copy_kimi_config_to_container(args=args, container_name=container_name)
             task_result["data_materialization"] = {
                 "mode": "docker_cp",
                 "source_data_dir": str(source_data_dir),
@@ -1604,14 +1498,14 @@ def run_task(
             )
             print("", flush=True)
             print(paint(f"Start running {task_name} turn {turn_id} ...", COLOR_RED), flush=True)
-            session_id, result = run_claude_turn(
+            session_id, result = run_kimi_turn(
                 args=args,
                 prompt=prompt,
                 turn_label=str(turn_id),
                 turn_dir=turn_dir,
                 work_dir=workspace_dir,
+                kimi_home=kimi_home,
                 session_id=session_id,
-                settings_path=claude_settings_path,
                 container_name=container_name,
             )
             task_result["session_id"] = session_id
@@ -1649,6 +1543,15 @@ def run_task(
             write_json(run_dir / "task_metadata.json", task_result)
             if sync["returncode"] != 0:
                 raise RuntimeError(f"Failed to sync Docker workspace: {sync['stderr']}")
+            kimi_sync = sync_kimi_home_from_container(
+                args=args,
+                container_name=container_name,
+                kimi_home=kimi_home,
+            )
+            task_result["kimi_home_sync"] = kimi_sync
+            write_json(run_dir / "task_metadata.json", task_result)
+            if kimi_sync["returncode"] != 0:
+                raise RuntimeError(f"Failed to sync Kimi Code home: {kimi_sync['stderr']}")
 
         results_with_ground_truth = []
         for turn, result in zip(turns, task_result["turns"]):
@@ -1679,8 +1582,16 @@ def run_task(
                 workspace_dir=workspace_dir,
             )
             write_json(run_dir / "task_metadata.json", task_result)
+            task_result["kimi_home_sync"] = sync_kimi_home_from_container(
+                args=args,
+                container_name=container_name,
+                kimi_home=kimi_home,
+            )
+            write_json(run_dir / "task_metadata.json", task_result)
         raise
     finally:
+        if not args.use_docker:
+            scrub_kimi_config(kimi_home)
         if args.use_docker and container_started and container_name is not None:
             if args.keep_docker_container:
                 task_result["docker_container_cleanup"] = {
@@ -1757,22 +1668,22 @@ def print_run_config(
     selected_count: int,
     total_count: int,
 ) -> None:
-    print("Claude Code LongDS run configuration:", flush=True)
+    print("Kimi Code LongDS run configuration:", flush=True)
     print(f"  run_name: {run_name}", flush=True)
     print(f"  task_root: {args.task_root}", flush=True)
     print(f"  data_root: {args.data_root}", flush=True)
     print(f"  output_dir: {results_root}", flush=True)
-    print(f"  claude_bin: {args.claude_bin}", flush=True)
-    print(f"  claude_model: {args.claude_model or 'config-default'}", flush=True)
-    print(f"  claude_model_source: {getattr(args, 'claude_model_source', 'unknown')}", flush=True)
+    print(f"  kimi_bin: {args.kimi_bin}", flush=True)
+    print(f"  kimi_model: {args.kimi_model or 'config-default'}", flush=True)
+    print(f"  kimi_model_source: {getattr(args, 'kimi_model_source', 'unknown')}", flush=True)
     print(
-        "  claude_model_cli_arg: "
-        f"{args.claude_model if getattr(args, 'claude_model_explicit', False) else 'none'}",
+        "  kimi_model_cli_arg: "
+        f"{args.kimi_model if getattr(args, 'kimi_model_explicit', False) else 'none'}",
         flush=True,
     )
-    print(f"  claude_settings: {args.claude_settings or 'none'}", flush=True)
+    print(f"  kimi_config: {args.kimi_config or 'none'}", flush=True)
     print(f"  analysis_python: {args.analysis_python}", flush=True)
-    print(f"  permission_mode: {args.permission_mode}", flush=True)
+    print("  permission_mode: auto (fixed by kimi --prompt)", flush=True)
     print(f"  use_docker: {args.use_docker}", flush=True)
     if args.use_docker:
         print(f"  docker_bin: {args.docker_bin}", flush=True)
@@ -1785,8 +1696,7 @@ def print_run_config(
         print(f"  keep_docker_container: {args.keep_docker_container}", flush=True)
         print(f"  docker_env_files: {len(args.docker_env_file)}", flush=True)
         print(f"  docker_extra_env: {len(args.docker_env)}", flush=True)
-    print(f"  bare: {args.bare}", flush=True)
-    print(f"  max_budget_usd: {args.max_budget_usd or 'none'}", flush=True)
+    print(f"  kimi_extra_args: {len(args.kimi_arg)}", flush=True)
     print(f"  start_index: {args.start_index}", flush=True)
     print(f"  task_limit: {args.task_limit if args.task_limit is not None else 'all'}", flush=True)
     print(f"  turn_limit: {args.turn_limit if args.turn_limit is not None else 'all'}", flush=True)
@@ -1801,19 +1711,19 @@ def print_run_config(
 
 def main() -> int:
     args = parse_args()
-    args.claude_model_explicit = args.claude_model is not None
+    args.kimi_model_explicit = args.kimi_model is not None
     args.task_root = args.task_root.resolve()
     args.data_root = args.data_root.resolve()
     args.output_dir = args.output_dir.resolve()
-    if args.claude_settings is not None:
-        args.claude_settings = args.claude_settings.resolve()
-        if not args.claude_settings.is_file():
-            raise FileNotFoundError(f"--claude-settings does not exist: {args.claude_settings}")
-    if args.claude_model is None:
-        args.claude_model = claude_settings_model(args.claude_settings)
-        args.claude_model_source = "settings" if args.claude_model else "config-default"
+    if args.kimi_config is not None:
+        args.kimi_config = args.kimi_config.resolve()
+        if not args.kimi_config.is_file():
+            raise FileNotFoundError(f"--kimi-config does not exist: {args.kimi_config}")
+    if args.kimi_model is None:
+        args.kimi_model = kimi_config_model(args.kimi_config)
+        args.kimi_model_source = "config" if args.kimi_model else "config-default"
     else:
-        args.claude_model_source = "cli"
+        args.kimi_model_source = "cli"
     if args.analysis_python is None:
         args.analysis_python = "/usr/local/bin/python" if args.use_docker else sys.executable
     if args.task_limit is not None and args.task_limit < 0:
@@ -1826,8 +1736,8 @@ def main() -> int:
         raise ValueError("--judge cannot be combined with --dry-run")
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    model_slug = slugify(args.claude_model or "default")
-    run_name = args.run_name or f"claude_code_{model_slug}_{timestamp}"
+    model_slug = slugify(args.kimi_model or "default")
+    run_name = args.run_name or f"kimi_code_{model_slug}_{timestamp}"
     validate_run_name(run_name)
     results_root = args.output_dir
     results_root.mkdir(parents=True, exist_ok=True)
@@ -1889,7 +1799,7 @@ def main() -> int:
 
     def print_final_status() -> None:
         print(
-            "Finished Claude Code LongDS run: "
+            "Finished Kimi Code LongDS run: "
             f"completed_tasks={completed_tasks}, "
             f"failed_tasks={failed_tasks}, "
             f"skipped_tasks={skipped_tasks}, "
@@ -1955,4 +1865,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-# python run_claude_longds.py --task-limit 1 --turn-limit 1
+# python run_kimi_longds.py --task-limit 1 --turn-limit 1

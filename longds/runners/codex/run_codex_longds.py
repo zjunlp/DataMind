@@ -84,6 +84,14 @@ def parse_args() -> argparse.Namespace:
         help="Model passed to `codex exec -m`. Omit to use Codex config default.",
     )
     parser.add_argument(
+        "--reasoning-effort",
+        choices=["none", "low", "medium", "high", "xhigh", "max"],
+        default=None,
+        help=(
+            "Codex model reasoning effort. Omit to use the Codex configuration default."
+        ),
+    )
+    parser.add_argument(
         "--codex-base-url",
         default=os.environ.get("CODEX_BASE_URL"),
         help=(
@@ -117,11 +125,11 @@ def parse_args() -> argparse.Namespace:
         choices=["untrusted", "on-failure", "on-request", "never"],
         help="Top-level Codex approval policy.",
     )
-    parser.add_argument("--task-limit", type=int, default=1, help="Number of tasks to run.")
     parser.add_argument(
-        "--all-tasks",
-        action="store_true",
-        help="Run every task after --start-index. Overrides --task-limit.",
+        "--task-limit",
+        type=int,
+        default=None,
+        help="Maximum number of tasks to run after --start-index. Defaults to all remaining tasks.",
     )
     parser.add_argument("--start-index", type=int, default=0, help="Start index in task_list.json.")
     parser.add_argument("--turn-limit", type=int, default=None, help="Maximum turns per task.")
@@ -139,14 +147,15 @@ def parse_args() -> argparse.Namespace:
         help="Optional run directory name. Defaults to codex_<model>_YYYYmmdd_HHMMSS.",
     )
     parser.add_argument(
-        "--dry-run",
+        "--keep-data",
         action="store_true",
-        help="Write prompts and metadata without invoking Codex.",
+        help="Keep workspace/data/ after a task finishes. By default the copied inputs are deleted "
+        "to bound peak disk usage; data of a failed task is always kept for debugging.",
     )
     parser.add_argument(
-        "--continue-on-error",
+        "--dry-run",
         action="store_true",
-        help="Continue to the next task if a turn fails.",
+        help="Write prompts and metadata without invoking Codex or copying task data.",
     )
     parser.add_argument(
         "--judge",
@@ -172,17 +181,80 @@ def write_json(path: Path, payload: Any) -> None:
         json.dump(payload, f, indent=2, ensure_ascii=False)
 
 
-def prepare_workspace_data(source_data_dir: Path, workspace_dir: Path) -> Path:
-    """Copy task data into the task workspace and return the local data path."""
+def prepare_workspace_data(
+    source_data_dir: Path,
+    workspace_dir: Path,
+    *,
+    materialize: bool = True,
+) -> Path:
+    """Copy task data into the task workspace and return the local data path.
+
+    With materialize=False the source is still validated but nothing is copied, so a dry run
+    cannot fill the disk with data it will never read.
+    """
     if not source_data_dir.exists():
         raise FileNotFoundError(f"Data directory does not exist: {source_data_dir}")
 
     local_data_dir = workspace_dir / "data"
-    if local_data_dir.exists():
+    if local_data_dir.exists() or not materialize:
         return local_data_dir
 
     shutil.copytree(source_data_dir, local_data_dir, symlinks=False)
     return local_data_dir
+
+
+def directory_size(path: Path) -> int:
+    total = 0
+    for entry in path.rglob("*"):
+        if entry.is_file() and not entry.is_symlink():
+            total += entry.stat().st_size
+    return total
+
+
+def format_bytes(size: int) -> str:
+    value = float(size)
+    for unit in ("B", "KB", "MB", "GB", "TB"):
+        if value < 1024 or unit == "TB":
+            return f"{value:.1f} {unit}"
+        value /= 1024
+    return f"{value:.1f} TB"
+
+
+def cleanup_workspace_data(local_data_dir: Path) -> dict[str, Any]:
+    """Delete the copied task data so peak disk usage stays bounded by concurrent tasks.
+
+    Only the copied inputs are removed. Helper scripts and intermediate artifacts the agent
+    produced stay in the workspace as trajectory evidence.
+    """
+    if not local_data_dir.exists():
+        return {"removed": False, "reason": "missing", "freed_bytes": 0}
+
+    freed_bytes = directory_size(local_data_dir)
+    shutil.rmtree(local_data_dir)
+    return {"removed": True, "reason": "task_completed", "freed_bytes": freed_bytes}
+
+
+def finalize_workspace_data(
+    *,
+    args: argparse.Namespace,
+    local_data_dir: Path,
+) -> dict[str, Any]:
+    """Drop the copied inputs of a completed task unless the run asked to keep them."""
+    if args.dry_run:
+        return {"removed": False, "reason": "dry_run", "freed_bytes": 0}
+    if args.keep_data:
+        return {"removed": False, "reason": "keep_data", "freed_bytes": 0}
+
+    cleanup = cleanup_workspace_data(local_data_dir)
+    if cleanup["removed"]:
+        print(
+            paint(
+                f"Removed copied data, freed {format_bytes(cleanup['freed_bytes'])}: {local_data_dir}",
+                COLOR_DIM,
+            ),
+            flush=True,
+        )
+    return cleanup
 
 
 def codex_command(
@@ -214,6 +286,10 @@ def codex_command(
     if args.model_supports_reasoning_summaries is not None:
         value = str(args.model_supports_reasoning_summaries).lower()
         cmd.extend(["-c", f"model_supports_reasoning_summaries={value}"])
+    if args.reasoning_effort:
+        cmd.extend(
+            ["-c", f"model_reasoning_effort={json.dumps(args.reasoning_effort)}"]
+        )
     cmd.extend(["exec"])
 
     if session_id:
@@ -868,7 +944,9 @@ def run_task(
     workspace_dir = run_dir / "workspace"
     run_dir.mkdir(parents=True, exist_ok=True)
     workspace_dir.mkdir(parents=True, exist_ok=True)
-    local_data_dir = prepare_workspace_data(source_data_dir, workspace_dir)
+    local_data_dir = prepare_workspace_data(
+        source_data_dir, workspace_dir, materialize=not args.dry_run
+    )
     schema_path = run_dir / "codex_turn.schema.json"
     write_json(schema_path, TURN_SCHEMA)
 
@@ -942,6 +1020,9 @@ def run_task(
         result_with_gt = dict(result)
         result_with_gt["ground_truth"] = turn.get("answer")
         results_with_ground_truth.append(result_with_gt)
+
+    task_result["data_cleanup"] = finalize_workspace_data(args=args, local_data_dir=local_data_dir)
+    write_json(run_dir / "task_metadata.json", task_result)
 
     source_metadata = {
         **task_result,
@@ -1017,6 +1098,7 @@ def print_run_config(
     print(f"  output_dir: {results_root}", flush=True)
     print(f"  codex_bin: {args.codex_bin}", flush=True)
     print(f"  codex_model: {args.codex_model or 'config-default'}", flush=True)
+    print(f"  reasoning_effort: {args.reasoning_effort or 'config-default'}", flush=True)
     print(f"  codex_base_url: {args.codex_base_url or 'config-default'}", flush=True)
     print(
         "  model_supports_reasoning_summaries: "
@@ -1028,13 +1110,13 @@ def print_run_config(
     print(f"  sandbox: {args.sandbox}", flush=True)
     print(f"  approval_policy: {args.approval_policy}", flush=True)
     print(f"  start_index: {args.start_index}", flush=True)
-    print(f"  task_limit: {'all' if args.all_tasks else args.task_limit}", flush=True)
+    print(f"  task_limit: {args.task_limit if args.task_limit is not None else 'all'}", flush=True)
     print(f"  turn_limit: {args.turn_limit if args.turn_limit is not None else 'all'}", flush=True)
     print(f"  timeout: {args.timeout}", flush=True)
     print(f"  run_parallel: {args.run_parallel}", flush=True)
     print(f"  selected_tasks: {selected_count} / {total_count}", flush=True)
+    print(f"  keep_data: {args.keep_data}", flush=True)
     print(f"  dry_run: {args.dry_run}", flush=True)
-    print(f"  continue_on_error: {args.continue_on_error}", flush=True)
     print(f"  judge: {args.judge}", flush=True)
 
 
@@ -1062,7 +1144,7 @@ def main() -> int:
 
     task_list = load_json(args.task_root / "task_list.json")
     selected = task_list[args.start_index :]
-    if not args.all_tasks and args.task_limit is not None:
+    if args.task_limit is not None:
         selected = selected[: args.task_limit]
 
     print_run_config(
@@ -1126,9 +1208,6 @@ def main() -> int:
             succeeded = execute(task_info)
             if not succeeded:
                 failed = True
-                if not args.continue_on_error:
-                    print_final_status()
-                    return 1
     elif selected:
         max_workers = min(args.run_parallel, len(selected))
         next_index = 0
@@ -1149,7 +1228,6 @@ def main() -> int:
                 futures[future] = (next_index, task_info)
                 next_index += 1
 
-            stop_scheduling = False
             while futures:
                 completed, _ = wait(futures, return_when=FIRST_COMPLETED)
                 for future in completed:
@@ -1163,22 +1241,19 @@ def main() -> int:
 
                     if not succeeded:
                         failed = True
-                        if not args.continue_on_error:
-                            stop_scheduling = True
 
-                if not stop_scheduling:
-                    for _ in completed:
-                        if next_index >= len(selected):
-                            break
-                        next_task = selected[next_index]
-                        next_future = pool.submit(
-                            run_task_pipeline,
-                            args=args,
-                            task_info=next_task,
-                            run_name=run_name,
-                        )
-                        futures[next_future] = (next_index, next_task)
-                        next_index += 1
+                for _ in completed:
+                    if next_index >= len(selected):
+                        break
+                    next_task = selected[next_index]
+                    next_future = pool.submit(
+                        run_task_pipeline,
+                        args=args,
+                        task_info=next_task,
+                        run_name=run_name,
+                    )
+                    futures[next_future] = (next_index, next_task)
+                    next_index += 1
 
     print_final_status()
     return 1 if failed else 0

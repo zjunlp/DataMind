@@ -53,6 +53,18 @@ configured endpoint must support the Responses API. If these variables are omitt
 its normal authentication and provider configuration. The custom provider does not require a
 separate `codex login`.
 
+Set the model reasoning effort for one run without changing `~/.codex/config.toml`:
+
+```bash
+python run_codex_longds.py \
+  --codex-model gpt-5.6-sol \
+  --reasoning-effort high \
+  --task-limit 1
+```
+
+Supported values are `none`, `low`, `medium`, `high`, `xhigh`, and `max`. Omit the option to use
+the Codex configuration default. The selected endpoint and model must support the requested value.
+
 For a provider that requires Codex reasoning-summary metadata, enable it only for that run:
 
 ```bash
@@ -114,11 +126,13 @@ Run all tasks:
 
 ```bash
 python run_codex_longds.py \
-  --all-tasks \
   --run-parallel 4 \
-  --timeout 7200 \
-  --continue-on-error
+  --timeout 7200
 ```
+
+All remaining tasks after `--start-index` are selected by default. Pass `--task-limit N` to run
+only the next `N` tasks. A failed task is recorded and does not stop the remaining tasks; after all
+selected tasks finish, the runner exits with status `1` if any task failed.
 
 `--run-parallel` controls task-level concurrency and defaults to `1`. Turns within the same task
 always run sequentially in one Codex thread. When `--judge` is enabled, each worker evaluates its
@@ -160,6 +174,32 @@ subprocess working directory so relative paths cannot fall back to `runners/code
 The runner first copies only that task's released `data/` directory into `workspace/data/`.
 Codex is not given the original `dataset/task/...` path that contains `task.json`, `task.py`,
 `task.ipynb`, metadata, and gold answers.
+
+## Disk Usage
+
+The full LongDS data set is about 19 GB, so copying every task's data would leave ~20 GB behind per
+run. To keep that bounded, the runner deletes `workspace/data/` as soon as a task's turns finish and
+records the result in `task_metadata.json`:
+
+```json
+"data_cleanup": {"removed": true, "reason": "task_completed", "freed_bytes": 44969266}
+```
+
+Peak disk usage therefore scales with `--run-parallel`, not with the number of tasks, and a finished
+task leaves roughly 100 KB of results.
+
+Only the copied inputs are removed. Helper scripts and intermediate artifacts Codex wrote into the
+workspace are kept as trajectory evidence, as is everything under `detail/`, so `judge.py` still
+works on a cleaned run.
+
+Two cases keep the data:
+
+- A task that fails keeps `workspace/data/` so the failure can be reproduced in place.
+- `--keep-data` disables the cleanup entirely. Use it when you intend to resume the session with
+  `manual_resume_command`, since a resumed session cannot re-read data that has been removed.
+
+`--dry-run` never copies data at all; it still validates that each task's source data directory
+exists.
 
 During a task, `results.json` does not include ground truth. After the task finishes, the runner
 writes `results_with_ground_truth.json` and `task_metadata_with_sources.json` for offline scoring

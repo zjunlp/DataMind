@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""LLM judge for Claude Code LongDS runs.
+"""LLM judge for Qoder CLI LongDS runs.
 
-This script reads Claude Code runner outputs, scores each turn with the same
+This script reads Qoder CLI runner outputs, scores each turn with the same
 JUDGE_PROMPT used by the DSGym LongDS runner, and writes results_eval.json.
 """
 
@@ -345,7 +345,7 @@ def load_existing_eval_turns(run_dir: Path) -> list[dict[str, Any]]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="LLM judge for Claude Code LongDS runs.")
+    parser = argparse.ArgumentParser(description="LLM judge for Qoder CLI LongDS runs.")
     parser.add_argument(
         "--run-dir",
         type=Path,
@@ -397,7 +397,7 @@ def main() -> int:
         out_path = args.out
 
     if not run_dirs:
-        print("ERROR: no Claude Code run directories found.", file=sys.stderr)
+        print("ERROR: no Qoder CLI run directories found.", file=sys.stderr)
         return 1
 
     existing_turns: list[dict[str, Any]] = []
@@ -416,7 +416,7 @@ def main() -> int:
         turns_to_judge.extend(load_run_turns(run_dir))
 
     if not turns_to_judge and not existing_turns:
-        print("ERROR: no turns found in Claude Code results.", file=sys.stderr)
+        print("ERROR: no turns found in Qoder CLI results.", file=sys.stderr)
         return 1
 
     print(f"Run directories: {len(run_dirs)}")

@@ -1,0 +1,31 @@
+default_model = "bailian/kimi-k3"
+default_permission_mode = "auto"
+default_plan_mode = false
+merge_all_available_skills = false
+builtin_product_skills = false
+telemetry = false
+
+[providers.bailian]
+type = "openai"
+base_url = "<your_base_url>"
+api_key = "<your_api_key>"
+
+[models."bailian/kimi-k3"]
+provider = "bailian"
+model = "kimi-k3"
+max_context_size = 1048576
+capabilities = ["thinking", "always_thinking", "tool_use"]
+support_efforts = ["low", "high", "max"]
+default_effort = "max"
+
+[thinking]
+enabled = true
+effort = "max"
+keep = "all"
+
+[loop_control]
+max_attempts_per_step = 10
+reserved_context_size = 50000
+
+[background]
+print_background_mode = "steer"

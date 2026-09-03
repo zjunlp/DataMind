@@ -1,0 +1,15 @@
+{
+  "model": "glm-5.2",
+  "effortLevel": "max",
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "<your_api_key>",
+    "ANTHROPIC_BASE_URL": "<your_base_url>",
+    "ANTHROPIC_MODEL": "glm-5.2",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-5.2",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-5.2",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-5.2",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "glm-5.2",
+    "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1000000",
+    "CLAUDE_CODE_EFFORT_LEVEL": "max"
+  }
+}
