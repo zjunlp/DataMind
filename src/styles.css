@@ -682,20 +682,16 @@ h1 {
 
 .leaderboard-version-control {
   border-color: var(--line-strong);
-  background: var(--ink);
-}
-
-.leaderboard-version-control button {
-  color: color-mix(in srgb, var(--paper) 68%, transparent);
-}
-
-.leaderboard-version-control button.is-selected {
-  color: var(--ink);
   background: var(--paper);
 }
 
-.leaderboard-filter-control {
-  margin-left: 2px;
+.leaderboard-version-control button {
+  color: var(--ink);
+}
+
+.leaderboard-version-control button.is-selected {
+  color: var(--paper);
+  background: var(--ink);
 }
 
 .tool-spacer {
@@ -773,7 +769,7 @@ h1 {
 
 table {
   width: 100%;
-  min-width: 780px;
+  min-width: 1180px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -795,10 +791,18 @@ th {
   font-weight: 560;
 }
 
-th:first-child { width: 82px; }
-th:nth-child(2) { width: 30%; }
-th:nth-child(3) { width: 150px; }
-th:nth-child(5) { width: 115px; }
+.leaderboard-col-rank { width: 76px; }
+.leaderboard-col-model { width: 15%; }
+.leaderboard-col-harness { width: 140px; }
+.leaderboard-col-cost { width: 115px; }
+.leaderboard-col-org { width: 120px; }
+.leaderboard-col-date { width: 125px; }
+
+th:nth-last-child(-n + 3),
+td:nth-last-child(-n + 3) {
+  padding-right: 12px;
+  padding-left: 12px;
+}
 
 tbody tr:last-child td {
   border-bottom: 0;
@@ -829,24 +833,30 @@ tbody tr:hover {
   background: var(--yellow);
 }
 
+.rank-unranked {
+  color: var(--muted);
+  background: var(--paper);
+}
+
 .model-name {
   display: block;
   font-size: 16px;
+  white-space: nowrap;
 }
 
-.model-type-pill {
-  display: inline-flex;
-  min-width: 96px;
-  justify-content: center;
-  padding: 4px 6px;
-  border: 1px solid var(--line);
+.model-note {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.harness-name {
+  color: var(--muted);
   font-size: 15px;
   font-weight: 560;
-}
-
-.model-type-open {
-  color: var(--blue);
-  border-color: var(--blue);
 }
 
 .score-cell {
@@ -880,10 +890,21 @@ tbody tr:first-child .score-track span {
   background: var(--coral);
 }
 
-.steps-cell {
+.cost-cell,
+.org-cell,
+.date-cell {
   color: var(--muted);
   font-size: 15px;
   font-variant-numeric: tabular-nums;
+  line-height: 1.45;
+}
+
+.cost-cell {
+  white-space: pre-line;
+}
+
+.date-cell {
+  white-space: nowrap;
 }
 
 .leaderboard-empty {

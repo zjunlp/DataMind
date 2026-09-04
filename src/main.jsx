@@ -292,6 +292,10 @@ function requestVisitorCount() {
 const models = [
   {
     model: "Gemini-3.1-Pro",
+    harness: "DSGym",
+    org: "Google",
+    cost: "—",
+    date: "2026-09-05",
     type: "proprietary",
     avgSteps: 117.82,
     scores: {
@@ -306,6 +310,10 @@ const models = [
   },
   {
     model: "GPT-5.4",
+    harness: "DSGym",
+    org: "OpenAI",
+    cost: "—",
+    date: "2026-09-05",
     type: "proprietary",
     avgSteps: 68.57,
     scores: {
@@ -320,6 +328,10 @@ const models = [
   },
   {
     model: "Claude-4.6-Sonnet",
+    harness: "DSGym",
+    org: "Anthropic",
+    cost: "—",
+    date: "2026-09-05",
     type: "proprietary",
     avgSteps: 170.04,
     scores: {
@@ -334,6 +346,10 @@ const models = [
   },
   {
     model: "Kimi-K2.6",
+    harness: "DSGym",
+    org: "Moonshot AI",
+    cost: "—",
+    date: "2026-09-05",
     type: "open",
     avgSteps: 115.41,
     scores: {
@@ -348,6 +364,10 @@ const models = [
   },
   {
     model: "DeepSeek-V4-Pro",
+    harness: "DSGym",
+    org: "DeepSeek AI",
+    cost: "—",
+    date: "2026-09-05",
     type: "open",
     avgSteps: 133.12,
     scores: {
@@ -362,11 +382,133 @@ const models = [
   },
 ];
 
+const v11FullModels = [
+  {
+    model: "Claude Fable 5.1",
+    harness: "Claude Code",
+    org: "Anthropic",
+    date: "2026-09-05",
+    type: "proprietary",
+    ranked: false,
+    note: "(24-task Lite only)",
+    cost: "¥3,868.32",
+    scores: { overall: 76.53, education: 88.21, community: 72.53, socialGood: 86.82, business: 85.91, geoscience: 82.81, sports: 38.25 },
+  },
+  {
+    model: "DeepSeek V4 Pro",
+    harness: "Claude Code",
+    org: "DeepSeek AI",
+    date: "2026-09-05",
+    type: "open",
+    cost: "¥731.96",
+    scores: { overall: 40.96, education: 72.95, community: 57.54, socialGood: 36.22, business: 16.59, geoscience: 34.3, sports: 22.74 },
+  },
+  {
+    model: "GLM-5.2",
+    harness: "Claude Code",
+    org: "Z.ai",
+    date: "2026-09-05",
+    type: "open",
+    cost: "¥6,943.46",
+    scores: { overall: 54.25, education: 88.91, community: 74.47, socialGood: 48.58, business: 33.61, geoscience: 42.51, sports: 29.74 },
+  },
+  {
+    model: "GPT-5.6-sol",
+    harness: "Codex",
+    org: "OpenAI",
+    date: "2026-09-05",
+    type: "proprietary",
+    cost: "¥4,004.11",
+    scores: { overall: 64.42, education: 93.87, community: 77.06, socialGood: 55.36, business: 56.99, geoscience: 56.18, sports: 30.58 },
+  },
+  {
+    model: "Kimi K3",
+    harness: "Kimi Code",
+    org: "Moonshot AI",
+    date: "2026-09-05",
+    type: "open",
+    cost: "¥1,442.35",
+    scores: { overall: 58.59, education: 82.2, community: 76, socialGood: 56.12, business: 43.35, geoscience: 46.02, sports: 51.64 },
+  },
+  {
+    model: "Qwen3.8-Max",
+    harness: "Qoder",
+    org: "Tongyi",
+    date: "2026-09-05",
+    type: "proprietary",
+    cost: "7,722.302 credits",
+    scores: { overall: 49.86, education: 77.06, community: 72.28, socialGood: 43.66, business: 29.4, geoscience: 39.39, sports: 26.48 },
+  },
+];
+
+const v11LiteModels = [
+  {
+    model: "Claude Fable 5.1",
+    harness: "Claude Code",
+    org: "Anthropic",
+    date: "2026-09-05",
+    type: "proprietary",
+    cost: "¥3,868.32",
+    scores: { overall: 76.53, education: 88.21, community: 72.53, socialGood: 86.82, business: 85.91, geoscience: 82.81, sports: 38.25 },
+  },
+  {
+    model: "DeepSeek V4 Pro",
+    harness: "Claude Code",
+    org: "DeepSeek AI",
+    date: "2026-09-05",
+    type: "open",
+    cost: "¥226.52",
+    scores: { overall: 39.33, education: 54.83, community: 33.52, socialGood: 53.2, business: 18.94, geoscience: 55.4, sports: 22.74 },
+  },
+  {
+    model: "GLM-5.2",
+    harness: "Claude Code",
+    org: "Z.ai",
+    date: "2026-09-05",
+    type: "open",
+    cost: "¥2,260.56",
+    scores: { overall: 56.59, education: 78.21, community: 62.96, socialGood: 79.86, business: 42.25, geoscience: 42.01, sports: 29.74 },
+  },
+  {
+    model: "GPT-5.6-sol",
+    harness: "Codex",
+    org: "OpenAI",
+    date: "2026-09-05",
+    type: "proprietary",
+    cost: "¥1,194.39",
+    scores: { overall: 70.71, education: 90.35, community: 62.9, socialGood: 76.78, business: 84.54, geoscience: 77.86, sports: 30.58 },
+  },
+  {
+    model: "Kimi K3",
+    harness: "Kimi Code",
+    org: "Moonshot AI",
+    date: "2026-09-05",
+    type: "open",
+    cost: "¥455.40",
+    scores: { overall: 68.9, education: 71.88, community: 66.6, socialGood: 84.75, business: 56.15, geoscience: 79.95, sports: 51.64 },
+  },
+  {
+    model: "Qwen3.8-Max",
+    harness: "Qoder",
+    org: "Tongyi",
+    date: "2026-09-05",
+    type: "proprietary",
+    cost: "2,414.182\ncredits",
+    scores: { overall: 54.6, education: 57.97, community: 67.02, socialGood: 63.38, business: 41.8, geoscience: 58.55, sports: 26.48 },
+  },
+];
+
 // Keep benchmark releases separate so a new release can ship its own scores
 // without changing the published snapshot for the original benchmark.
 const leaderboardModels = {
+  v1_1_lite: v11LiteModels,
+  v1_1_full: v11FullModels,
   v1: models,
-  v1_1: [],
+};
+
+const leaderboardDomainCounts = {
+  v1_1_lite: { education: 3, community: 6, socialGood: 4, business: 4, geoscience: 4, sports: 3 },
+  v1_1_full: { education: 8, community: 16, socialGood: 10, business: 12, geoscience: 19, sports: 3 },
 };
 
 const translations = {
@@ -419,10 +561,10 @@ const translations = {
       filterLabel: "Model type filter",
       filters: { all: "All Models", proprietary: "Proprietary Models", open: "Open-source Models" },
       versionLabel: "Benchmark version",
-      versions: { v1: "LongDS v1", v1_1: "LongDS v1.1" },
-      emptyState: "LongDS v1.1 results will be published soon.",
+      versions: { v1_1_lite: "LongDS v1.1 Lite", v1_1_full: "LongDS v1.1 Full", v1: "LongDS v1" },
+      emptyState: "No models match the current filters.",
       domainLabel: "Score domain",
-      columns: { rank: "Rank", model: "Model", type: "Model Type", score: "Score", steps: "Avg Step" },
+      columns: { rank: "Rank", model: "Model", harness: "Harness", score: "Score", cost: "Cost", org: "Org", date: "Date" },
       types: { open: "Open-source", proprietary: "Proprietary" },
     },
     benchmark: {
@@ -507,10 +649,10 @@ const translations = {
       filterLabel: "模型类型筛选",
       filters: { all: "全部模型", proprietary: "专有模型", open: "开源模型" },
       versionLabel: "评测版本",
-      versions: { v1: "LongDS v1", v1_1: "LongDS v1.1" },
-      emptyState: "LongDS v1.1 的评测结果即将发布。",
+      versions: { v1_1_lite: "LongDS v1.1 Lite", v1_1_full: "LongDS v1.1 Full", v1: "LongDS v1" },
+      emptyState: "没有符合当前筛选条件的模型。",
       domainLabel: "得分领域",
-      columns: { rank: "排名", model: "模型", type: "模型类型", score: "得分", steps: "平均步数" },
+      columns: { rank: "排名", model: "模型", harness: "运行框架", score: "得分", cost: "成本", org: "机构", date: "日期" },
       types: { open: "开源", proprietary: "专有" },
     },
     benchmark: {
@@ -551,7 +693,7 @@ const translations = {
 function App() {
   const [language, setLanguage] = useState("en");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [leaderboardVersion, setLeaderboardVersion] = useState("v1");
+  const [leaderboardVersion, setLeaderboardVersion] = useState("v1_1_lite");
   const [modelType, setModelType] = useState("all");
   const [domain, setDomain] = useState("overall");
   const [visitorCount, setVisitorCount] = useState(null);
@@ -576,10 +718,23 @@ function App() {
   const filteredModels = useMemo(() => {
     return leaderboardModels[leaderboardVersion]
       .filter((item) => modelType === "all" || item.type === modelType)
-      .sort((a, b) => b.scores[domain] - a.scores[domain]);
+      .sort((a, b) => {
+        if (a.ranked === false || b.ranked === false) {
+          if (a.ranked === b.ranked) return 0;
+          return a.ranked === false ? 1 : -1;
+        }
+        return b.scores[domain] - a.scores[domain];
+      });
   }, [domain, modelType, leaderboardVersion]);
 
-  const maxScore = filteredModels[0]?.scores[domain] || 100;
+  const maxScore = filteredModels.length > 0
+    ? Math.max(...filteredModels.map((item) => item.scores[domain]))
+    : 100;
+  const domainCounts = leaderboardDomainCounts[leaderboardVersion];
+  const domainDisplayName = (value, label) => {
+    const count = domainCounts?.[value];
+    return count ? `${label} (${count})` : label;
+  };
 
   const toggleLanguage = () => {
     setLanguage((current) => (current === "en" ? "zh" : "en"));
@@ -686,6 +841,7 @@ function App() {
                 </button>
               ))}
             </div>
+            <div className="tool-spacer" />
             <div className="segmented-control leaderboard-filter-control" aria-label={t.leaderboard.filterLabel}>
               {[
                 ["all", t.leaderboard.filters.all],
@@ -702,11 +858,12 @@ function App() {
                 </button>
               ))}
             </div>
-            <div className="tool-spacer" />
             <label className="select-control">
               <span className="sr-only">{t.leaderboard.domainLabel}</span>
               <select value={domain} onChange={(event) => setDomain(event.target.value)}>
-                {Object.entries(t.domains).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                {Object.entries(t.domains).map(([value, label]) => (
+                  <option key={value} value={value}>{domainDisplayName(value, label)}</option>
+                ))}
               </select>
               <ChevronDown size={15} aria-hidden="true" />
             </label>
@@ -720,37 +877,57 @@ function App() {
             aria-live="polite"
           >
             <table>
+              <colgroup>
+                <col className="leaderboard-col-rank" />
+                <col className="leaderboard-col-model" />
+                <col className="leaderboard-col-harness" />
+                <col className="leaderboard-col-score" />
+                <col className="leaderboard-col-cost" />
+                <col className="leaderboard-col-org" />
+                <col className="leaderboard-col-date" />
+              </colgroup>
               <thead>
                 <tr>
                   <th scope="col">{t.leaderboard.columns.rank}</th>
                   <th scope="col">{t.leaderboard.columns.model}</th>
-                  <th scope="col">{t.leaderboard.columns.type}</th>
-                  <th scope="col" className="score-column">{t.domains[domain]} {t.leaderboard.columns.score}</th>
-                  <th scope="col">{t.leaderboard.columns.steps}</th>
+                  <th scope="col">{t.leaderboard.columns.harness}</th>
+                  <th scope="col" className="score-column">{domainDisplayName(domain, t.domains[domain])} {t.leaderboard.columns.score}</th>
+                  <th scope="col">{t.leaderboard.columns.cost}</th>
+                  <th scope="col">{t.leaderboard.columns.org}</th>
+                  <th scope="col">{t.leaderboard.columns.date}</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredModels.length > 0 ? filteredModels.map((item, index) => {
                     const score = item.scores[domain];
+                    const isRanked = item.ranked !== false;
+                    const rank = isRanked ? index + 1 : null;
                     return (
                       <tr key={item.model}>
-                        <td><span className={`rank rank-${index + 1}`}>{String(index + 1).padStart(2, "0")}</span></td>
+                        <td>
+                          <span className={isRanked ? `rank rank-${rank}` : "rank rank-unranked"}>
+                            {isRanked ? String(rank).padStart(2, "0") : "-"}
+                          </span>
+                        </td>
                         <td>
                           <strong className="model-name">{item.model}</strong>
+                          {item.note && <span className="model-note">{item.note}</span>}
                         </td>
-                        <td><span className={`model-type-pill model-type-${item.type}`}>{t.leaderboard.types[item.type]}</span></td>
+                        <td><span className="harness-name">{item.harness}</span></td>
                         <td className="score-cell">
                           <div className="score-number">{score.toFixed(2)}%</div>
                           <div className="score-track" aria-hidden="true">
                             <span style={{ width: `${(score / maxScore) * 100}%` }} />
                           </div>
                         </td>
-                        <td className="steps-cell">{item.avgSteps.toFixed(2)}</td>
+                        <td className="cost-cell">{item.cost}</td>
+                        <td className="org-cell">{item.org}</td>
+                        <td className="date-cell">{item.date}</td>
                       </tr>
                     );
                   }) : (
                     <tr>
-                      <td className="leaderboard-empty" colSpan={5}>{t.leaderboard.emptyState}</td>
+                      <td className="leaderboard-empty" colSpan={7}>{t.leaderboard.emptyState}</td>
                     </tr>
                   )}
               </tbody>

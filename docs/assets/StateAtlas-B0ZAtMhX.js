@@ -1,4 +1,4 @@
-import{r as wn,u as sl,j as Pi,g as gi}from"./index-BqS3HTF4.js";/**
+import{r as wn,u as sl,j as Pi,g as gi}from"./index-BawByY6X.js";/**
  * @license
  * Copyright 2010-2026 Three.js Authors
  * SPDX-License-Identifier: MIT
