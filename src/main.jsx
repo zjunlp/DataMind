@@ -392,6 +392,7 @@ const v11FullModels = [
     ranked: false,
     note: "(24-task Lite only)",
     cost: "¥3,868.32",
+    costPerTask: "¥161.18 / task",
     scores: { overall: 76.53, education: 88.21, community: 72.53, socialGood: 86.82, business: 85.91, geoscience: 82.81, sports: 38.25 },
   },
   {
@@ -401,6 +402,7 @@ const v11FullModels = [
     date: "2026-09-05",
     type: "open",
     cost: "¥731.96",
+    costPerTask: "¥10.76 / task",
     scores: { overall: 40.96, education: 72.95, community: 57.54, socialGood: 36.22, business: 16.59, geoscience: 34.3, sports: 22.74 },
   },
   {
@@ -410,6 +412,7 @@ const v11FullModels = [
     date: "2026-09-05",
     type: "open",
     cost: "¥6,943.46",
+    costPerTask: "¥102.11 / task",
     scores: { overall: 54.25, education: 88.91, community: 74.47, socialGood: 48.58, business: 33.61, geoscience: 42.51, sports: 29.74 },
   },
   {
@@ -419,6 +422,7 @@ const v11FullModels = [
     date: "2026-09-05",
     type: "proprietary",
     cost: "¥4,004.11",
+    costPerTask: "¥58.88 / task",
     scores: { overall: 64.42, education: 93.87, community: 77.06, socialGood: 55.36, business: 56.99, geoscience: 56.18, sports: 30.58 },
   },
   {
@@ -428,15 +432,18 @@ const v11FullModels = [
     date: "2026-09-05",
     type: "open",
     cost: "¥1,442.35",
+    costPerTask: "¥21.21 / task",
     scores: { overall: 58.59, education: 82.2, community: 76, socialGood: 56.12, business: 43.35, geoscience: 46.02, sports: 51.64 },
   },
   {
-    model: "Qwen3.8-Max",
+    model: "Qwen3.8-Max-0803",
     harness: "Qoder",
-    org: "Tongyi",
+    org: "Qwen",
     date: "2026-09-05",
     type: "proprietary",
-    cost: "7,722.302 credits",
+    cost: "7,722.302",
+    costPerTask: "113.563 / task",
+    costUnit: "credits",
     scores: { overall: 49.86, education: 77.06, community: 72.28, socialGood: 43.66, business: 29.4, geoscience: 39.39, sports: 26.48 },
   },
 ];
@@ -449,6 +456,7 @@ const v11LiteModels = [
     date: "2026-09-05",
     type: "proprietary",
     cost: "¥3,868.32",
+    costPerTask: "¥161.18 / task",
     scores: { overall: 76.53, education: 88.21, community: 72.53, socialGood: 86.82, business: 85.91, geoscience: 82.81, sports: 38.25 },
   },
   {
@@ -458,6 +466,7 @@ const v11LiteModels = [
     date: "2026-09-05",
     type: "open",
     cost: "¥226.52",
+    costPerTask: "¥9.44 / task",
     scores: { overall: 39.33, education: 54.83, community: 33.52, socialGood: 53.2, business: 18.94, geoscience: 55.4, sports: 22.74 },
   },
   {
@@ -467,6 +476,7 @@ const v11LiteModels = [
     date: "2026-09-05",
     type: "open",
     cost: "¥2,260.56",
+    costPerTask: "¥94.19 / task",
     scores: { overall: 56.59, education: 78.21, community: 62.96, socialGood: 79.86, business: 42.25, geoscience: 42.01, sports: 29.74 },
   },
   {
@@ -476,6 +486,7 @@ const v11LiteModels = [
     date: "2026-09-05",
     type: "proprietary",
     cost: "¥1,194.39",
+    costPerTask: "¥49.77 / task",
     scores: { overall: 70.71, education: 90.35, community: 62.9, socialGood: 76.78, business: 84.54, geoscience: 77.86, sports: 30.58 },
   },
   {
@@ -485,15 +496,18 @@ const v11LiteModels = [
     date: "2026-09-05",
     type: "open",
     cost: "¥455.40",
+    costPerTask: "¥18.98 / task",
     scores: { overall: 68.9, education: 71.88, community: 66.6, socialGood: 84.75, business: 56.15, geoscience: 79.95, sports: 51.64 },
   },
   {
-    model: "Qwen3.8-Max",
+    model: "Qwen3.8-Max-0803",
     harness: "Qoder",
-    org: "Tongyi",
+    org: "Qwen",
     date: "2026-09-05",
     type: "proprietary",
-    cost: "2,414.182\ncredits",
+    cost: "2,414.182",
+    costPerTask: "100.591 / task",
+    costUnit: "credits",
     scores: { overall: 54.6, education: 57.97, community: 67.02, socialGood: 63.38, business: 41.8, geoscience: 58.55, sports: 26.48 },
   },
 ];
@@ -920,7 +934,11 @@ function App() {
                             <span style={{ width: `${(score / maxScore) * 100}%` }} />
                           </div>
                         </td>
-                        <td className="cost-cell">{item.cost}</td>
+                        <td className="cost-cell">
+                          <span className="cost-total">{item.cost}</span>
+                          {item.costPerTask && <span className="cost-per-task">{item.costPerTask}</span>}
+                          {item.costUnit && <span className="cost-unit">{item.costUnit}</span>}
+                        </td>
                         <td className="org-cell">{item.org}</td>
                         <td className="date-cell">{item.date}</td>
                       </tr>

@@ -903,6 +903,27 @@ tbody tr:first-child .score-track span {
   white-space: pre-line;
 }
 
+.cost-total,
+.cost-per-task,
+.cost-unit {
+  display: block;
+}
+
+.cost-per-task {
+  margin-top: 3px;
+  color: color-mix(in srgb, var(--muted) 76%, transparent);
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.cost-unit {
+  margin-top: 2px;
+  color: color-mix(in srgb, var(--muted) 76%, transparent);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 .date-cell {
   white-space: nowrap;
 }
