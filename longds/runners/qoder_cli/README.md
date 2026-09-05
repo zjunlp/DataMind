@@ -1,5 +1,14 @@
 # Running LongDS with Qoder
 
+Results default to `./results/longds_<version>_<split>/` relative to the
+current working directory. `--output-dir` overrides the base `./results`;
+the dataset version/split group is appended automatically.
+
+Task selection defaults to `--longds_version v1.1 --split lite`. Use `--split lite`
+for the 24-task subset, or `--longds_version v1 --split full` for v1. All versions
+share `dataset/data/longds`. See the [shared runner guide](../README.md) for path
+overrides and versioned results.
+
 This directory contains a direct Qoder runner for LongDS-Bench. It supports a local conda
 environment and a task-isolated Docker mode based on the LongDS executor image.
 
@@ -310,13 +319,15 @@ checkpoint mechanism.
 
 ## Run More Tasks
 
-By default the runner executes every task after `--start-index`. Pass `--task-limit` to cap how many
+By default the runner reads `task_list_lite.json` and executes every task after `--start-index`. Pass
+`--task-list-name task_list_lite.json` to run the Lite subset. Pass `--task-limit` to cap how many
 tasks run, which is what the smoke tests above rely on.
 
 Run one full task:
 
 ```bash
 python run_qoder_longds.py \
+  --task-list-name task_list_lite.json \
   --task-limit 1 \
   --timeout 7200
 ```
@@ -383,7 +394,7 @@ exists, so a dry run over all 68 tasks costs a few megabytes of prompts and meta
 
 ## Output Layout
 
-Outputs are written under `results/<domain>/<dataset>/<task_id>/<run_name>/`. By default, `run_name`
+Outputs are written under `results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/`. By default, `run_name`
 is `qoder_<model>_<timestamp>`, for example `qoder_performance_20260807_120000`. Passing
 `--run-name` overrides the complete directory name. During each turn, stdout and stderr are streamed
 to the terminal in real time with formatted, colorized step blocks. Raw Qoder CLI stream-json stdout
@@ -392,7 +403,7 @@ and stderr are still saved under that turn directory.
 For each task run:
 
 ```text
-results/<domain>/<dataset>/<task_id>/<run_name>/
+results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/
 ├── workspace/                    # copied data plus Qoder CLI temporary files
 │   └── data/                     # copied released dataset files
 ├── qoder_turn.schema.json
@@ -411,7 +422,7 @@ results/<domain>/<dataset>/<task_id>/<run_name>/
 ```
 
 The Qoder CLI execution directory is always the task workspace:
-`results/<domain>/<dataset>/<task_id>/<run_name>/workspace/`. The runner passes it both as
+`results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/workspace/`. The runner passes it both as
 `qoder --cwd` and as the subprocess working directory, so relative paths cannot fall back to
 `runners/qoder_cli/`. From inside Qoder CLI, benchmark files are available under `data/`, and
 temporary analysis files should be written outside `data/`.
@@ -490,7 +501,7 @@ Score one run:
 
 ```bash
 python judge.py \
-  --run-dir results/<domain>/<dataset>/<task_id>/<run_name>
+  --run-dir results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>
 ```
 
 Or score every completed run under `results/`:

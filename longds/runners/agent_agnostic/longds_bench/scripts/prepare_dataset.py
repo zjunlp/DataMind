@@ -22,11 +22,17 @@ Usage:
 import argparse, json, sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
+from src.longds_dataset import (
+    add_dataset_arguments, resolve_dataset, dataset_metadata, load_task_list, load_turns,
+)
+
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Split a downloaded LongDS dataset into agent manifest + held-out gold.")
-    ap.add_argument("--dataset-root", required=True,
-                    help="Where you ran `hf download zjunlp/LongDS --local-dir ...`; must contain task/longds and data/longds")
+    add_dataset_arguments(ap)
+    ap.add_argument("--dataset-root", default=str(Path(__file__).resolve().parents[4] / "dataset"),
+                    help="Where you ran `hf download zjunlp/LongDS --local-dir ...`; must contain task/longds_<version> and data/longds")
     ap.add_argument("--out-dir", required=True, help="Output workspace (manifest/, gold/, answers/, index.json)")
     ap.add_argument("--start-index", type=int, default=0)
     ap.add_argument("--task-limit", type=int, default=None)
@@ -36,16 +42,15 @@ def main() -> int:
                     help="After extraction, delete answer-bearing files (task.json/task.py/task.ipynb) from the download tree.")
     args = ap.parse_args()
 
-    root = Path(args.dataset_root).resolve()
-    task_root = root / "task" / "longds"
-    data_root = root / "data" / "longds"
-    task_list_path = task_root / "task_list.json"
-    if not task_list_path.is_file():
-        print(f"ERROR: {task_list_path} not found. Download the dataset first:\n"
-              f"  hf download zjunlp/LongDS --repo-type dataset --local-dir {root}", file=sys.stderr)
-        return 1
+    resolve_dataset(args, args.dataset_root)
+    task_root = args.task_root
+    data_root = args.data_root
+    for name in ("start_index", "task_limit", "turn_limit"):
+        value = getattr(args, name)
+        if value is not None and value < 0:
+            ap.error(f"--{name.replace('_', '-')} must be non-negative")
 
-    task_list = json.loads(task_list_path.read_text(encoding="utf-8"))
+    task_list = load_task_list(args)
     if args.domain:
         task_list = [t for t in task_list if t["task_domain"] in set(args.domain)]
     task_list = task_list[args.start_index:]
@@ -56,6 +61,9 @@ def main() -> int:
     for sub in ("manifest", "gold", "answers"):
         (out / sub).mkdir(parents=True, exist_ok=True)
 
+    (out / "dataset_metadata.json").write_text(
+        json.dumps(dataset_metadata(args), ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     index, total_turns, stripped = [], 0, 0
     for ti in task_list:
         domain, ds, tid = ti["task_domain"], ti["dataset_name"], ti["task_id"]
@@ -65,9 +73,7 @@ def main() -> int:
         if not tjson.is_file():
             print(f"WARN: missing {tjson}, skipping {key}", file=sys.stderr)
             continue
-        turns = json.loads(tjson.read_text(encoding="utf-8"))
-        if args.turn_limit is not None:
-            turns = turns[: args.turn_limit]
+        turns = load_turns(tjson, args.turn_limit)
 
         data_dir = data_root / domain / ds / tid / "data"
         (out / "manifest" / f"{key}.json").write_text(json.dumps({

@@ -1,0 +1,4 @@
+model = "gpt-6-astra"
+model_reasoning_effort = "xhigh"
+service_tier = "default"
+cli_auth_credentials_store = "file"

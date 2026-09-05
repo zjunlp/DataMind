@@ -2,6 +2,7 @@ scripts/workspace/
 **/*result*/
 **/__pycache__/
 runners/**/config.toml
+runners/**/auth.json
 runners/**/setting*.json
 !runners/**/config.example.toml
 !runners/**/setting*.example.json

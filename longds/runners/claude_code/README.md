@@ -1,5 +1,14 @@
 # Running LongDS with Claude Code in a Conda Environment
 
+Results default to `./results/longds_<version>_<split>/` relative to the
+current working directory. `--output-dir` overrides the base `./results`;
+the dataset version/split group is appended automatically.
+
+Task selection defaults to `--longds_version v1.1 --split lite`. Use `--split lite`
+for the 24-task subset, or `--longds_version v1 --split full` for v1. All versions
+share `dataset/data/longds`. See the [shared runner guide](../README.md) for path
+overrides and versioned results.
+
 This directory contains a direct Claude Code runner for LongDS-Bench. It does not use the DSGym Docker executor or LiteLLM. Claude Code runs inside each task workspace, uses its own shell/code tools, and keeps the same Claude session across turns in a task.
 
 ## Files
@@ -101,7 +110,7 @@ docker exec -i <task-container> claude -p ...
 
 The same container is reused for all turns in that task, so Claude Code session files, `/tmp`, and
 intermediate analysis files persist across turns. By default the container is removed after the task
-workspace is copied back to `results/<domain>/<dataset>/<task_id>/<run_name>/workspace`; pass
+workspace is copied back to `results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/workspace`; pass
 `--keep-docker-container` to keep it for debugging or manual resume.
 
 Authentication follows the same shape as Harbor: pass secret names into the agent environment, and
@@ -235,13 +244,13 @@ Useful Claude Code options:
 
 ## Outputs
 
-Outputs are written under `results/<domain>/<dataset>/<task_id>/<run_name>/`.
+Outputs are written under `results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/`.
 During each turn, Claude Code stdout and stderr are streamed to the terminal in real time. Raw Claude Code stream JSON and stderr are saved under that turn directory.
 
 For each task run:
 
 ```text
-results/<domain>/<dataset>/<task_id>/<run_name>/
+results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/
 ├── workspace/                    # copied data plus Claude Code temporary files
 │   └── data/                     # copied released dataset files
 ├── claude_turn.schema.json
@@ -260,7 +269,7 @@ results/<domain>/<dataset>/<task_id>/<run_name>/
 ```
 
 Claude Code is launched with `cwd` set to the task workspace:
-`results/<domain>/<dataset>/<task_id>/<run_name>/workspace/`. From inside Claude Code, benchmark files are available under `data/`, and temporary analysis files should be written outside `data/`.
+`results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/workspace/`. From inside Claude Code, benchmark files are available under `data/`, and temporary analysis files should be written outside `data/`.
 
 The runner first copies only that task's released `data/` directory into `workspace/data/`. Claude Code is not given the original `dataset/task/...` path that contains `task.json`, `task.py`, `task.ipynb`, metadata, and gold answers.
 
@@ -303,7 +312,7 @@ Score one Claude Code run:
 
 ```bash
 python judge.py \
-  --run-dir results/<domain>/<dataset>/<task_id>/<run_name>
+  --run-dir results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>
 ```
 
 Or score every completed run under `results/`:

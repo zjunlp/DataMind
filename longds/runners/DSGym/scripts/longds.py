@@ -4,6 +4,11 @@ import sys
 import warnings
 import argparse
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from src.run_summary import RunSummary
+from src.longds_dataset import (
+    add_dataset_arguments, resolve_dataset, dataset_metadata, load_task_list, load_turns, result_root,
+)
 from prompt import SYSTEM_PROMPT
 # Suppress common warnings
 warnings.filterwarnings("ignore", category=FutureWarning, module="torch.cuda")
@@ -136,9 +141,9 @@ def create_parser():
                        help="Model name (e.g., 'gpt-4', 'together_ai/Qwen/Qwen3-235B-A22B-Instruct-2507-tput')")
 
     # Common arguments
-    parser.add_argument("--dataset-path", type=str,
-                       default=str(Path(__file__).resolve().parents[3] / "dataset" / "task" / "longds"),
-                       help="Path to the LongDS task directory containing task_list.json")
+    add_dataset_arguments(parser, task_root_alias="--dataset-path")
+    parser.add_argument("--executor-data-root", default="/data/longds",
+                       help="Shared data root inside executor containers; configure the matching mount separately.")
     parser.add_argument("--backend", type=str, default="litellm", 
                        choices=["litellm", "vllm", "sglang"],
                        help="Backend to use for model inference")
@@ -149,7 +154,7 @@ def create_parser():
     parser.add_argument("--turn-limit", type=int, default=None,
                         help="Maximum number of LongDS turns to load from each task.json")
     parser.add_argument("--output-dir", type=str, default="./results",
-                       help="Output directory for results")
+                       help="Result base (default: ./results in the current directory). Appends longds_<version>_<split>.")
     parser.add_argument("--manager-url", type=str, default="http://localhost:5000",
                        help="Code sandbox manager URL")
     parser.add_argument("--temperature", type=float, default=0.0,
@@ -168,9 +173,6 @@ def create_parser():
                        help="Maximum model sequence length for vLLM backend (default: 32768)")
     
     # Dataset-specific arguments
-    parser.add_argument("--split", type=str, default="test",
-                       choices=["train", "validation", "test"],
-                       help="Dataset split to use (for discoverybench)")
     parser.add_argument("--dataset-type", type=str, default="original",
                        choices=["original", "synthetic"],
                        help="Type of dataset to use (for qrdata)")
@@ -221,12 +223,9 @@ def create_agent(args, agent_type):
 
 def load_dataset(args):
     """Load dataset with appropriate configuration."""
-    Base_Path = args.dataset_path
-    task_root = Path(Base_Path)
-    task_list_path = task_root / "task_list.json"
-
-    with open(task_list_path, "r", encoding="utf-8") as f:
-        task_list = json.load(f)
+    resolve_dataset(args)
+    task_root = args.task_root
+    task_list = load_task_list(args)
 
     if args.start_index < 0:
         raise ValueError("--start-index must be non-negative")
@@ -240,13 +239,12 @@ def load_dataset(args):
         task_list = task_list[:args.task_limit]
 
     for task_info in task_list:
-        system_prompt = SYSTEM_PROMPT.format(PATH=f"/data/longds/{task_info['task_domain']}/{task_info['dataset_name']}/{task_info['task_id']}/data")
+        data_path = '/'.join((args.executor_data_root.rstrip('/'), task_info['task_domain'],
+                              task_info['dataset_name'], task_info['task_id'], 'data'))
+        system_prompt = SYSTEM_PROMPT.format(PATH=data_path)
         task_path = task_root / task_info['task_domain'] / task_info['dataset_name'] / task_info['task_id'] / "task.json"
         task_info['task_path'] = str(task_path)
-        with open(task_path, 'r', encoding='utf-8') as f:
-            tasks_json = json.load(f)
-        if args.turn_limit is not None:
-            tasks_json = tasks_json[:args.turn_limit]
+        tasks_json = load_turns(task_path, args.turn_limit)
         for item in tasks_json:
             item['turn_id'] = item.pop('turn_id')
             if item['turn_id'] == 1:
@@ -271,11 +269,8 @@ def run_one_task(args, agent_type, task_info):
     task_id = task_info["task_id"]
     task_key = f"{domain}/{dataset_name}/{task_id}"
 
-    timestamp = datetime.now().strftime("%m%d_%H%M%S")
-    model_name = args.model.replace("/", "_")
     output_dir = (
-        f"{args.output_dir}/{args.dataset}/{domain}/{dataset_name}/{task_id}/"
-        f"{model_name}_{timestamp}"
+        f"{result_root(args)}/{args.run_name}/{domain}/{dataset_name}/{task_id}"
     )
 
     print(f"📝 Starting task {task_key} with {len(turns)} turns...")
@@ -284,6 +279,10 @@ def run_one_task(args, agent_type, task_info):
 
     bak_path = f"{output_dir}/bak"
     os.makedirs(bak_path, exist_ok=True)
+    with open(f"{output_dir}/task_metadata.json", "w", encoding="utf-8") as f:
+        json.dump({**dataset_metadata(args), "executor_data_root": args.executor_data_root, "run_name": args.run_name,
+                   "task_domain": domain, "dataset_name": dataset_name, "task_id": task_id},
+                  f, indent=2, ensure_ascii=False)
     result = agent.solve_task(
         turns,
         bak_path=bak_path,
@@ -361,6 +360,7 @@ def run_one_task(args, agent_type, task_info):
 def main():
     parser = create_parser()
     args = parser.parse_args()
+    args.run_name = f"dsgym_{args.model.replace('/', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
     dataset_config = DATASET_CONFIG[args.dataset]
 
@@ -383,7 +383,9 @@ def main():
     print(f"📊 Loading {args.dataset} dataset...")
     try:
         dataset, all_tasks = load_dataset(args)
-        print(f"✅ Loaded {len(all_tasks)} tasks from {args.dataset}")
+        print(f"✅ Loaded {len(all_tasks)} tasks from {args.longds_version}/{args.split}")
+        print(f"Task list: {args.task_list}")
+        print(f"Shared data: {args.data_root}; executor path: {args.executor_data_root}")
     except Exception as e:
         print(f"❌ Failed to load dataset: {e}")
         return 1
@@ -391,7 +393,10 @@ def main():
     if args.reset_env_times > 0:
         args.output_dir += f"_reset_{args.reset_env_times}"
 
+    summary = RunSummary(args, 'dsgym', args.model, args.run_name, all_tasks,
+                         result_root(args) / args.run_name)
     if not all_tasks:
+        summary.save()
         print("No tasks selected.")
         return 0
 
@@ -408,8 +413,10 @@ def main():
             )
             try:
                 run_one_task(args, dataset_config["agent_type"], task_info)
+                summary.record(task_info, 'completed')
                 completed += 1
             except Exception as exc:
+                summary.record(task_info, 'failed')
                 failures.append((task_key, str(exc)))
                 print(f"❌ Task {task_key} failed: {exc}")
     else:
@@ -431,16 +438,19 @@ def main():
                 task_key = futures[future]
                 try:
                     future.result()
+                    summary.record(task_key, 'completed')
                     completed += 1
                     print(
                         f"📊 Progress: {completed}/{len(all_tasks)} tasks completed "
                         f"({task_key})"
                     )
                 except Exception as exc:
+                    summary.record(task_key, 'failed')
                     failures.append((task_key, str(exc)))
                     print(f"❌ Task {task_key} failed: {exc}")
 
     print("-" * 50)
+    summary.save()
     print(f"Completed tasks: {completed}/{len(all_tasks)}")
     if failures:
         print(f"Failed tasks: {len(failures)}")

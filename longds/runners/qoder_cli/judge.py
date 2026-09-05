@@ -17,6 +17,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from src.longds_dataset import infer_result_metadata
+
 
 def load_judge_prompt() -> str:
     prompt_path = Path(__file__).resolve().parents[1] / "DSGym" / "scripts" / "prompt.py"
@@ -57,12 +60,7 @@ def combine_context_question(context: str, question: str) -> str:
 
 
 def infer_metadata(run_dir: Path) -> dict[str, str]:
-    return {
-        "task_domain": run_dir.parent.parent.parent.name if len(run_dir.parents) >= 4 else "",
-        "dataset_name": run_dir.parent.parent.name if len(run_dir.parents) >= 3 else "",
-        "task_id": run_dir.parent.name if len(run_dir.parents) >= 2 else "",
-        "run_name": run_dir.name,
-    }
+    return infer_result_metadata(run_dir)
 
 
 def load_run_metadata(run_dir: Path) -> dict[str, str]:

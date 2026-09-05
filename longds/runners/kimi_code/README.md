@@ -1,5 +1,14 @@
 # Running LongDS with Kimi Code
 
+Results default to `./results/longds_<version>_<split>/` relative to the
+current working directory. `--output-dir` overrides the base `./results`;
+the dataset version/split group is appended automatically.
+
+Task selection defaults to `--longds_version v1.1 --split lite`. Use `--split lite`
+for the 24-task subset, or `--longds_version v1 --split full` for v1. All versions
+share `dataset/data/longds`. See the [shared runner guide](../README.md) for path
+overrides and versioned results.
+
 This runner executes LongDS directly with Kimi Code CLI. It follows the Claude Code runner's task lifecycle and result format: one isolated Docker container per task, one persistent agent session across all turns in that task, task-level parallelism, optional per-task judging, and the same `results_eval.json` format.
 
 ## Configure Kimi Code
@@ -52,12 +61,15 @@ Run all tasks with four task workers and judge each completed task:
 ```bash
 python runners/kimi_code/run_kimi_longds.py \
   --use-docker \
+  --task-list-name task_list_lite.json \
   --run-parallel 4 \
   --timeout 7200 \
   --judge
 ```
 
-The runner defaults to all remaining tasks. `--task-limit N` limits the selected slice after `--start-index`. Turns within a task always remain sequential.
+The runner defaults to `task_list_lite.json` and all remaining tasks. Use
+`--task-list-name task_list_lite.json` for the Lite subset. `--task-limit N` limits the selected
+slice after `--start-index`. Turns within a task always remain sequential.
 
 If a task already has the same run directory, it is skipped. Use `--overwrite` to remove that directory and rerun it:
 
@@ -103,7 +115,7 @@ Kimi stores session state under `/tmp/longds_kimi_home` inside the container. At
 Each task writes:
 
 ```text
-results/<domain>/<dataset>/<task_id>/<run_name>/
+results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/
 ├── workspace/
 ├── kimi_home/                 # session trace, config.toml removed
 ├── kimi_turn.schema.json
@@ -132,6 +144,7 @@ When `--judge` is enabled, `judge.py` also writes `results_eval.json` using the 
 --kimi-arg ARG               Extra Kimi CLI argument; repeatable.
 --use-docker                 Run one isolated container per task.
 --run-parallel N             Number of tasks to run concurrently.
+--task-list-name FILE        Task list file name under --task-root.
 --task-limit N               Number of tasks after --start-index.
 --turn-limit N               Maximum turns per task.
 --timeout SECONDS            Wall-clock timeout per Kimi turn.

@@ -1,5 +1,12 @@
 # Agent-Agnostic Runner Guide
 
+Dataset preparation defaults to `--longds_version v1.1 --split lite`. Use
+`--split lite` for the 24-task subset, or `--longds_version v1 --split full` for
+v1. All versions share `dataset/data/longds`. See the
+[shared runner guide](../README.md) for path overrides and metadata. Use a
+separate `RUN` directory for each version and split; `--out-dir` remains the
+exact workspace path.
+
 This directory integrates a portable [agent-agnostic skill](https://github.com/ldclabs/longds-bench/blob/main/README.md) into LongDS-Bench. LongDS-Bench evaluates long-horizon, multi-turn agentic data analysis; in this execution mode, **the agent itself is the runtime under test**.
 
 The [LDC Labs team](https://github.com/ldclabs) developed the [longds-bench skill](https://github.com/ldclabs/longds-bench) independently of any specific agent framework. Its `SKILL.md` defines the multi-turn workflow and data-access constraints, while its scripts provide dataset preparation, persistent Python sessions, and LLM-based judging. Any agent with shell or code-execution capabilities can follow the skill to run LongDS-Bench.

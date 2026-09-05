@@ -19,6 +19,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from src.run_summary import RunSummary
+from src.longds_dataset import (
+    add_dataset_arguments, resolve_dataset, dataset_metadata, load_task_list, load_turns, result_root,
+)
+
 from prompt import build_output_contract, build_turn_prompt
 
 
@@ -89,27 +95,15 @@ QODER_CONFIG_SEED_ENTRIES = (
 
 def parse_args() -> argparse.Namespace:
     script_dir = Path(__file__).resolve().parent
-    longds_root = Path(__file__).resolve().parents[2]
     parser = argparse.ArgumentParser(
         description="Run LongDS-Bench directly with Qoder headless sessions."
     )
-    parser.add_argument(
-        "--task-root",
-        type=Path,
-        default=longds_root / "dataset" / "task" / "longds",
-        help="LongDS task root containing task_list.json.",
-    )
-    parser.add_argument(
-        "--data-root",
-        type=Path,
-        default=longds_root / "dataset" / "data" / "longds",
-        help="LongDS data root.",
-    )
+    add_dataset_arguments(parser)
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=script_dir / "results",
-        help="Result root. Task runs are saved as <domain>/<dataset>/<task_id>/<run_name>/.",
+        default=Path("results"),
+        help="Result base (default: ./results in the current directory). Appends longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/.",
     )
     parser.add_argument("--qoder-bin", default="qoder", help="Qoder executable.")
     parser.add_argument(
@@ -278,7 +272,7 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Number of tasks to run after --start-index. Omit to run every task.",
     )
-    parser.add_argument("--start-index", type=int, default=0, help="Start index in task_list.json.")
+    parser.add_argument("--start-index", type=int, default=0, help="Start index in the task list.")
     parser.add_argument("--turn-limit", type=int, default=None, help="Maximum LongDS turns per task.")
     parser.add_argument(
         "--timeout", type=int, default=7200
@@ -1836,9 +1830,7 @@ def run_task(
     print("", flush=True)
     print(paint(f"======= Start running task {task_name} ... =======", COLOR_RED), flush=True)
 
-    turns = load_json(task_json)
-    if args.turn_limit is not None:
-        turns = turns[: args.turn_limit]
+    turns = load_turns(task_json, args.turn_limit)
 
     model_slug = slugify(args.qoder_model or "qoder-default")
     workspace_dir = run_dir / "workspace"
@@ -1858,6 +1850,7 @@ def run_task(
     output_contract = build_output_contract(TURN_SCHEMA)
 
     task_result: dict[str, Any] = {
+        **dataset_metadata(args),
         "task_domain": domain,
         "dataset_name": dataset,
         "task_id": task_id,
@@ -2124,10 +2117,10 @@ def record_cli_model(
 def task_run_dir(args: argparse.Namespace, task_info: dict[str, str], run_name: str) -> Path:
     return (
         args.output_dir
+        / run_name
         / task_info["task_domain"]
         / task_info["dataset_name"]
         / task_info["task_id"]
-        / run_name
     )
 
 
@@ -2177,6 +2170,9 @@ def print_run_config(
     print("Qoder LongDS run configuration:", flush=True)
     print(f"  run_name: {run_name}", flush=True)
     print(f"  task_root: {args.task_root}", flush=True)
+    print(f"  longds_version: {args.longds_version}", flush=True)
+    print(f"  split: {args.split}", flush=True)
+    print(f"  task_list_name: {args.task_list_name}", flush=True)
     print(f"  data_root: {args.data_root}", flush=True)
     print(f"  output_dir: {results_root}", flush=True)
     print(f"  qoder_bin: {args.qoder_bin}", flush=True)
@@ -2238,9 +2234,8 @@ def main() -> int:
     args.qoder_model_explicit = args.qoder_model is not None
     args.reasoning_effort_explicit = args.reasoning_effort is not None
     args.context_window_explicit = args.context_window is not None
-    args.task_root = args.task_root.resolve()
-    args.data_root = args.data_root.resolve()
-    args.output_dir = args.output_dir.resolve()
+    resolve_dataset(args)
+    args.output_dir = result_root(args)
     if args.qoder_config_dir is not None:
         args.qoder_config_dir = args.qoder_config_dir.expanduser().resolve()
     if args.qoder_settings is not None:
@@ -2287,7 +2282,7 @@ def main() -> int:
     results_root = args.output_dir
     results_root.mkdir(parents=True, exist_ok=True)
 
-    task_list = load_json(args.task_root / "task_list.json")
+    task_list = load_task_list(args)
     selected = task_list[args.start_index :]
     if args.task_limit is not None:
         selected = selected[: args.task_limit]
@@ -2300,6 +2295,7 @@ def main() -> int:
         total_count=len(task_list),
     )
 
+    summary = RunSummary(args, "qoder_cli", args.qoder_model, run_name, selected, results_root / run_name)
     completed_tasks = 0
     failed_tasks = 0
 
@@ -2308,11 +2304,14 @@ def main() -> int:
         evaluation: dict[str, Any] | None,
     ) -> bool:
         nonlocal completed_tasks, failed_tasks
+        summary.record(task_result, "skipped" if task_result.get("skipped") else
+                       "dry_run" if args.dry_run else "completed")
         completed_tasks += 1
         if evaluation is not None:
             task_result["evaluation"] = evaluation
             write_json(Path(task_result["run_dir"]) / "task_metadata.json", task_result)
         if evaluation is not None and evaluation["returncode"] != 0:
+            summary.judge_failed(task_result)
             failed_tasks += 1
             print(f"ERROR: evaluation failed: {evaluation}", file=sys.stderr)
             return False
@@ -2320,9 +2319,10 @@ def main() -> int:
 
     def record_error(task_info: dict[str, str], exc: Exception) -> None:
         nonlocal failed_tasks
+        summary.record(task_info, "failed")
         failed_tasks += 1
         run_dir = task_run_dir(args, task_info, run_name)
-        error = {"task": task_info, "run_dir": str(run_dir), "error": str(exc)}
+        error = {**dataset_metadata(args), "task": task_info, "run_dir": str(run_dir), "error": str(exc)}
         write_json(run_dir / "error.json", error)
         print(f"ERROR: {error}", file=sys.stderr)
 
@@ -2400,6 +2400,7 @@ def main() -> int:
                     futures[next_future] = (next_index, next_task)
                     next_index += 1
 
+    summary.save()
     print_final_status()
     return 1 if failed else 0
 

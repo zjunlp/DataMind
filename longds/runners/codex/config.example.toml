@@ -1,0 +1,10 @@
+model = "gpt-5.6-sol"
+model_provider = "longds_env"
+model_reasoning_effort = "high"
+service_tier = "default"
+
+[model_providers.longds_env]
+name = "longds_codex"
+base_url = "<your_responses_api_base_url>"
+experimental_bearer_token = "<your_api_key>"
+wire_api = "responses"
