@@ -390,6 +390,7 @@ const v11FullModels = [
     date: "2026-09-05",
     type: "proprietary",
     ranked: false,
+    unrankedOrder: 2,
     note: "(24-task Lite only)",
     cost: "¥3,868.32",
     costPerTask: "¥161.18 / task",
@@ -426,6 +427,18 @@ const v11FullModels = [
     scores: { overall: 64.42, education: 93.87, community: 77.06, socialGood: 55.36, business: 56.99, geoscience: 56.18, sports: 30.58 },
   },
   {
+    model: "GPT-6 Astra",
+    harness: "Codex",
+    org: "OpenAI",
+    date: "2026-09-05",
+    type: "proprietary",
+    ranked: false,
+    note: "(24-task Lite only)",
+    cost: "¥3,040.84",
+    costPerTask: "¥126.70 / task",
+    scores: { overall: 78.17, education: 96.33, community: 63.09, socialGood: 81.31, business: 88.72, geoscience: 81.32, sports: 67.73 },
+  },
+  {
     model: "Kimi K3",
     harness: "Kimi Code",
     org: "Moonshot AI",
@@ -445,6 +458,17 @@ const v11FullModels = [
     costPerTask: "113.563 / task",
     costUnit: "credits",
     scores: { overall: 49.86, education: 77.06, community: 72.28, socialGood: 43.66, business: 29.4, geoscience: 39.39, sports: 26.48 },
+  },
+  {
+    model: "Qwen3.8-Max-0902",
+    harness: "Qoder",
+    org: "Qwen",
+    date: "2026-09-05",
+    type: "proprietary",
+    cost: "26,426.995",
+    costPerTask: "388.632 / task",
+    costUnit: "credits",
+    scores: { overall: 56.88, education: 88.88, community: 76.87, socialGood: 51.21, business: 41.96, geoscience: 43.85, sports: 26.09 },
   },
 ];
 
@@ -490,6 +514,16 @@ const v11LiteModels = [
     scores: { overall: 70.71, education: 90.35, community: 62.9, socialGood: 76.78, business: 84.54, geoscience: 77.86, sports: 30.58 },
   },
   {
+    model: "GPT-6 Astra",
+    harness: "Codex",
+    org: "OpenAI",
+    date: "2026-09-05",
+    type: "proprietary",
+    cost: "¥3,040.84",
+    costPerTask: "¥126.70 / task",
+    scores: { overall: 78.17, education: 96.33, community: 63.09, socialGood: 81.31, business: 88.72, geoscience: 81.32, sports: 67.73 },
+  },
+  {
     model: "Kimi K3",
     harness: "Kimi Code",
     org: "Moonshot AI",
@@ -509,6 +543,17 @@ const v11LiteModels = [
     costPerTask: "100.591 / task",
     costUnit: "credits",
     scores: { overall: 54.6, education: 57.97, community: 67.02, socialGood: 63.38, business: 41.8, geoscience: 58.55, sports: 26.48 },
+  },
+  {
+    model: "Qwen3.8-Max-0902",
+    harness: "Qoder",
+    org: "Qwen",
+    date: "2026-09-05",
+    type: "proprietary",
+    cost: "8,604.453",
+    costPerTask: "358.519 / task",
+    costUnit: "credits",
+    scores: { overall: 62.58, education: 83.77, community: 71.98, socialGood: 73.29, business: 51.94, geoscience: 59.9, sports: 26.09 },
   },
 ];
 
@@ -734,7 +779,9 @@ function App() {
       .filter((item) => modelType === "all" || item.type === modelType)
       .sort((a, b) => {
         if (a.ranked === false || b.ranked === false) {
-          if (a.ranked === b.ranked) return 0;
+          if (a.ranked === b.ranked) {
+            return (a.unrankedOrder ?? 0) - (b.unrankedOrder ?? 0);
+          }
           return a.ranked === false ? 1 : -1;
         }
         return b.scores[domain] - a.scores[domain];
