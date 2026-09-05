@@ -66,8 +66,7 @@ Pass only the base to `--output-dir`; do not include the dataset group or run na
 
 One run directory contains all tasks from that invocation. Judges accept a task
 leaf through `--run-dir`, or scan an entire run through `--results-root`.
-The summarizer accepts either a selection group or one run directory. Both tools
-continue to read legacy task-first layouts; existing results are not moved.
+Judges continue to read legacy task-first layouts; existing results are not moved.
 
 Each CLI runner and DSGym writes `<run_name>/summary.json` when the invocation
 finishes, including when individual tasks fail or the selection is empty. It records
@@ -84,16 +83,9 @@ Separate later judge runs do not refresh this snapshot. Forced termination may p
 the final summary from being written.
 
 `task_metadata.json` records `longds_version`, `split`, `task_root`, `task_list`,
-and `data_root`. Existing results are not moved. Summarize one selection at a time:
-
-```bash
-python runners/summarize_scores.py results/longds_v1.1_lite
-```
-
-The summarizer rejects roots containing multiple version/split selections to
-avoid merging scores. When filtering results with `--subset` or
-`--task-list-name`, use `--longds_version` (default `v1.1`) or `--task-root` to
-choose the matching task definitions.
+and `data_root`. Open `<run_name>/summary.json` for the experiment overview and
+each task's `results_eval.json` for per-turn scores; no separate summary command
+is required.
 
 ## DSGym
 
