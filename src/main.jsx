@@ -37,7 +37,6 @@ const HERO_STATS = [
   { value: 68, decimals: 0, suffix: "" },
   { value: 2225, decimals: 0, suffix: "" },
   { value: 11.29, decimals: 2, suffix: "" },
-  { value: 48.45, decimals: 2, suffix: "%" },
 ];
 
 const QUICK_START_COMMANDS = [
@@ -588,7 +587,7 @@ const translations = {
       explore: "Leaderboard",
       paper: "Paper",
       statsLabel: "Benchmark statistics",
-      stats: ["Tasks", "Turns", "Dependency span / turn", "Gemini-3.1-Pro Avg Score"],
+      stats: ["Tasks", "Turns", "Dependency span / turn"],
       stateScene: {
         heading: "Evolving Analytical States",
         turn1: "Calculate X on the cleaned data ...",
@@ -676,7 +675,7 @@ const translations = {
       explore: "排行榜",
       paper: "论文",
       statsLabel: "评测统计",
-      stats: ["任务数", "轮次数", "每轮依赖跨度", "Gemini-3.1-Pro 平均得分"],
+      stats: ["任务数", "轮次数", "每轮依赖跨度"],
       stateScene: {
         heading: "演化中的分析状态",
         turn1: "在清洗后的数据上计算 X……",
