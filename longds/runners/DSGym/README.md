@@ -64,5 +64,34 @@ Open `summary.json` for the run overview and task-average score.
 docker compose -f runners/DSGym/executors/docker-compose.yml down
 ```
 
+## Common options
+
+| Option | Usage / default |
+| --- | --- |
+| `--model NAME` | Required. Model name, including the provider prefix for LiteLLM, such as `openai/<your_model_name>`. |
+| `--temperature VALUE` | Sampling temperature. Default: `0.0`. |
+| `--dataset longds` | Required. Select the LongDS benchmark. |
+| `--backend NAME` | Inference backend: `litellm` (default), `vllm`, or `sglang`. |
+| `--run-parallel N` | Concurrent tasks. Default: `1`; do not exceed the available executor count. |
+| `--max-steps N` | Maximum agent steps per turn. Default: `40`. |
+| `--task-limit N` | Run at most N tasks. Default: all selected tasks. |
+| `--turn-limit N` | Run at most N turns per task. Default: all turns. |
+| `--start-index N` | Start at index N in the task list, counting from `0`. |
+| `--longds_version VERSION` | Task version: `v1.1` (default) or `v1`. Use `--split full` with v1. |
+| `--split SPLIT` | `lite` (default) or `full`. |
+| `--judge-model NAME` | Judge model. Default: `deepseek-v4-pro`. |
+| `--judge-max-workers N` | Concurrent judge requests per task. Default: `15`. |
+| `--output-dir PATH` | Output base directory. Default: `./results`; version/split and an automatic run name are appended. |
+
+DSGym uses the running Docker executor pool and judges automatically; do not pass
+`--use-docker` or `--judge`. It has no `--timeout`, `--reasoning-effort`, or
+`--run-name` option.
+
+For the complete option list:
+
+```bash
+uv run --project runners/DSGym python runners/DSGym/scripts/longds.py --help
+```
+
 For more details, see the [executor guide](executors/README.md) and
 [upstream DSGym documentation](README_DSGym.md).

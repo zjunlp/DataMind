@@ -1,332 +1,146 @@
-# Running LongDS with Claude Code in a Conda Environment
+# Run LongDS with Claude Code
 
-Run commands from the `longds/` root; edit model configuration in `runners/claude_code/`.
-Default configuration paths are resolved relative to the runner script, not the launch directory.
+Run all commands from the `longds/` root. The steps below use Docker and
+evaluate **v1.1 Lite (24 tasks / 777 turns)** by default.
+First [download the dataset](../../README.md#1-download-the-dataset).
 
-Results default to `./results/longds_<version>_<split>/` relative to the
-current working directory. `--output-dir` overrides the base `./results`;
-the dataset version/split group is appended automatically.
+## 1. Prepare the environment
 
-Task selection defaults to `--longds_version v1.1 --split lite`. Use `--split lite`
-for the 24-task subset, or `--longds_version v1 --split full` for v1. All versions
-share `dataset/data/longds`. See the [Quick start](../../README.md#quick-start)
-for dataset download and standard run commands.
-
-This directory contains a direct Claude Code runner for LongDS-Bench. It does not use the DSGym Docker executor or LiteLLM. Claude Code runs inside each task workspace, uses its own shell/code tools, and keeps the same Claude session across turns in a task.
-
-## Files
-
-- `run_claude_longds.py`: runs LongDS tasks with `claude -p` and a fixed Claude session id per task.
-- `runners/src/judge.py`: scores Claude Code run outputs with the LongDS LLM judge.
-- `prompt.py`: stores the first-turn prompt template and turn prompt formatting.
-- `requirements-environment.txt`: Python packages for the local Claude Code LongDS environment.
-
-## Create the Conda Environment
-
-Create and activate a Python 3.12 conda environment:
+You need Docker installed and running. Create a Python 3.12 environment,
+or activate an existing one:
 
 ```bash
-cd /mnt/40t/xkw/LongMemDA/DataMind/longds
-
+cd /path/to/DataMind/longds
 conda create -n longds python=3.12 -y
 conda activate longds
+python -m pip install openai
 ```
 
-Install the environment packages from the LongDS root:
+Docker supplies the agent CLI and data-analysis packages; you do not need to
+install them on the host for this workflow.
+
+## 2. Configure Claude Code
+
+Create your local configuration without overwriting an existing file:
 
 ```bash
-pip install --upgrade pip
-pip install -r runners/claude_code/requirements-environment.txt
+cp -n runners/claude_code/settings.example.json runners/claude_code/settings.json
 ```
 
-`requirements-environment.txt` matches the LongDS Docker executor Python package set and includes `openai` for judge/API calls.
+Edit `runners/claude_code/settings.json`:
 
-## Quick Start
+- Set `env.ANTHROPIC_BASE_URL` to your Anthropic-compatible endpoint.
+- Set `env.ANTHROPIC_AUTH_TOKEN` to your API key.
+- Set `model` and the model names in `env.ANTHROPIC_*` and
+  `env.CLAUDE_CODE_SUBAGENT_MODEL` to models available through your endpoint.
+- Adjust the effort and context-window settings to match your model.
 
-Make sure Claude Code is installed and authenticated:
+A Chat Completions-only endpoint is not sufficient for Claude Code.
+This Docker workflow uses the settings file; host Claude login is not required.
+
+The local configuration is Git-ignored. Keep credentials out of commits and
+shared result files.
+
+## 3. Build the Docker images
 
 ```bash
-claude --version
-claude
+docker build -t executor-prebuilt runners/DSGym/executors/container_images/longds_image
+docker build -t longds-claude-code:latest runners/claude_code
 ```
 
-Then run one LongDS turn from the activated conda environment:
+Skip the first build if `executor-prebuilt` is already available.
+No DSGym executor pool is needed.
 
-```bash
-cd /mnt/40t/xkw/LongMemDA/DataMind/longds
-
-python runners/claude_code/run_claude_longds.py \
-  --task-limit 1 \
-  --turn-limit 1
-```
-
-`run_claude_longds.py` passes the current Python executable to Claude Code as `--analysis-python`, so when you run it from the activated `longds` conda environment, Claude Code is instructed to use that conda Python for analysis code.
-
-To be explicit:
-
-```bash
-python runners/claude_code/run_claude_longds.py \
-  --task-limit 1 \
-  --turn-limit 1 \
-  --analysis-python "$(python -c 'import sys; print(sys.executable)')"
-```
-
-## Docker Mode
-
-Docker mode keeps Claude Code's normal tool set, but prevents it from seeing host files by running
-one dedicated container per task. The runner copies only the current task's `data/` directory into
-the container workspace, executes all turns with `docker exec`, then snapshots `/workspace` back to
-the host run directory.
-
-Build the base LongDS executor image first, then build the thin Claude Code image from it:
-
-```bash
-cd /mnt/40t/xkw/LongMemDA/DataMind/longds
-
-docker build \
-  -t executor-prebuilt \
-  runners/DSGym/executors/container_images/longds_image
-
-docker build \
-  -t longds-claude-code:latest \
-  --build-arg BASE_IMAGE=executor-prebuilt \
-  --build-arg CLAUDE_CODE_VERSION=latest \
-  runners/claude_code
-```
-
-Then run with Docker enabled:
-
-```bash
-python runners/claude_code/run_claude_longds.py \
-  --use-docker \
-  --task-limit 1 \
-  --turn-limit 1
-```
-
-In Docker mode the default analysis Python is `/usr/local/bin/python`, the Python installed in the
-container. For each task, the runner starts a container named from the run and task id, copies data
-to `/workspace/data`, and runs each turn as:
-
-```bash
-docker exec -i <task-container> claude -p ...
-```
-
-The same container is reused for all turns in that task, so Claude Code session files, `/tmp`, and
-intermediate analysis files persist across turns. By default the container is removed after the task
-workspace is copied back to `results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/workspace`; pass
-`--keep-docker-container` to keep it for debugging or manual resume.
-
-Authentication follows the same shape as Harbor: pass secret names into the agent environment, and
-keep secret values outside runner metadata and Docker command arguments. The runner automatically
-passes common Claude Code/API variables when they exist in the runner process environment:
-
-```bash
-export ANTHROPIC_API_KEY="<your_anthropic_api_key>"
-export ANTHROPIC_BASE_URL="<optional_third_party_gateway_base_url>"
-
-python runners/claude_code/run_claude_longds.py \
-  --use-docker \
-  --task-limit 1
-```
-
-You can also put secrets in a local `.env` file and load it for Docker only:
-
-```bash
-python runners/claude_code/run_claude_longds.py \
-  --use-docker \
-  --docker-env-file /path/to/claude.env \
-  --task-limit 1
-```
-
-The `.env` file can contain `KEY=VALUE` or `export KEY=VALUE` lines. Values loaded this way are
-placed in the Docker CLI process environment; Docker receives only `--env KEY`, not
-`--env KEY=VALUE`.
-
-Claude Code also accepts a settings JSON file. The runner passes
-`runners/claude_code/settings.json` by default.
-
-```json
-{
-  "model": "deepseek-v4-flash",
-  "env": {
-    "ANTHROPIC_API_KEY": "<your_api_key>",
-    "ANTHROPIC_BASE_URL": "https://www.dmxapi.cn/v1"
-  }
-}
-```
-
-```bash
-python runners/claude_code/run_claude_longds.py \
-  --use-docker \
-  --task-limit 1
-```
-
-Use `--claude-settings /path/to/claude-settings.json` to override the default settings file. When
-the model is read from settings, the runner uses it for the run name and metadata but does not add a
-separate `claude --model` argument. Pass `--claude-model NAME` when you want an explicit CLI model
-argument to override the settings model.
-
-In Docker mode, the runner copies this settings file to `/tmp/longds_claude_settings.json` inside
-each task container and passes `claude --settings /tmp/longds_claude_settings.json ...`. The file is
-not copied into `/workspace`, so it is not included in the final workspace snapshot. If the settings
-file contains credentials, keep it outside this repository and prefer `apiKeyHelper` or environment
-variables for secrets.
-
-For compatibility with Harbor-style shared provider keys, the runner maps these variables when the
-standard target variable is not already set:
-
-```text
-HARBOR_ANTHROPIC_KEY      -> ANTHROPIC_API_KEY
-HARBOR_ANTHROPIC_BASE_URL -> ANTHROPIC_BASE_URL
-```
-
-Additional variables can be selected with repeatable `--docker-env KEY`. Avoid typing API keys as
-`--docker-env KEY=VALUE` in shell history; prefer `export KEY=...` or `--docker-env-file` for
-secrets. The runner does not print these values in run config, logs, or metadata.
-
-Some gateways describe themselves as OpenAI-compatible because their raw HTTP API also supports
-`/v1/chat/completions`. That is a gateway protocol detail, not the runner identity: this runner still
-starts Claude Code and passes provider configuration through Claude Code's `ANTHROPIC_*` variables.
-
-## Run More Tasks
-
-Run one full task:
-
-```bash
-python runners/claude_code/run_claude_longds.py \
-  --task-limit 1
-```
-
-Run the LLM judge automatically after each Claude Code task finishes:
-
-```bash
-python runners/claude_code/run_claude_longds.py \
-  --task-limit 1 \
-  --judge
-```
-
-`--judge` uses the existing `JUDGE_API_KEY`, `JUDGE_BASE_URL`, and optional `JUDGE_MODEL`
-environment variables. Each task is evaluated immediately after all its turns finish, before the
-worker takes another task.
-
-Run all tasks:
-
-```bash
-python runners/claude_code/run_claude_longds.py \
-  --run-parallel 4
-```
-
-All remaining tasks after `--start-index` are selected by default. Pass `--task-limit N` to run
-only the next `N` tasks. A failed task is recorded and does not stop the remaining tasks; after all
-selected tasks finish, the runner exits with status `1` if any task failed.
-
-If a selected task already has a directory with the same `run_name`, that task is skipped without
-reading, overwriting, resuming, or judging the existing result. Skipped tasks are reported separately
-as `skipped_tasks` in the final status. Pass `--overwrite` to delete each existing task run directory
-before running that task again. Do not run concurrent processes with the same `run_name` when using
-`--overwrite`.
-
-`--run-parallel` controls task-level concurrency and defaults to `1`. Turns within the same task
-always run sequentially in one Claude Code session. When `--judge` is enabled, each worker evaluates
-its completed task before taking another task. Parallel terminal output from different tasks may be
-interleaved; each task's raw and formatted logs remain isolated in its own run directory.
-
-Useful Claude Code options:
-
-```text
---claude-model NAME        Model passed to `claude --model`.
---claude-settings PATH     Settings JSON file passed to `claude --settings`. Defaults to settings.json.
---permission-mode MODE     Claude Code permission mode. Default: bypassPermissions.
---bare                     Reduce external context, hooks, plugins, and memory lookup.
---max-budget-usd VALUE     Optional per-turn Claude Code budget cap.
---use-docker               Run Claude Code in the LongDS Claude Code container.
-```
-
-## Outputs
-
-Outputs are written under `results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/`.
-During each turn, Claude Code stdout and stderr are streamed to the terminal in real time. Raw Claude Code stream JSON and stderr are saved under that turn directory.
-
-For each task run:
-
-```text
-results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/
-├── workspace/                    # copied data plus Claude Code temporary files
-│   └── data/                     # copied released dataset files
-├── claude_turn.schema.json
-├── task_metadata.json
-├── task_metadata_with_sources.json
-├── results.json
-├── results_with_ground_truth.json
-└── detail/
-    └── turn_1/
-        ├── prompt.md
-        ├── last_message.json
-        ├── result.json
-        ├── formatted_steps.json
-        ├── claude_stdout.jsonl
-        └── claude_stderr.txt
-```
-
-Claude Code is launched with `cwd` set to the task workspace:
-`results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/workspace/`. From inside Claude Code, benchmark files are available under `data/`, and temporary analysis files should be written outside `data/`.
-
-The runner first copies only that task's released `data/` directory into `workspace/data/`. Claude Code is not given the original `dataset/task/...` path that contains `task.json`, `task.py`, `task.ipynb`, metadata, and gold answers.
-
-With `--use-docker`, no host workspace is bind-mounted during normal execution. Claude Code tools are
-not restricted, but the container only receives the copied task data and cannot see the host repo,
-task JSON, gold answers, or other datasets.
-
-## Disk Usage
-
-The full LongDS data set is about 19 GB, so copying every task's data would leave ~20 GB behind per run. To keep that bounded, the runner deletes `workspace/data/` as soon as a task's turns finish and records the result in `task_metadata.json`:
-
-```json
-"data_cleanup": {"removed": true, "reason": "task_completed", "freed_bytes": 44969266}
-```
-
-A finished task leaves roughly 100 KB of results. Only the copied inputs are removed: helper scripts and intermediate artifacts Claude Code wrote into the workspace are kept as trajectory evidence, as is everything under `detail/`, so `runners/src/judge.py` still works on a cleaned run.
-
-Two cases keep the data:
-
-- A task that fails keeps `workspace/data/` so the failure can be reproduced in place.
-- `--keep-data` disables the cleanup entirely. Use it when you intend to resume the session with `manual_resume_command`, since a resumed session cannot re-read data that has been removed.
-
-`--dry-run` never copies data at all; it still validates that each task's source data directory exists.
-
-After a run finishes, you can reopen the Claude Code session from the task workspace. The session ID
-and manual resume command are recorded in `task_metadata.json`.
-
-Note: Claude Code permission mode controls tool approval behavior, not filesystem sandboxing. This runner isolates tasks by copying data into a workspace and launching Claude Code with that workspace as `cwd`.
-
-## Run the LLM Judge
-
-Run these commands from `longds/`. Set the judge endpoint first:
+## 4. Configure the judge and check one turn
 
 ```bash
 export JUDGE_API_KEY="<your_judge_api_key>"
 export JUDGE_BASE_URL="<your_judge_base_url>"
+
+python runners/claude_code/run_claude_longds.py \
+  --use-docker \
+  --task-limit 1 \
+  --turn-limit 1 \
+  --judge
 ```
 
-Score one Claude Code run:
+The judge endpoint must support Chat Completions. Its default model is
+`deepseek-v4-pro`; set `JUDGE_MODEL` to use another name.
+This is a real, billable model and judge call. Check the printed
+`summary.json` path for execution or judge errors before continuing.
+
+## 5. Run all of v1.1 Lite
 
 ```bash
-python runners/src/judge.py \
-  --run-dir results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>
+python runners/claude_code/run_claude_longds.py \
+  --use-docker \
+  --run-parallel 4 \
+  --judge
 ```
 
-Or score every completed run under `results/`:
+Each invocation gets an automatic run name. Reduce `--run-parallel` if needed.
+The default timeout is one hour **per turn**; change it with `--timeout SECONDS`.
+
+For v1.1 Full, add `--split full`. For v1, add
+`--longds_version v1 --split full`.
+
+## 6. View results
+
+Open the run directory printed by the launcher:
+
+```text
+results/longds_v1.1_lite/<run_name>/
+├── summary.json
+└── <domain>/<dataset>/taskN/
+    ├── results.json
+    ├── results_eval.json
+    ├── detail/
+    └── workspace/
+```
+
+`summary.json` contains completion counts and `task_avg_score`.
+Task folders contain answers, judge scores, and execution traces.
+No separate scoring command is needed when running with `--judge`.
+
+## Optional: run without Docker
+
+Install Node.js 22, then install the CLI and analysis dependencies in your
+active Python environment:
 
 ```bash
-python runners/src/judge.py
+npm install -g @anthropic-ai/claude-code
+conda activate longds
+python -m pip install -r runners/claude_code/requirements-environment.txt
+claude --version
 ```
 
-The judge writes `results_eval.json` back to each run directory. Runs that already have
-`results_eval.json` are skipped by default and reused in the printed summary. In all-runs mode,
-no aggregate file is written unless `--out` is provided:
+Use the same configuration and run commands above, but omit `--use-docker`.
+Local mode gives the agent access to the host environment; use Docker when
+you need task isolation.
+
+## Common options
+
+Set reasoning effort in `settings.json` (`effortLevel` and the template's
+`env.CLAUDE_CODE_EFFORT_LEVEL`); this runner has no dedicated effort flag.
+
+| Option | Usage / default |
+| --- | --- |
+| `--claude-model NAME` | Override the model in the configuration for this run. |
+| `--use-docker` | Run each task in Docker. Omit for local execution. |
+| `--judge` | Automatically score each completed task. Requires judge credentials. |
+| `--run-parallel N` | Concurrent tasks. Default: `1`. |
+| `--timeout SECONDS` | Time limit per turn. Default: `3600`. |
+| `--task-limit N` | Run at most N tasks. Default: all selected tasks. |
+| `--turn-limit N` | Run at most N turns per task. Default: all turns. |
+| `--start-index N` | Start at index N in the task list, counting from `0`. |
+| `--longds_version VERSION` | Task version: `v1.1` (default) or `v1`. Use `--split full` with v1. |
+| `--split SPLIT` | `lite` (default) or `full`. |
+| `--claude-settings PATH` | Use another configuration. Default: `runners/claude_code/settings.json`. |
+| `--output-dir PATH` | Output base directory. Default: `./results`; version/split and run name are appended automatically. |
+| `--run-name NAME` | Set an experiment name instead of generating one. Use a unique name for each experiment. |
+
+For the complete option list:
 
 ```bash
-python runners/src/judge.py --out results_eval.json
+python runners/claude_code/run_claude_longds.py --help
 ```
-
-To force re-evaluation, pass `--overwrite`.
