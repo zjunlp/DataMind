@@ -1,13 +1,16 @@
 # Running LongDS with Qoder
 
+Run commands from the `longds/` root; edit model configuration in `runners/qoder_cli/`.
+Default configuration paths are resolved relative to the runner script, not the launch directory.
+
 Results default to `./results/longds_<version>_<split>/` relative to the
 current working directory. `--output-dir` overrides the base `./results`;
 the dataset version/split group is appended automatically.
 
 Task selection defaults to `--longds_version v1.1 --split lite`. Use `--split lite`
 for the 24-task subset, or `--longds_version v1 --split full` for v1. All versions
-share `dataset/data/longds`. See the [shared runner guide](../README.md) for path
-overrides and versioned results.
+share `dataset/data/longds`. See the [Quick start](../../README.md#quick-start)
+for dataset download and standard run commands.
 
 This directory contains a direct Qoder runner for LongDS-Bench. It supports a local conda
 environment and a task-isolated Docker mode based on the LongDS executor image.
@@ -21,7 +24,7 @@ scripts, and intermediate artifacts.
 - `run_qoder_longds.py`: runs LongDS tasks with `qoder --print --output-format stream-json` and resumes the session per turn.
 - `settings.json`: runner-owned Qoder model and runtime defaults, passed through `qoder --settings`.
 - `Dockerfile`: extends `executor-prebuilt` with Node.js and Qoder.
-- `judge.py`: scores Qoder CLI run outputs with the LongDS LLM judge.
+- `runners/src/judge.py`: scores Qoder CLI run outputs with the LongDS LLM judge.
 - `prompt.py`: stores the first-turn prompt template, the JSON output contract, and turn prompt formatting.
 - `requirements-environment.txt`: Python packages for the local LongDS analysis environment.
 
@@ -30,17 +33,17 @@ scripts, and intermediate artifacts.
 Create and activate a Python 3.12 conda environment:
 
 ```bash
-cd /mnt/40t/xkw/LongMemDA/DataMind/longds/runners/qoder_cli
+cd /mnt/40t/xkw/LongMemDA/DataMind/longds
 
 conda create -n longds python=3.12 -y
 conda activate longds
 ```
 
-Install the environment packages from this directory:
+Install the environment packages from the LongDS root:
 
 ```bash
 pip install --upgrade pip
-pip install -r requirements-environment.txt
+pip install -r runners/qoder_cli/requirements-environment.txt
 ```
 
 `requirements-environment.txt` matches the LongDS Docker executor Python package set and includes
@@ -77,14 +80,14 @@ interactive `/model` flow rather than by writing API keys into this runner's set
 Build the image after `executor-prebuilt` is available:
 
 ```bash
-cd /mnt/40t/xkw/LongMemDA/DataMind/longds/runners/qoder_cli
-docker build -t longds-qoder:latest .
+cd /mnt/40t/xkw/LongMemDA/DataMind/longds
+docker build -t longds-qoder:latest runners/qoder_cli
 ```
 
 Run one task in Docker:
 
 ```bash
-python run_qoder_longds.py \
+python runners/qoder_cli/run_qoder_longds.py \
   --use-docker \
   --qoder-model Qwen3.8-Max \
   --task-limit 1 \
@@ -132,7 +135,7 @@ mode to avoid nesting a second container sandbox.
 Preview the prompts and directory layout without calling the model:
 
 ```bash
-python run_qoder_longds.py \
+python runners/qoder_cli/run_qoder_longds.py \
   --task-limit 1 \
   --turn-limit 1 \
   --dry-run
@@ -141,9 +144,9 @@ python run_qoder_longds.py \
 Then run one LongDS turn from the activated conda environment:
 
 ```bash
-cd /mnt/40t/xkw/LongMemDA/DataMind/longds/runners/qoder_cli
+cd /mnt/40t/xkw/LongMemDA/DataMind/longds
 
-python run_qoder_longds.py \
+python runners/qoder_cli/run_qoder_longds.py \
   --task-limit 1 \
   --turn-limit 1
 ```
@@ -155,7 +158,7 @@ conda Python for analysis code.
 To be explicit:
 
 ```bash
-python run_qoder_longds.py \
+python runners/qoder_cli/run_qoder_longds.py \
   --task-limit 1 \
   --turn-limit 1 \
   --analysis-python "$(python -c 'import sys; print(sys.executable)')"
@@ -172,7 +175,7 @@ offers; model values can be aliases such as `Auto`, `Lite`, and `Performance`, a
 as `Qwen3.8-Max`, or a configured BYOK model ID:
 
 ```bash
-python run_qoder_longds.py \
+python runners/qoder_cli/run_qoder_longds.py \
   --qoder-model Qwen3.8-Max \
   --reasoning-effort high \
   --task-limit 1
@@ -233,7 +236,7 @@ So choose `auto` when containment matters more than fidelity, and check
 not pre-approved, including writes in the workspace, so it is unusable without an explicit rule set:
 
 ```bash
-python run_qoder_longds.py \
+python runners/qoder_cli/run_qoder_longds.py \
   --permission-mode dont_ask \
   --allowed-tools 'Read,Grep,Glob,Bash(/path/to/conda/envs/longds/bin/python:*)'
 ```
@@ -248,7 +251,7 @@ Anything Qoder CLI does not expose through these options can be appended with th
 passthrough flag:
 
 ```bash
-python run_qoder_longds.py --qoder-arg --debug
+python runners/qoder_cli/run_qoder_longds.py --qoder-arg --debug
 ```
 
 ### Verified CLI Surface
@@ -284,8 +287,8 @@ The runner now retries a turn that failed on an infrastructure fault, controlled
 (default 2 extra attempts) and `--retry-backoff` (default 30 s, doubled per attempt):
 
 ```bash
-python run_qoder_longds.py --turn-retries 3 --retry-backoff 20
-python run_qoder_longds.py --turn-retries 0     # disable
+python runners/qoder_cli/run_qoder_longds.py --turn-retries 3 --retry-backoff 20
+python runners/qoder_cli/run_qoder_longds.py --turn-retries 0     # disable
 ```
 
 **Only infrastructure faults are retried.** Retrying a turn that the model simply answered badly
@@ -326,18 +329,16 @@ tasks run, which is what the smoke tests above rely on.
 Run one full task:
 
 ```bash
-python run_qoder_longds.py \
+python runners/qoder_cli/run_qoder_longds.py \
   --task-list-name task_list_lite.json \
-  --task-limit 1 \
-  --timeout 7200
+  --task-limit 1
 ```
 
 Run the LLM judge automatically after each task finishes:
 
 ```bash
-python run_qoder_longds.py \
+python runners/qoder_cli/run_qoder_longds.py \
   --task-limit 1 \
-  --timeout 7200 \
   --judge
 ```
 
@@ -348,9 +349,8 @@ next task starts.
 Run all tasks:
 
 ```bash
-python run_qoder_longds.py \
-  --run-parallel 4 \
-  --timeout 7200
+python runners/qoder_cli/run_qoder_longds.py \
+  --run-parallel 4
 ```
 
 `--run-parallel` controls task-level concurrency and defaults to `1`. Turns within the same task
@@ -381,7 +381,7 @@ sequential run of all 68 tasks peaks at the largest single task (about 3.9 GB) a
 
 Only the copied inputs are removed. Helper scripts, caches, and intermediate artifacts the agent
 wrote into the workspace are kept as trajectory evidence, as are all files under `detail/`, so
-`judge.py` still works on a cleaned run.
+`runners/src/judge.py` still works on a cleaned run.
 
 Two cases keep the data:
 
@@ -490,7 +490,7 @@ other than `same_as_previous_turn` after turn 1 means the multi-turn context was
 
 ## Run the LLM Judge
 
-Set the judge endpoint first:
+Run these commands from `longds/`. Set the judge endpoint first:
 
 ```bash
 export JUDGE_API_KEY="<your_judge_api_key>"
@@ -500,14 +500,14 @@ export JUDGE_BASE_URL="<your_judge_base_url>"
 Score one run:
 
 ```bash
-python judge.py \
+python runners/src/judge.py \
   --run-dir results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>
 ```
 
 Or score every completed run under `results/`:
 
 ```bash
-python judge.py
+python runners/src/judge.py
 ```
 
 The judge writes a DSGym-compatible `results_eval.json` list back to each run directory. Each turn
@@ -517,11 +517,11 @@ contains `turn_id`, `question`, `ground_truth`, `solution`, `success`, `steps`, 
 the printed summary. In all-runs mode, no aggregate file is written unless `--out` is provided:
 
 ```bash
-python judge.py --out results_eval.json
+python runners/src/judge.py --out results_eval.json
 ```
 
 To force re-evaluation, pass `--overwrite`:
 
 ```bash
-python judge.py --overwrite
+python runners/src/judge.py --overwrite
 ```

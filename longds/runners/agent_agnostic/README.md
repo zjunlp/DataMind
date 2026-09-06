@@ -3,7 +3,7 @@
 Dataset preparation defaults to `--longds_version v1.1 --split lite`. Use
 `--split lite` for the 24-task subset, or `--longds_version v1 --split full` for
 v1. All versions share `dataset/data/longds`. See the
-[shared runner guide](../README.md) for path overrides and metadata. Use a
+[dataset download instructions](../../README.md#1-download-the-dataset). Use a
 separate `RUN` directory for each version and split; `--out-dir` remains the
 exact workspace path.
 

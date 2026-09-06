@@ -1795,7 +1795,7 @@ def task_run_dir(args: argparse.Namespace, task_info: dict[str, str], run_name: 
 
 
 def evaluate_completed_task(task_result: dict[str, Any]) -> dict[str, Any]:
-    judge_script = Path(__file__).resolve().with_name("judge.py")
+    judge_script = Path(__file__).resolve().parents[1] / "src" / "judge.py"
     run_dir = Path(task_result["run_dir"])
     print("", flush=True)
     print(paint(f"======= Evaluating {run_dir} ... =======", COLOR_RED), flush=True)

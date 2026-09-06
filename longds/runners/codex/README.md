@@ -1,13 +1,16 @@
 # Running LongDS with Codex in a Conda Environment
 
+Run commands from the `longds/` root; edit model configuration in `runners/codex/`.
+Default configuration paths are resolved relative to the runner script, not the launch directory.
+
 Results default to `./results/longds_<version>_<split>/` relative to the
 current working directory. `--output-dir` overrides the base `./results`;
 the dataset version/split group is appended automatically.
 
 Task selection defaults to `--longds_version v1.1 --split lite`. Use `--split lite`
 for the 24-task subset, or `--longds_version v1 --split full` for v1. All versions
-share `dataset/data/longds`. See the [shared runner guide](../README.md) for path
-overrides and versioned results.
+share `dataset/data/longds`. See the [Quick start](../../README.md#quick-start)
+for dataset download and standard run commands.
 
 This directory contains a direct Codex runner for LongDS-Bench. It can run Codex locally or in one
 isolated Docker container per task. The Docker image extends the LongDS executor environment with
@@ -19,7 +22,7 @@ Codex CLI.
 - `config.toml`: default local Codex configuration (ignored by Git).
 - `config.example.toml`: configuration template without credentials.
 - `config_oauth.toml`: OpenAI provider configuration for ChatGPT browser login.
-- `judge.py`: scores Codex run outputs with the LongDS LLM judge.
+- `runners/src/judge.py`: scores Codex run outputs with the LongDS LLM judge.
 - `prompt.py`: stores the first-turn prompt template and turn prompt formatting.
 - `requirements-environment.txt`: Python packages for the local Codex LongDS environment.
 
@@ -28,17 +31,17 @@ Codex CLI.
 Create and activate a Python 3.12 conda environment:
 
 ```bash
-cd /mnt/40t/xkw/LongMemDA/DataMind/longds/runners/codex
+cd /mnt/40t/xkw/LongMemDA/DataMind/longds
 
 conda create -n longds python=3.12 -y
 conda activate longds
 ```
 
-Install the environment packages from this directory:
+Install the environment packages from the LongDS root:
 
 ```bash
 pip install --upgrade pip
-pip install -r requirements-environment.txt
+pip install -r runners/codex/requirements-environment.txt
 ```
 
 `requirements-environment.txt` matches the LongDS Docker executor Python package set and includes `openai` for judge/API calls. 
@@ -124,7 +127,7 @@ codex login
 To override only the endpoint for one run, use the runner argument:
 
 ```bash
-python run_codex_longds.py \
+python runners/codex/run_codex_longds.py \
   --codex-base-url "https://your-api.example.com/v1" \
   --task-limit 1
 ```
@@ -135,7 +138,7 @@ from the selected TOML file. The configured endpoint must support the Responses 
 Override the model and reasoning effort for one run without changing `config.toml`:
 
 ```bash
-python run_codex_longds.py \
+python runners/codex/run_codex_longds.py \
   --codex-model gpt-5.6-sol \
   --reasoning-effort high \
   --task-limit 1
@@ -147,7 +150,7 @@ the Codex configuration default. The selected endpoint and model must support th
 For a provider that requires Codex reasoning-summary metadata, enable it only for that run:
 
 ```bash
-python run_codex_longds.py \
+python runners/codex/run_codex_longds.py \
   --codex-model glm-5.2 \
   --model-supports-reasoning-summaries \
   --task-limit 1
@@ -160,9 +163,9 @@ This injects `-c model_supports_reasoning_summaries=true` without changing
 Then run one LongDS turn from the activated conda environment:
 
 ```bash
-cd /mnt/40t/xkw/LongMemDA/DataMind/longds/runners/codex
+cd /mnt/40t/xkw/LongMemDA/DataMind/longds
 
-python run_codex_longds.py \
+python runners/codex/run_codex_longds.py \
   --task-limit 1 \
   --turn-limit 1
 ```
@@ -172,7 +175,7 @@ python run_codex_longds.py \
 To be explicit:
 
 ```bash
-python run_codex_longds.py \
+python runners/codex/run_codex_longds.py \
   --task-limit 1 \
   --turn-limit 1 \
   --analysis-python "$(python -c 'import sys; print(sys.executable)')"
@@ -183,17 +186,15 @@ python run_codex_longds.py \
 Run one full task:
 
 ```bash
-python run_codex_longds.py \
-  --task-limit 1 \
-  --timeout 7200
+python runners/codex/run_codex_longds.py \
+  --task-limit 1
 ```
 
 Run the LLM judge automatically after each Codex task finishes:
 
 ```bash
-python run_codex_longds.py \
+python runners/codex/run_codex_longds.py \
   --task-limit 1 \
-  --timeout 7200 \
   --judge
 ```
 
@@ -204,9 +205,8 @@ next task starts.
 Run all tasks:
 
 ```bash
-python run_codex_longds.py \
-  --run-parallel 4 \
-  --timeout 7200
+python runners/codex/run_codex_longds.py \
+  --run-parallel 4
 ```
 
 All remaining tasks after `--start-index` are selected by default. Pass `--task-limit N` to run
@@ -273,7 +273,7 @@ Peak input-data disk usage therefore scales with `--run-parallel`, not with the 
 Docker runs also retain Codex session traces under `codex_home/`.
 
 Only the copied inputs are removed. Helper scripts and intermediate artifacts Codex wrote into the
-workspace are kept as trajectory evidence, as is everything under `detail/`, so `judge.py` still
+workspace are kept as trajectory evidence, as is everything under `detail/`, so `runners/src/judge.py` still
 works on a cleaned run.
 
 Two cases keep the data:
@@ -295,7 +295,7 @@ retain it for interactive debugging.
 
 ## Run the LLM Judge
 
-Set the judge endpoint first:
+Run these commands from `longds/`. Set the judge endpoint first:
 
 ```bash
 export JUDGE_API_KEY="<your_judge_api_key>"
@@ -305,14 +305,14 @@ export JUDGE_BASE_URL="<your_judge_base_url>"
 Score one Codex run:
 
 ```bash
-python judge.py \
+python runners/src/judge.py \
   --run-dir results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>
 ```
 
 Or score every completed run under `results/`:
 
 ```bash
-python judge.py
+python runners/src/judge.py
 ```
 
 The judge writes a DSGym-compatible `results_eval.json` list back to each run directory. Each
@@ -322,11 +322,11 @@ and `judge`; the final list element contains `summary.correct`, `summary.incorre
 in the printed summary. In all-runs mode, no aggregate file is written unless `--out` is provided:
 
 ```bash
-python judge.py --out results_eval.json
+python runners/src/judge.py --out results_eval.json
 ```
 
 To force re-evaluation, pass `--overwrite`:
 
 ```bash
-python judge.py --overwrite
+python runners/src/judge.py --overwrite
 ```

@@ -31,7 +31,7 @@ from dsgym.eval import Evaluator
 from dsgym.eval.utils import EvaluationConfig
 import shutil
 from datetime import datetime
-from prompt import JUDGE_PROMPT
+from src.judge_prompt import JUDGE_PROMPT
 from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import re

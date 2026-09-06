@@ -275,8 +275,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--start-index", type=int, default=0, help="Start index in the task list.")
     parser.add_argument("--turn-limit", type=int, default=None, help="Maximum LongDS turns per task.")
     parser.add_argument(
-        "--timeout", type=int, default=7200
-        , help="Timeout per Qoder CLI turn, seconds."
+        "--timeout", type=int, default=3600,
+        help="Timeout per Qoder CLI turn, seconds. Default: 3600 (one hour)."
     )
     parser.add_argument(
         "--turn-retries",
@@ -2125,7 +2125,7 @@ def task_run_dir(args: argparse.Namespace, task_info: dict[str, str], run_name: 
 
 
 def evaluate_completed_task(task_result: dict[str, Any]) -> dict[str, Any]:
-    judge_script = Path(__file__).resolve().with_name("judge.py")
+    judge_script = Path(__file__).resolve().parents[1] / "src" / "judge.py"
     run_dir = Path(task_result["run_dir"])
     print("", flush=True)
     print(paint(f"======= Evaluating {run_dir} ... =======", COLOR_RED), flush=True)

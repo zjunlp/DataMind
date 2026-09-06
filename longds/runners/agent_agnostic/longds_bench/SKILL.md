@@ -104,4 +104,4 @@ export JUDGE_API_KEY="<key>"; export JUDGE_BASE_URL="https://api.deepseek.com"
 - **Kernel not ready / dead** (`pysession exec` exits 2 / "kernel died"): restart the session for that task; you lose only that task's in-session state — restart the task from turn 1.
 - **Step exceeds `--timeout`**: tighten the code or raise `--timeout`; do not let a runaway step stall the whole run.
 - **Judge can't parse `<score>`**: it retries 3× then records `score: null`; those turns are excluded from the average and reported as unjudged.
-- **Upstream drift**: the canonical protocol/judge live in `DataMind/longds/DSGym/examples/prompt.py` and `longds.py`; re-read them if results look off.
+- **Upstream drift**: the canonical judge prompt lives in `runners/src/judge_prompt.py`; the DSGym turn protocol lives in `runners/DSGym/scripts/longds.py`; re-read them if results look off.

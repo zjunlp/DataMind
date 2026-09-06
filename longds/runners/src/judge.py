@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-"""LLM judge for Kimi Code LongDS runs.
+"""Shared LLM judge for LongDS CLI runner outputs.
 
-This script reads Kimi Code runner outputs, scores each turn with the same
+This script reads CLI runner outputs, scores each turn with the same
 JUDGE_PROMPT used by the DSGym LongDS runner, and writes results_eval.json.
 """
 
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
 import os
 import re
@@ -18,20 +17,9 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from src.judge_prompt import JUDGE_PROMPT
 from src.longds_dataset import infer_result_metadata
 
-
-def load_judge_prompt() -> str:
-    prompt_path = Path(__file__).resolve().parents[1] / "DSGym" / "scripts" / "prompt.py"
-    spec = importlib.util.spec_from_file_location("longds_dsgym_prompt", prompt_path)
-    if spec is None or spec.loader is None:
-        raise RuntimeError(f"Cannot load DSGym prompt from {prompt_path}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module.JUDGE_PROMPT
-
-
-JUDGE_PROMPT = load_judge_prompt()
 
 
 def read_json(path: Path) -> Any:
@@ -343,7 +331,7 @@ def load_existing_eval_turns(run_dir: Path) -> list[dict[str, Any]]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="LLM judge for Kimi Code LongDS runs.")
+    parser = argparse.ArgumentParser(description="LLM judge for LongDS CLI runs.")
     parser.add_argument(
         "--run-dir",
         type=Path,
@@ -395,7 +383,7 @@ def main() -> int:
         out_path = args.out
 
     if not run_dirs:
-        print("ERROR: no Kimi Code run directories found.", file=sys.stderr)
+        print("ERROR: no LongDS run directories found.", file=sys.stderr)
         return 1
 
     existing_turns: list[dict[str, Any]] = []
@@ -414,7 +402,7 @@ def main() -> int:
         turns_to_judge.extend(load_run_turns(run_dir))
 
     if not turns_to_judge and not existing_turns:
-        print("ERROR: no turns found in Kimi Code results.", file=sys.stderr)
+        print("ERROR: no turns found in LongDS results.", file=sys.stderr)
         return 1
 
     print(f"Run directories: {len(run_dirs)}")

@@ -1,13 +1,16 @@
 # Running LongDS with Kimi Code
 
+Run commands from the `longds/` root; edit model configuration in `runners/kimi_code/`.
+Default configuration paths are resolved relative to the runner script, not the launch directory.
+
 Results default to `./results/longds_<version>_<split>/` relative to the
 current working directory. `--output-dir` overrides the base `./results`;
 the dataset version/split group is appended automatically.
 
 Task selection defaults to `--longds_version v1.1 --split lite`. Use `--split lite`
 for the 24-task subset, or `--longds_version v1 --split full` for v1. All versions
-share `dataset/data/longds`. See the [shared runner guide](../README.md) for path
-overrides and versioned results.
+share `dataset/data/longds`. See the [Quick start](../../README.md#quick-start)
+for dataset download and standard run commands.
 
 This runner executes LongDS directly with Kimi Code CLI. It follows the Claude Code runner's task lifecycle and result format: one isolated Docker container per task, one persistent agent session across all turns in that task, task-level parallelism, optional per-task judging, and the same `results_eval.json` format.
 
@@ -63,7 +66,6 @@ python runners/kimi_code/run_kimi_longds.py \
   --use-docker \
   --task-list-name task_list_lite.json \
   --run-parallel 4 \
-  --timeout 7200 \
   --judge
 ```
 
@@ -133,7 +135,7 @@ results/longds_<version>_<split>/<run_name>/<domain>/<dataset>/<task_id>/
         └── kimi_stderr.txt
 ```
 
-When `--judge` is enabled, `judge.py` also writes `results_eval.json` using the same LongDS judge contract as the Claude Code and Codex runners.
+When `--judge` is enabled, `runners/src/judge.py` also writes `results_eval.json` using the same LongDS judge contract as the Claude Code and Codex runners.
 
 ## Useful Options
 

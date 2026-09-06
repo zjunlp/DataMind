@@ -16,8 +16,9 @@ Third-party material — NOT covered by this repository's MIT license
    - Authors: Kewei Xu, Xiaoben Lu, Shuofei Qiao, Zihan Ding, Haoming Xu,
               Lei Liang, Ningyu Zhang (Zhejiang University / ZJUNLP)
    - Reused here:
-       * scripts/judge.py contains the JUDGE_PROMPT copied VERBATIM from
-         DataMind/longds/DSGym/examples/prompt.py.
+       * scripts/judge.py imports the shared JUDGE_PROMPT from
+         DataMind/longds/runners/src/judge_prompt.py (originally in
+         DataMind/longds/DSGym/examples/prompt.py).
        * The multi-turn task protocol and per-turn prompt format (described in
          SKILL.md) follow DataMind/longds/DSGym/examples/longds.py and prompt.py.
      These remain © their authors under Apache-2.0; we reproduce the prompt

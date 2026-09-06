@@ -1,380 +1,310 @@
-<h1 align="center"> LongDS-Bench </h1>
+<h1 align="center">LongDS-Bench</h1>
 
 <p align="center">
-  <a href="https://github.com/zjunlp/DataMind">💻 GitHub</a> •
-  <a href="https://huggingface.co/datasets/zjunlp/LongDS">🤗 Hugging Face</a> •
-  <a href="https://huggingface.co/collections/zjunlp/datamind">📚 DataMind Collection</a>
+  <a href="https://zjunlp.github.io/DataMind/">🌐 Website</a> •
+  <a href="https://arxiv.org/abs/2605.30434">📖 Paper</a> •
+  <a href="https://huggingface.co/datasets/zjunlp/LongDS">🤗 Dataset</a> •
+  <a href="https://zjunlp.github.io/DataMind/#leaderboard">📊 Leaderboard</a> •
+  <a href="https://github.com/zjunlp/DataMind">💻 GitHub</a>
 </p>
 
-## Table of Contents
+**LongDS evaluates long-horizon, multi-turn agentic data analysis:** can an agent preserve, update, and reuse the right analytical state throughout an evolving workflow?
 
-- 👀 [Overview](#overview)
-- 🔧 [Installation](#installation)
-  - 📋 [Prerequisites](#-prerequisites)
-  - ⚙️ [Environment Setup](#️-environment-setup)
-  - 🐳 [Execution Environment](#-execution-environment)
-- 📦 [Data](#data)
-- 💻 [Running LongDS using DSGym](#running-longds-using-dsgym)
-  - [1. Configure Model Access](#1-configure-model-access)
-  - [2. Run Evaluation](#2-run-evaluation)
-  - [3. Outputs](#3-outputs)
-  - 🚀 [4. Run in Parallel](#4-run-in-parallel)
-- 💻 [Running LongDS using Agent-Agnostic Runner](#running-longds-using-agent-agnostic-runner)
-- 💻 [Running LongDS using Codex](#running-longds-using-codex)
-- 💻 [Running LongDS using Claude Code](#running-longds-using-claude-code)
-- 🙏 [Acknowledgements](#acknowledgements)
-- 📖 [Citation](#citation)
+> **LongDS v1.1 is available! We recommend LongDS v1.1 Lite for new evaluations.**
+> Evaluate your model or agent on 24 complete tasks spanning 777 turns, and share your results with the community!
 
----
+## News
 
-## 👀 Overview
+- **LongDS v1.1 and v1.1 Lite released**, with refined task specifications and native runners for Codex, Claude Code, Kimi Code, and Qoder.
+- Our paper, *LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis*, has been accepted to the **EMNLP 2026 Main Conference**.
 
-### Introduction
+## Contents
 
-**LongDS** is a benchmark for evaluating long-horizon, multi-turn agentic data analysis. Real-world analysis is rarely a sequence of independent questions: filters, metric definitions, assumptions, intermediate tables, and branch-specific results evolve over many turns. LongDS tests whether agents can maintain, update, and apply these evolving analytical states correctly.
+- [What's new in v1.1](#whats-new-in-v11)
+- [Overview](#overview)
+- [Quick start](#quick-start)
+- [Example: run v1.1 Lite with Codex](#example-run-v11-lite-with-codex)
+- [Results and leaderboard](#results-and-leaderboard)
+- [Acknowledgements](#acknowledgements)
+- [Citation](#citation)
 
-LongDS contains **68 tasks** and **2,225 turns** across six domains: Business, Community, Education, Geoscience, Social Good, and Sports. It is constructed from real-world Kaggle notebooks and datasets through source filtering, initial task construction, expert review, semi-automated validation, and final consistency checks.
+## What's new in v1.1
+
+### Clearer task specifications
+
+We conducted a comprehensive audit of the benchmark, refining **task scopes, tie-breaking rules, output conventions, and the semantics of inherited states**. These changes improve clarity, consistency, and evaluation rigor while preserving the core analytical logic and long-horizon dependencies.
+
+### v1.1 Lite: the recommended starting point
+
+**LongDS v1.1 Lite contains 24 carefully selected tasks and 777 turns**, covering all six domains and diverse state-evolution behaviors. The subset focuses on tasks that are empirically solvable while remaining discriminative across agents, making evaluation faster and less costly without removing the challenge of long-horizon state management.
+
+Lite selects **complete tasks** from v1.1 Full. The task content and all turns within each selected task are identical; Lite does not truncate conversations. The full collection contains 68 tasks and 2,225 turns. v1 remains available for historical comparisons.
+
+The runners default to `--longds_version v1.1 --split lite`. Always report the version and split with your scores; results from different task versions should not be treated as directly interchangeable.
+
+### Native agent runners
+
+In addition to DSGym, LongDS supports **Codex, Claude Code, Kimi Code, and Qoder** through their native CLI runtimes. All four CLI runners support local and Docker execution. In Docker mode, each task uses an isolated container, with a persistent native agent session across its turns.
+
+## Overview
+
+Real-world data analysis is rarely a sequence of independent questions. Filters, metric definitions, assumptions, intermediate tables, and branch-specific results evolve over many turns. LongDS tests whether agents can maintain, update, and apply these analytical states correctly.
+
+The complete benchmark contains **68 tasks and 2,225 turns** across **Business, Community, Education, Geoscience, Social Good, and Sports**. It is constructed from real-world Kaggle notebooks and datasets through source filtering, task construction, expert review, semi-automated validation, and consistency checks.
 
 <p align="center">
-  <img src="figs/benchmark-domain.png" alt="LongDS task construction pipeline and domain distribution" width="95%">
+  <img src="figs/benchmark-domain.png" alt="LongDS construction pipeline and domain distribution" width="95%">
 </p>
 
-### State-Evolution Patterns
-
-**LongDS** covers representative state-evolution patterns that commonly arise in long-horizon data analysis:
-
-- **Initial state construction**, where the agent builds reusable analytical context from raw data.
-- **State inheritance**, where later turns depend on definitions or intermediate results from earlier turns.
-- **State update**, where the analytical state must be revised as new constraints are introduced.
-- **Counterfactual perturbation**, where the agent must reason under changed assumptions.
-- **Rollback**, where the agent returns to an earlier state and continues from it.
-- **Multi-state composition**, where multiple previous states must be combined.
+LongDS covers six representative state-evolution patterns: **initial state construction, state inheritance, state update, counterfactual perturbation, rollback, and multi-state composition**.
 
 <p align="center">
   <img src="figs/mainPic.png" alt="LongDS multi-turn analytical state evolution" width="95%">
 </p>
 
-### Experimental Results
+### LongDS v1.1 Lite leaderboard
 
-Experimental results show that LongDS remains challenging for both proprietary and open-source models. The best-performing model, Gemini-3.1-Pro, reaches only **48.45** average accuracy, while GPT-5.4 and Claude-4.6-Sonnet obtain **43.50** and **41.56**, respectively. Performance varies substantially across domains: models perform relatively better on Education but struggle on Geoscience, Business, and Sports, where long-horizon feature engineering and state management are more demanding.
+The updated leaderboard presents results for models evaluated through their native agent frameworks on **LongDS v1.1 Lite**. In the snapshot below, **GPT-6 Astra / Codex** achieves **78.17%**, followed by **Claude Fable 5.1 / Claude Code** at **76.53%** and **GPT-5.6-sol / Codex** at **70.71%**. Scores are averaged equally across tasks.
+
+We welcome the community to evaluate more models and agent frameworks on **LongDS v1.1** and share their results. Visit the [live leaderboard](https://zjunlp.github.io/DataMind/#leaderboard) for detailed results and updates.
+
+<p align="center">
+  <a href="https://zjunlp.github.io/DataMind/#leaderboard">
+    <img src="figs/Leaderboard.png" alt="LongDS v1.1 Lite leaderboard snapshot" width="95%">
+  </a>
+</p>
+
+<details>
+<summary>Original paper experiments</summary>
+
+The original paper studies performance across task progress, dependency breadth, and state-evolution patterns. These figures describe the original experimental setting, not the updated v1.1 leaderboard. See the [leaderboard](https://zjunlp.github.io/DataMind/#leaderboard) for v1.1 results.
+
+Experimental results show that LongDS remains challenging for both proprietary and open-source models. The best-performing model, Gemini-3.1-Pro, reaches only 48.45 average accuracy, while GPT-5.4 and Claude-4.6-Sonnet obtain 43.50 and 41.56, respectively. Performance varies substantially across domains: models perform relatively better on Education but struggle on Geoscience, Business, and Sports, where long-horizon feature engineering and state management are more demanding.
 
 Further analysis reveals consistent degradation as tasks become longer and more state-dependent. Model accuracy drops sharply along task progress, decreases as dependency breadth increases, and becomes lower under more complex state-evolution patterns such as counterfactual perturbation and rollback. These trends suggest that the main bottleneck is maintaining a correct evolving analytical state rather than simply increasing the interaction budget.
 
 <p align="center">
-  <img src="figs/results_table.png" alt="LongDS evaluation results across models and domains" width="95%">
-  <img src="figs/result_fig.png" alt="LongDS performance analysis across task progress, dependency breadth, and state-evolution patterns" width="95%">
+  <img src="figs/results_table.png" alt="Original paper evaluation results" width="95%">
+  <img src="figs/result_fig.png" alt="Original paper analysis of long-horizon performance" width="95%">
 </p>
 
+</details>
 
-## 🔧 Installation
+## Quick start
 
-The paper experiments use [DSGym](https://arxiv.org/abs/2601.16344), which provides Docker-based execution infrastructure for code-based data analysis.
-LongDS also includes an agent-agnostic runner based on the LDC Labs [longds-bench](https://github.com/ldclabs/longds-bench) skill for evaluating agents that execute the benchmark with their own shell/code tools; see [runners/agent_agnostic/README.md](runners/agent_agnostic/README.md).
-LongDS also provides direct Codex and Claude Code runners for evaluating agents through their own CLI runtimes.
+**Run commands from the `longds/` root.** Edit model configuration in the corresponding `runners/<runner>/` directory; default outputs go to `longds/results/`.
 
-Follow the [DSGym](https://github.com/fannie1208/DSGym) setup instructions to configure the evaluation environment.
+### 1. Download the dataset
 
-### 📋 Prerequisites
-
-- Python 3.12
-- Docker and Docker Compose
-- `uv`
-
-### ⚙️ Environment Setup
-
-```bash
-cd DataMind/longds/runners/DSGym
-
-# Install main dependencies (includes litellm by default)
-uv sync
-```
-
-### 🐳 Execution Environment
-
-LongDS uses DSGym's container manager to allocate isolated Python execution environments.
-
-Build and start the LongDS executor pool:
-
-> Note: The complete executor image is approximately 12 GB. Ensure sufficient disk space and a stable network connection before building.
-
-```bash
-cd DataMind/longds/runners/DSGym/executors
-
-docker build -t executor-prebuilt ./container_images/longds_image
-docker build -t manager-prebuilt ./manager
-
-python generate_compose.py \
-  -n 16 \
-  --types "executor-prebuilt:16" \
-  -m ../../../dataset/data
-
-docker compose -f docker-compose.yml up -d --build
-```
-
-From `runners/DSGym/executors/`, `../../../dataset/data` resolves to `longds/dataset/data` and is mounted read-only at `/data` in each executor.
-
-> If manager-to-executor requests return `502 Bad Gateway` while using a proxy or VPN, add the Docker service names to `NO_PROXY`.
-
-Stop the executor pool:
-
-```bash
-cd DataMind/longds/runners/DSGym/executors
-docker compose -f docker-compose.yml down
-```
-
-## 📦 Data
-
-LongDS expects the following layout under `longds/dataset/`:
-
-```text
-dataset/
-├── data/
-│   └── longds/
-│       └── {domain}/{dataset}/taskN/data/...
-└── task/
-    └── longds/
-        ├── task_list.json
-        └── {domain}/{dataset}/taskN/
-            ├── task.ipynb
-            ├── task.py
-            ├── task.json
-            └── metadata.json
-```
-
-You can download the released data from [Hugging Face](https://huggingface.co/datasets/zjunlp/LongDS):
+Use the Hugging Face CLI to download the [released dataset](https://huggingface.co/datasets/zjunlp/LongDS). The command below downloads the entire repository, including both task versions and shared input data:
 
 ```bash
 cd /path/to/DataMind/longds
-hf download zjunlp/LongDS \
-  --repo-type dataset \
-  --local-dir dataset
+hf download zjunlp/LongDS --repo-type dataset --local-dir dataset
 ```
 
-## 💻 Running LongDS using DSGym
+For more targeted downloads, see the [download instructions on Hugging Face](https://huggingface.co/datasets/zjunlp/LongDS#download):
 
-Run LongDS using `runners/DSGym/scripts/longds.py`.
+- **v1.1 Lite only:** download the 24 selected tasks and their corresponding input data.
+- **v1.1 Full:** download all v1.1 tasks and the shared input data.
+- **Upgrade from v1:** reuse your existing input data and download only the updated v1.1 task files.
 
-### 1. Configure Model Access
+All options preserve the same `longds/dataset/` layout used by the runners.
 
-For API-based models via LiteLLM, set the required environment variables for your provider.
+The versioned task definitions share the same raw data:
 
-OpenAI-compatible example:
-
-```bash
-export OPENAI_API_KEY="<your_openai_compatible_api_key>"
-export OPENAI_BASE_URL="<your_openai_compatible_base_url>"
+```text
+dataset/
+├── data/longds/{domain}/{dataset}/taskN/data/...
+└── task/
+    ├── longds_v1/...
+    └── longds_v1.1/
+        ├── task_list_lite.json
+        ├── task_list_full.json
+        └── {domain}/{dataset}/taskN/task.json
 ```
 
-Anthropic example:
+If you already have an older download, update it and confirm that `dataset/task/longds_v1.1/task_list_lite.json` exists. The runners do not silently fall back to v1 when the selected task list is missing.
 
-```bash
-export ANTHROPIC_API_KEY="<your_anthropic_api_key>"
-export ANTHROPIC_BASE_URL="<your_anthropic_base_url>"
-```
+### 2. Set up a runner
 
-LongDS also runs an LLM-as-judge evaluation after each task. Configure the judge endpoint as follows:
+Choose a runner and follow its guide to install dependencies, configure model access, and build the Docker image if using Docker. The CLI runner environments use Python 3.12; DSGym additionally uses `uv` and a Docker Compose executor pool.
+
+| Runner | Guide | Model configuration |
+| --- | --- | --- |
+| Codex | [Setup and usage](runners/codex/README.md) | `runners/codex/config.toml` |
+| Claude Code | [Setup and usage](runners/claude_code/README.md) | `runners/claude_code/settings.json` |
+| Kimi Code | [Setup and usage](runners/kimi_code/README.md) | `runners/kimi_code/config.toml` |
+| Qoder | [Setup and usage](runners/qoder_cli/README.md) | `runners/qoder_cli/settings.json` plus Qoder authentication |
+| DSGym | [Setup and usage](runners/DSGym/README.md) | Provider environment variables / LiteLLM |
+
+Use the example configuration files as templates and supply your own credentials. Keep credentials out of commits and shared result files.
+
+### 3. Evaluate v1.1 Lite
+
+Configure the judge endpoint before running with `--judge`:
 
 ```bash
 export JUDGE_API_KEY="<your_judge_api_key>"
 export JUDGE_BASE_URL="<your_judge_base_url>"
 ```
 
-The judge model defaults to `deepseek-v4-pro`. Use `--judge-model` if your endpoint uses a different model name.
+For the CLI runners, the judge model defaults to `deepseek-v4-pro`; set `JUDGE_MODEL` if your endpoint uses another model name.
 
-### 2. Run Evaluation
-
-Evaluate all LongDS tasks:
+After completing the selected runner's setup, run **one** of the following commands from `longds/`:
 
 ```bash
-cd DataMind/longds/runners/DSGym/scripts
-
-uv run python longds.py \
-  --dataset longds \
-  --model openai/gpt-5.4 \
-  --backend litellm \
-  --output-dir ./results
+python runners/codex/run_codex_longds.py --use-docker --run-parallel 4 --judge
+python runners/claude_code/run_claude_longds.py --use-docker --run-parallel 4 --judge
+python runners/kimi_code/run_kimi_longds.py --use-docker --run-parallel 4 --judge
+python runners/qoder_cli/run_qoder_longds.py --use-docker --run-parallel 4 --judge
 ```
 
-#### Example:
-Run one task for its first three turns using deepseek-v4-pro:
+These commands evaluate **all 24 Lite tasks and all 777 turns**. No version, split, output directory, or run name argument is needed. Four tasks run concurrently; turns within a task remain sequential. Each CLI turn has a default timeout of **3600 seconds (one hour)**, configurable with `--timeout`. Evaluation consumes model and judge API usage.
+
+For a small connectivity check, add `--task-limit 1 --turn-limit 1`. To run v1.1 Full, add `--split full`; for v1, add `--longds_version v1 --split full`.
+
+## Example: run v1.1 Lite with Codex
+
+This example runs the complete v1.1 Lite benchmark with **Codex in Docker**, including automatic judging. You need Docker installed and running, access to a Codex-compatible Responses API endpoint, and a judge endpoint. Codex and the data-analysis environment run inside Docker; you do not need to install the Codex CLI on the host or start the DSGym executor pool.
+
+### Step 1. Prepare the host Python environment
+
+Enter your checkout's `longds/` directory. Run all subsequent commands from this directory and the same shell. If you already have a Python 3.12 environment, activate it and skip creating a new one.
 
 ```bash
-uv run python longds.py \
-  --dataset longds \
-  --model openai/deepseek-v4-pro \
-  --backend litellm \
-  --output-dir ./results \
-  --task-limit 1 \
-  --turn-limit 3
-```
-
-Useful options:
-
-```text
---task-limit N        Evaluate at most N task directories.
---start-index N       Start from the task directory at index N in task_list.json.
---turn-limit N        Evaluate at most N turns per task.
---max-steps N         Maximum agent steps per turn. Default: 40.
---judge-model NAME    Judge model name. Default: deepseek-v4-pro.
---judge-max-workers N Maximum parallel judge requests per task. Default: 15.
---run-parallel N      Run N LongDS tasks concurrently. Default: 1.
-```
-
-### 3. Outputs
-
-For each task, LongDS writes results under:
-
-```text
-{output_dir}/longds/{domain}/{dataset}/taskN/{model_name}_{timestamp}/
-├── traj.json          # full multi-turn conversation and solutions
-├── results.json       # per-turn trajectories before judging
-├── results_eval.json  # per-turn trajectories with LLM judge scores
-├── code.py            # extracted Python code from model responses
-└── bak/               # intermediate execution records
-```
-
-The main evaluation score is stored in `results_eval.json`, where each turn receives a judge score and the final element contains a summary with the average score.
-
-### 🚀 4. Run in Parallel
-
-We recommend running LongDS in parallel to reduce the total evaluation time. A
-full run with `8` parallel workers takes approximately 10 hours, although the
-actual runtime depends on model latency, API stability, and executor performance.
-The number of parallel workers must not exceed the number of running Docker
-executors.
-
-Use `--run-parallel` to dynamically schedule tasks across the requested number
-of workers. Because each active task can also issue concurrent judge requests,
-use a smaller `--judge-max-workers` value for parallel runs:
-
-```bash
-cd DataMind/longds/runners/DSGym/scripts
-
-uv run python longds.py \
-  --dataset longds \
-  --model openai/deepseek-v4-pro \
-  --backend litellm \
-  --output-dir ./results_deepseek-v4-pro \
-  --run-parallel 8 
-```
-
-For a long-running evaluation, use `nohup` so it continues after the terminal
-disconnects:
-
-```bash
-mkdir -p logs
-
-nohup uv run python longds.py \
-  --dataset longds \
-  --model openai/gpt-5.4 \
-  --backend litellm \
-  --output-dir ./results_gpt54 \
-  --run-parallel 8 \
-  --judge-max-workers 2 \
-  > logs/longds_parallel.log 2>&1 &
-
-echo $! > logs/longds_parallel.pid
-```
-
-Follow the overall progress with:
-
-```bash
-tail -f logs/longds_parallel.log
-```
-
-## 💻 Running LongDS using Agent-Agnostic Runner
-
-If you want the agent itself to act as the runtime under test, use the agent-agnostic runner instead of DSGym. This method does not start Docker executors or call a model through LiteLLM; the agent reads `runners/agent_agnostic/longds_bench/SKILL.md`, uses its own tools and a persistent Python session, and writes answers for later judging.
-
-For setup, pilot runs, scoring, and comparability notes, see [runners/agent_agnostic/README.md](runners/agent_agnostic/README.md).
-
-## 💻 Running LongDS using Codex
-
-Use the Codex runner when you want the Codex CLI itself to execute LongDS tasks without DSGym Docker executors or LiteLLM. The runner starts `codex exec` sessions, resumes the same session across turns in a task, copies each task's released data into an isolated workspace, and stores per-turn outputs for later judging.
-
-Quick start:
-
-```bash
-cd DataMind/longds/runners/codex
+cd /path/to/DataMind/longds
 
 conda create -n longds python=3.12 -y
 conda activate longds
-pip install --upgrade pip
-pip install -r requirements-environment.txt
-
-codex login
-
-python run_codex_longds.py \
-  --task-limit 1 \
-  --turn-limit 1
+python -m pip install openai huggingface_hub
 ```
 
-After a run finishes, you can reopen the codex session from `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/workspace`; the session ID is recorded in `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/summary.json`.
+The host runs the Python launcher and judge. `openai` is needed for judging, and `huggingface_hub` provides the dataset download command. Data-analysis packages are installed in the Docker image in Step 4.
 
-You can also configure the judge endpoint and score the Codex outputs:
+### Step 2. Download the data
+
+Skip this step if the versioned tasks and their input data are already present.
+
+```bash
+hf download zjunlp/LongDS --repo-type dataset --local-dir dataset
+```
+
+This downloads the entire dataset repository. For a smaller download, use the [Lite-only instructions](https://huggingface.co/datasets/zjunlp/LongDS#download-longds-v11-lite). Before continuing, confirm that `dataset/task/longds_v1.1/task_list_lite.json` and the selected tasks' data under `dataset/data/longds/` are available.
+
+### Step 3. Configure Codex and the judge
+
+Create the local Codex configuration from the template. The command below leaves an existing configuration untouched:
+
+```bash
+cp -n runners/codex/config.example.toml runners/codex/config.toml
+```
+
+Open `runners/codex/config.toml` in your editor and set:
+
+- `model`: the model name exposed by your endpoint.
+- `model_reasoning_effort`: the reasoning effort supported by the selected model.
+- `model_providers.longds_env.base_url`: your Responses API base URL.
+- `model_providers.longds_env.experimental_bearer_token`: your API key.
+
+Keep `model_provider = "longds_env"` and `wire_api = "responses"` for this configuration. This example uses API-key authentication; for ChatGPT login-based authentication, see the [Codex guide](runners/codex/README.md).
+
+Configure the separate judge connection in the current shell:
 
 ```bash
 export JUDGE_API_KEY="<your_judge_api_key>"
 export JUDGE_BASE_URL="<your_judge_base_url>"
-
-python judge.py
+export JUDGE_MODEL="deepseek-v4-pro"
 ```
 
-The runner writes results under `runners/codex/results/<domain>/<dataset>/<task_id>/<run_name>/`. The judge skips runs that already have `results_eval.json` unless `--overwrite` is passed. For full setup, options, output layout, and judge behavior, see [runners/codex/README.md](runners/codex/README.md).
+Replace the placeholders with your endpoint details, and change `JUDGE_MODEL` if needed. The judge endpoint must support Chat Completions. Do not commit credentials; `runners/codex/config.toml` is Git-ignored.
 
-## 💻 Running LongDS using Claude Code
+### Step 4. Build the Docker images
 
-Use the Claude Code runner when you want Claude Code itself to execute LongDS tasks without DSGym Docker executors or LiteLLM. The runner starts `claude -p` sessions, reuses the same Claude session id across turns in a task, copies each task's released data into an isolated workspace, and stores per-turn outputs for later judging.
-
-Quick start:
+Build the shared data-analysis base image, then the image containing the Codex CLI. You only need to rebuild when updating the environment or CLI version.
 
 ```bash
-cd DataMind/longds/runners/claude_code
+docker build -t executor-prebuilt runners/DSGym/executors/container_images/longds_image
+docker build -t longds-codex:latest runners/codex
+```
 
-conda create -n longds python=3.12 -y
-conda activate longds
-pip install --upgrade pip
-pip install -r requirements-environment.txt
+The runner starts a separate container for each task, copies in that task's raw data, and keeps the same Codex session across its turns. The first build downloads dependencies and requires sufficient disk space.
 
-claude
+### Step 5. Check one task and one turn
 
-python run_claude_longds.py \
+Verify model access, data analysis, and judging before starting the complete evaluation:
+
+```bash
+python runners/codex/run_codex_longds.py \
+  --use-docker \
   --task-limit 1 \
-  --turn-limit 1
+  --turn-limit 1 \
+  --judge
 ```
 
-After a run finishes, you can reopen the claude code session from `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/workspace`; the session ID is recorded in `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/summary.json`.
+This is a real, billable evaluation, not a dry run. Check the printed output path and its `summary.json`: execution should complete, and the turn should be judged without errors. An incorrect answer is a model result, not necessarily a setup failure. This one-turn run is not a complete Lite score.
 
-You can also configure the judge endpoint and score the Claude Code outputs:
+### Step 6. Run all of v1.1 Lite
+
+Remove the task and turn limits to evaluate all **24 tasks / 777 turns**:
 
 ```bash
-export JUDGE_API_KEY="<your_judge_api_key>"
-export JUDGE_BASE_URL="<your_judge_base_url>"
-
-python judge.py
+python runners/codex/run_codex_longds.py \
+  --use-docker \
+  --run-parallel 4 \
+  --judge
 ```
 
-The runner writes results under `runners/claude_code/results/<domain>/<dataset>/<task_id>/<run_name>/`. The judge skips runs that already have `results_eval.json` unless `--overwrite` is passed. For full setup, options, output layout, and judge behavior, see [runners/claude_code/README.md](runners/claude_code/README.md).
+The defaults select v1.1 Lite and allow up to one hour per turn. Four tasks run concurrently; reduce `--run-parallel` if your machine or API quota cannot support that concurrency. Each invocation gets a new automatic run name, so this evaluation is saved separately from the one-turn check.
 
+### Step 7. Inspect the results
 
-## 🙏 Acknowledgements
+The terminal prints the experiment's `summary.json` path. With the template model name, it has this form:
 
-We thank the [DSGym](https://github.com/fannie1208/DSGym) team for their open-source evaluation framework. We adapted DSGym's evaluation pipeline to support long-horizon, multi-turn data analysis tasks and use DSGym's Docker-based execution infrastructure. For more details about DSGym, please refer to their [paper](https://arxiv.org/abs/2601.16344).
+```text
+results/longds_v1.1_lite/codex_gpt-5.6-sol_<timestamp>/summary.json
+```
 
-We also thank [LDC Labs](https://github.com/ldclabs) for open-sourcing the agent-agnostic [longds-bench](https://github.com/ldclabs/longds-bench) skill, which supports running LongDS-Bench with the agent itself as the runtime under test.
+For a complete Lite evaluation, check that `selected_tasks`, `completed_tasks`, and `judged_tasks` are all **24**, with no task or judge failures and no turn limit. Read `task_avg_score` for the task-averaged result; multiply by 100 to express it as a percentage. Individual task answers, scores, and execution traces are under `{domain}/{dataset}/taskN/` in the same run directory.
 
-## 📖 Citation
+## Results and leaderboard
+
+Each CLI runner and DSGym writes an experiment-level overview when the run finishes:
+
+```text
+results/longds_v1.1_lite/{run_name}/
+├── summary.json
+└── {domain}/{dataset}/taskN/
+    ├── task_metadata.json
+    ├── results.json
+    ├── results_eval.json
+    └── ...
+```
+
+- **`summary.json`**: model, selection and limits, task execution counts, judged task count, and `task_avg_score`.
+- **`results_eval.json`**: per-turn judge scores and the task's average score.
+- CLI runs also retain `detail/` and `workspace/`; DSGym retains its trajectory and execution artifacts. See the corresponding runner guide for details.
+
+`task_avg_score` is the **equal-weight mean of fully judged task averages**, on a 0–1 scale. Check `judged_tasks` and the task/turn limits alongside the score: unjudged or incomplete tasks are excluded, not counted as zero. No separate summary command is needed.
+
+**We welcome evaluations on LongDS v1.1 Lite!** Explore the [leaderboard](https://zjunlp.github.io/DataMind/#leaderboard) and share new model or agent results through a [GitHub issue](https://github.com/zjunlp/DataMind/issues), or contact us by email at [kewe1x@163.com](mailto:kewe1x@163.com) or [zhangningyu@zju.edu.cn](mailto:zhangningyu@zju.edu.cn). Include the benchmark version and split, model and agent, relevant settings, task coverage, score, and execution trajectories. Please identify partial runs clearly and remove credentials before sharing artifacts.
+
+## Acknowledgements
+
+We thank the [DSGym](https://github.com/fannie1208/DSGym) team for their open-source evaluation framework and Docker-based execution infrastructure. See their [paper](https://arxiv.org/abs/2601.16344) for details.
+
+## Citation
 
 If you use LongDS, please cite:
 
 ```bibtex
 @misc{xu2026longdsbench,
-      title={LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis}, 
+      title={LongDS-Bench: On the Failure of Long-Horizon Agentic Data Analysis},
       author={Kewei Xu and Xiaoben Lu and Shuofei Qiao and Zihan Ding and Haoming Xu and Lei Liang and Ningyu Zhang},
       year={2026},
       eprint={2605.30434},
       archivePrefix={arXiv},
       primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2605.30434}, 
+      url={https://arxiv.org/abs/2605.30434},
 }
 ```

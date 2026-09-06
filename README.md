@@ -60,7 +60,7 @@ This repository hosts multiple data analysis projects. The table below provides 
 | **DataMind-Analysis** | Empirical diagnosis and targeted training for understanding why open-source LLMs struggle with data analysis | [AAAI 2026](https://arxiv.org/abs/2506.19794)     | [DataMind-Analysis.md](./datamind-analysis/README.md) |
 | **DataMind**          | Scalable data synthesis and agent training recipe for building generalist data-analytic agents               | [ICLR 2026](https://arxiv.org/abs/2509.25084) | [DataMind.md](./datamind/README.md)                   |
 | **DataPRM**           | Environment-aware process reward model for reliable multi-step data analysis                                 | [KDD 2026](https://arxiv.org/abs/2604.24198)     | [DataPRM.md](./dataprm/README.md)                     |
-| **LongDS-Bench**      | Long-horizon benchmark for evaluating analytical state management in multi-turn data analysis                | [arXiv](https://arxiv.org/abs/2605.30434)     | [LongDS-Bench.md](./longds/README.md)           |
+| **LongDS-Bench**      | Long-horizon benchmark for evaluating analytical state management in multi-turn data analysis                | [EMNLP 2026](https://arxiv.org/abs/2605.30434)     | [LongDS-Bench.md](./longds/README.md)           |
 | **DataCOPE**          | Unsupervised verifier-guided skill discovery framework for data-analytic agents. Meanwhile, we also provide a [User-Friendly Framework](./datacope/general/README.md) for generating data analysis skills.                             | [arXiv](https://arxiv.org/abs/2606.06416)     | [DataCOPE.md](./datacope/README.md)                   |
 
 
