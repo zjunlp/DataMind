@@ -128,6 +128,19 @@ If you already have an older download, update it and confirm that `dataset/task/
 
 ### 2. Set up a runner
 
+**Bringing your own agent?** Provide your own Agent class with
+`respond(self, message: str) -> str` and run:
+
+```bash
+python runners/custom/run_custom_longds.py --agent my_agent.py:MyAgent
+```
+
+The [Custom Agent runner](runners/custom/README.md) manages Docker, sequential
+turns, persistent per-task processes, answers, and optional judging. Add
+`--requirements requirements.txt` for cached agent dependencies. No base class, wrapper Agent, or
+Dockerfile is required. See the [ReAct example](runners/custom/examples/README.md).
+Start with `--task-limit 1 --turn-limit 2` to check your integration.
+
 Choose a runner and follow its guide to install dependencies, configure model access, and build the Docker image if using Docker. The CLI runner environments use Python 3.12; DSGym additionally uses `uv` and a Docker Compose executor pool.
 
 | Runner | Guide | Model configuration |
@@ -137,6 +150,7 @@ Choose a runner and follow its guide to install dependencies, configure model ac
 | Kimi Code | [Setup and usage](runners/kimi_code/README.md) | `runners/kimi_code/config.toml` |
 | Qoder | [Setup and usage](runners/qoder_cli/README.md) | `runners/qoder_cli/settings.json` plus Qoder authentication |
 | DSGym | [Setup and usage](runners/DSGym/README.md) | Provider environment variables / LiteLLM |
+| Your own agent | [Custom Agent integration](runners/custom/README.md) | Python adapter or JSON Lines executable |
 
 Use the example configuration files as templates and supply your own credentials. Keep credentials out of commits and shared result files.
 
