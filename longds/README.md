@@ -24,6 +24,7 @@
 - [Overview](#overview)
 - [Quick start](#quick-start)
 - [Example: run v1.1 Lite with Codex](#example-run-v11-lite-with-codex)
+- [Example: run v1.1 Lite with your own agent](#example-run-v11-lite-with-your-own-agent)
 - [Results and leaderboard](#results-and-leaderboard)
 - [Acknowledgements](#acknowledgements)
 - [Citation](#citation)
@@ -128,19 +129,6 @@ If you already have an older download, update it and confirm that `dataset/task/
 
 ### 2. Set up a runner
 
-**Bringing your own agent?** Provide your own Agent class with
-`respond(self, message: str) -> str` and run:
-
-```bash
-python runners/custom/run_custom_longds.py --agent my_agent.py:MyAgent
-```
-
-The [Custom Agent runner](runners/custom/README.md) manages Docker, sequential
-turns, persistent per-task processes, answers, and optional judging. Add
-`--requirements requirements.txt` for cached agent dependencies. No base class, wrapper Agent, or
-Dockerfile is required. See the [ReAct example](runners/custom/examples/README.md).
-Start with `--task-limit 1 --turn-limit 2` to check your integration.
-
 Choose a runner and follow its guide to install dependencies, configure model access, and build the Docker image if using Docker. The CLI runner environments use Python 3.12; DSGym additionally uses `uv` and a Docker Compose executor pool.
 
 | Runner | Guide | Model configuration |
@@ -150,7 +138,7 @@ Choose a runner and follow its guide to install dependencies, configure model ac
 | Kimi Code | [Setup and usage](runners/kimi_code/README.md) | `runners/kimi_code/config.toml` |
 | Qoder | [Setup and usage](runners/qoder_cli/README.md) | `runners/qoder_cli/settings.json` plus Qoder authentication |
 | DSGym | [Setup and usage](runners/DSGym/README.md) | Provider environment variables / LiteLLM |
-| Your own agent | [Custom Agent integration](runners/custom/README.md) | Python adapter or JSON Lines executable |
+| Custom Agent | [Setup and usage](runners/custom/README.md) | Agent-defined environment variables / `--agent-config` |
 
 Use the example configuration files as templates and supply your own credentials. Keep credentials out of commits and shared result files.
 
@@ -281,9 +269,38 @@ results/longds_v1.1_lite/codex_gpt-5.6-sol_<timestamp>/summary.json
 
 For a complete Lite evaluation, check that `selected_tasks`, `completed_tasks`, and `judged_tasks` are all **24**, with no task or judge failures and no turn limit. Read `task_avg_score` for the task-averaged result; multiply by 100 to express it as a percentage. Individual task answers, scores, and execution traces are under `{domain}/{dataset}/taskN/` in the same run directory.
 
+## Example: run v1.1 Lite with your own agent
+
+The [Custom Agent runner](runners/custom/README.md)
+accepts any Python class with `respond(self, message: str) -> str`. Each task
+gets a fresh instance, reused across turns; your agent owns its history and tools.
+LongDS provides Docker, task data, saved answers, and optional scoring.
+
+After defining `MyAgent` in `my_agent.py`, check two turns:
+
+```bash
+export OPENAI_API_KEY="<agent-key>"
+export OPENAI_BASE_URL="<your-api-base-url>"
+
+python runners/custom/run_custom_longds.py \
+  --agent my_agent.py:MyAgent \
+  --requirements requirements.txt \
+  --env OPENAI_API_KEY --env OPENAI_BASE_URL \
+  --task-limit 1 --turn-limit 2
+```
+
+Use your agent's environment variable names and list its extra dependencies in
+`requirements.txt` (omit the flag if none are needed). Add `--agent-config config.json`
+to pass constructor arguments, such as `{"model": "your-model"}`, or `--agent-dir ./my_agent`
+for a multi-file project. No base class is required. The
+[ReAct example](runners/custom/examples/README.md) includes a complete agent and model config.
+Remove the task/turn limits for all of Lite; add `--judge` after installing `openai`
+on the host and setting `JUDGE_API_KEY` and `JUDGE_BASE_URL` as described in
+[Quick start](#3-evaluate-v11-lite).
+
 ## Results and leaderboard
 
-Each CLI runner and DSGym writes an experiment-level overview when the run finishes:
+The CLI runners, Custom Agent runner, and DSGym write an experiment-level overview:
 
 ```text
 results/longds_v1.1_lite/{run_name}/
@@ -297,7 +314,7 @@ results/longds_v1.1_lite/{run_name}/
 
 - **`summary.json`**: model, selection and limits, task execution counts, judged task count, and `task_avg_score`.
 - **`results_eval.json`**: per-turn judge scores and the task's average score.
-- CLI runs also retain `detail/` and `workspace/`; DSGym retains its trajectory and execution artifacts. See the corresponding runner guide for details.
+- CLI and Custom Agent runs also retain `detail/` and `workspace/`; DSGym retains its trajectory and execution artifacts. See the corresponding runner guide for details.
 
 `task_avg_score` is the **equal-weight mean of fully judged task averages**, on a 0–1 scale. Check `judged_tasks` and the task/turn limits alongside the score: unjudged or incomplete tasks are excluded, not counted as zero. No separate summary command is needed.
 
