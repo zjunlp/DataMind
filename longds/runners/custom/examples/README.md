@@ -14,17 +14,27 @@ model again, until it returns an answer without tool calls. There is a limit of
 20 model calls per turn. Python errors are returned as tool observations so the
 model can correct its code.
 
-Run from the `longds/` root:
+Set `model` in [`react_config.json`](react_config.json) to your API's model name:
+
+```json
+{
+  "model": "<your-model>",
+  "max_steps": 20
+}
+```
+
+LongDS passes these values to `Agent(model=..., max_steps=...)`. Run from the
+`longds/` root, forwarding the API credentials through environment variables:
 
 ```bash
 export OPENAI_API_KEY="<your-key>"
 export OPENAI_BASE_URL="<your-chat-completions-base-url>"
-export REACT_MODEL="<your-model>"
 
 python runners/custom/run_custom_longds.py \
   --agent runners/custom/examples/react_agent.py:Agent \
+  --agent-config runners/custom/examples/react_config.json \
   --requirements runners/custom/examples/react_requirements.txt \
-  --env OPENAI_API_KEY --env OPENAI_BASE_URL --env REACT_MODEL \
+  --env OPENAI_API_KEY --env OPENAI_BASE_URL \
   --task-limit 1 --turn-limit 2
 ```
 
@@ -37,8 +47,8 @@ The agent runs in Docker by default. Its Python tool uses `/usr/local/bin/python
 from the analysis image, reads `data/`, and writes intermediate files in the
 current workspace. Each tool call uses a fresh Python process; variables do not
 persist, but files and chat history do. For local runs, add `--local`, omit
-`--requirements` and `--env` flags, install `openai` yourself, and set
-`REACT_PYTHON` to your analysis Python executable.
+`--requirements` and `--env` flags, install `openai` yourself, and add
+`"python": "/path/to/analysis/python"` to the config for your local interpreter.
 
 The example deliberately has no history compression, memory retrieval, or
 framework abstraction. Tool output is capped at 20,000 characters, and each Python
@@ -56,9 +66,8 @@ Recording uses the optional `from longds import save` helper provided by the
 runner, so the example does not implement file handling. Its system prompt is
 the first entry in `self.messages`, set in `Agent.__init__`; edit that entry to change it.
 
-Optional constructor settings (`model`, `python`, `max_steps`) can be passed
-using `--agent-config`. The class is selected explicitly by `:Agent`; there is
-no forwarding function or required base class.
+The config accepts `model`, `python`, and `max_steps`. The class is selected
+explicitly by `:Agent`; there is no forwarding function or required base class.
 
 [`agent.py`](agent.py) is the offline echo example for checking the runner without
 calling a model.
