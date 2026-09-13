@@ -31,20 +31,8 @@ def load_agent(spec):
     return entry
 
 
-def turn_message(request, workspace, data_dir, first_turn):
+def turn_message(request):
     parts = []
-    if first_turn:
-        parts.append(
-            'You are solving a multi-turn data analysis task. Solve only the current question.\n'
-            f'Input data (read-only): {data_dir}\n'
-            f'Working directory for tools, scripts, and intermediate files: {workspace}\n'
-            'Keep useful analysis state for later questions. Use tools to calculate from the data.\n'
-            'Do not access benchmark source tasks, reference answers, other tasks, or future questions.\n'
-            'Follow the requested rounding and ordering. Return the final answer to the current question.'
-        )
-        if workspace == '/workspace':
-            parts.append('Use /usr/local/bin/python for data analysis in the LongDS analysis image; '
-                         'keep agent-specific dependencies in the agent environment.')
     if request['context']:
         parts.append('Context:\n' + request['context'])
     parts.append('Question:\n' + request['question'])
@@ -58,7 +46,6 @@ def main():
     os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
     agent = None
     is_function = False
-    first_turn = True
     turn_index = 0
     for line in sys.stdin:
         request = json.loads(line)
@@ -71,7 +58,7 @@ def main():
                     raise ValueError('--agent-config is for class adapters; configure respond() agents in their module or environment')
                 agent = entry if is_function else entry(**request['config'])
                 respond = agent if is_function else getattr(agent, 'respond', None)
-                workspace, data_dir = request['workspace'], request['data_dir']
+                workspace = request['workspace']
                 if not is_function and hasattr(agent, 'start_task'):
                     agent.start_task(workspace=request['workspace'], data_dir=request['data_dir'])
                 response = {'type': 'ready'}
@@ -82,14 +69,13 @@ def main():
                 os.environ['LONGDS_TRACE_DIR'] = str(trace_dir)
                 os.environ['LONGDS_TURN_ID'] = str(request['turn_id'])
                 if respond is not None:
-                    message = turn_message(request, workspace, data_dir, first_turn)
+                    message = turn_message(request)
                     (trace_dir / 'prompt.md').write_text(message, encoding='utf-8')
                     answer = respond(message)
                     if not isinstance(answer, str):
                         raise TypeError('respond(message) must return a final answer string (not a coroutine, stream, or dict)')
                 else:
                     answer = agent.run_turn(context=request['context'], question=request['question'])
-                first_turn = False
                 if isinstance(answer, str):
                     answer = {'answer': answer}
                 if not isinstance(answer, dict) or not isinstance(answer.get('answer'), str):

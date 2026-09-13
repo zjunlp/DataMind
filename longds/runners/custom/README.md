@@ -30,7 +30,8 @@ conversation history and a Python tool.
 
 - LongDS creates **one instance per task**, reusing it across that task's turns.
 - Your agent owns its system prompt, history, memory, and tools. LongDS sends
-  the current context/question each turn, with environment instructions on the first turn.
+  only the current context/question each turn, including the first. Put environment
+  instructions and analysis guidance in your agent's own prompt, as in the ReAct example.
 - Return the final answer string, including JSON text when requested. Finish
   tool execution and consume async/streaming results before returning.
 - In Docker, read input from `/workspace/data` and write outputs to `/workspace`.

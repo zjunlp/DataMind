@@ -65,6 +65,9 @@ message actually passed to `respond()`. No API key or HTTP headers are logged.
 Recording uses the optional `from longds import save` helper provided by the
 runner, so the example does not implement file handling. Its system prompt is
 the first entry in `self.messages`, set in `Agent.__init__`; edit that entry to change it.
+It includes the data/workspace paths, analysis interpreter, and access rules.
+The runner supplies only the current context and question on every turn; it
+does not prepend environment instructions or analysis guidance.
 
 The config accepts `model`, `python`, and `max_steps`. The class is selected
 explicitly by `:Agent`; there is no forwarding function or required base class.

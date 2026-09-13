@@ -2,6 +2,7 @@
 
 import json
 import os
+from pathlib import Path
 import subprocess
 
 from openai import OpenAI
@@ -19,7 +20,13 @@ class Agent:
             'role': 'system',
             'content': (
                 'You are a data analysis agent. Use the python tool to inspect files and '
-                'calculate answers from data. Read input data without modifying it. '
+                'calculate answers from data. Solve the current question. '
+                f'Input data (read-only): {Path.cwd() / "data"}. '
+                f'Working directory for tools, scripts, and intermediate files: {Path.cwd()}. '
+                f'Use {self.python} for data analysis; keep agent-specific dependencies '
+                'in the agent environment. Read input data without modifying it. '
+                'Do not access benchmark source tasks, reference answers, other tasks, '
+                'or future questions. '
                 'Save useful intermediate results in the working directory for later turns. '
                 'Each python call starts a fresh process: variables do not persist, but files do. '
                 'Print results you need to inspect. Follow the requested rounding and ordering. '
