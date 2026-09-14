@@ -86,7 +86,7 @@ nbconvert==7.17.0
 nbformat==5.10.4
 netCDF4==1.7.4
 networkx==3.6.1
-nltk==3.9.3
+nltk==3.10.3
 numba==0.65.0
 numpy==2.4.3
 nvidia-nccl-cu12==2.20.5
