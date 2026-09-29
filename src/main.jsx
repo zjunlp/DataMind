@@ -42,8 +42,8 @@ const usdCostFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
-function formatCost(cost) {
-  if (!cost.startsWith("¥")) return cost;
+function formatCost(cost, language) {
+  if (language === "zh" || !cost.startsWith("¥")) return cost;
   return cost.replace(/^¥([\d,.]+)/, (_, amount) => (
     usdCostFormatter.format(Number(amount.replaceAll(",", "")) / COST_CNY_PER_USD)
   ));
@@ -743,7 +743,7 @@ const translations = {
       versions: { v1_1_lite: "LongDS v1.1 Lite", v1_1_full: "LongDS v1.1 Full", v1: "LongDS v1" },
       emptyState: "没有符合当前筛选条件的模型。",
       domainLabel: "得分领域",
-      costNote: `人民币费用按 1 美元 = ${COST_CNY_PER_USD.toFixed(2)} 元人民币换算为美元（${COST_FX_DATE}）。Qoder 费用保留 credits 单位。`,
+      costNote: "费用以原始人民币金额显示。Qoder 费用保留 credits 单位。",
       costSource: "汇率来源",
       columns: { rank: "排名", model: "模型", harness: "运行框架", score: "得分", cost: "成本", org: "机构", date: "日期" },
       types: { open: "开源", proprietary: "专有" },
@@ -1026,8 +1026,8 @@ function App() {
                           </div>
                         </td>
                         <td className="cost-cell">
-                          <span className="cost-total">{formatCost(item.cost)}</span>
-                          {item.costPerTask && <span className="cost-per-task">{formatCost(item.costPerTask)}</span>}
+                          <span className="cost-total">{formatCost(item.cost, language)}</span>
+                          {item.costPerTask && <span className="cost-per-task">{formatCost(item.costPerTask, language)}</span>}
                           {item.costUnit && <span className="cost-unit">{item.costUnit}</span>}
                         </td>
                         <td className="org-cell">{item.org}</td>
@@ -1045,7 +1045,9 @@ function App() {
           {leaderboardVersion !== "v1" && (
             <p className="leaderboard-cost-note">
               {t.leaderboard.costNote}{" "}
-              <a href={COST_FX_SOURCE} target="_blank" rel="noreferrer">{t.leaderboard.costSource}</a>
+              {language === "en" && (
+                <a href={COST_FX_SOURCE} target="_blank" rel="noreferrer">{t.leaderboard.costSource}</a>
+              )}
             </p>
           )}
         </section>
