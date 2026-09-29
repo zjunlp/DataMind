@@ -31,6 +31,24 @@ const LONGDS_DOC_URL = "https://github.com/zjunlp/DataMind/tree/main/longds";
 const CONTACT_EMAIL = "zhangningyu@zju.edu.cn";
 const VISITOR_API_URL = "https://bsz.iirose.cn/api";
 const VISITOR_ID_KEY = "longds_busuanzi_identity";
+// Fixed display conversion snapshot, rounded to 2 decimals; keep source CNY costs intact.
+const COST_CNY_PER_USD = 6.71;
+const COST_FX_DATE = "2026-09-29";
+const COST_FX_SOURCE = "https://www.bloomberglinea.com/english/quote/USDCNY%3ACUR/";
+const usdCostFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+function formatCost(cost) {
+  if (!cost.startsWith("¥")) return cost;
+  return cost.replace(/^¥([\d,.]+)/, (_, amount) => (
+    usdCostFormatter.format(Number(amount.replaceAll(",", "")) / COST_CNY_PER_USD)
+  ));
+}
+
 const StateAtlas = React.lazy(() => import("./StateAtlas"));
 
 const HERO_STATS = [
@@ -43,41 +61,44 @@ const QUICK_START_COMMANDS = [
   {
     key: "environment",
     commands: [
-      "cd DataMind/longds/runners/DSGym",
-      "uv sync",
+      "cd /path/to/DataMind/longds",
+      "conda create -n longds python=3.12 -y",
+      "conda activate longds",
+      "python -m pip install openai huggingface_hub",
     ],
   },
   {
     key: "dataset",
     commands: [
-      "cd /path/to/DataMind/longds",
-      `hf download zjunlp/LongDS \\
-  --repo-type dataset \\
-  --local-dir dataset`,
+      "hf download zjunlp/LongDS --repo-type dataset --local-dir dataset",
     ],
   },
   {
-    key: "executors",
+    key: "configuration",
     commands: [
-      "cd DataMind/longds/runners/DSGym/executors",
-      "docker build -t executor-prebuilt ./container_images/longds_image",
-      "docker build -t manager-prebuilt ./manager",
-      `python generate_compose.py \\
-  -n 16 \\
-  --types "executor-prebuilt:16" \\
-  -m ../../../dataset/data`,
-      "docker compose -f docker-compose.yml up -d --build",
+      "cp -n runners/codex/config.example.toml runners/codex/config.toml",
+      'export JUDGE_API_KEY="<your_judge_api_key>"',
+      'export JUDGE_BASE_URL="<your_judge_base_url>"',
+      'export JUDGE_MODEL="deepseek-v4-pro"',
+    ],
+  },
+  {
+    key: "images",
+    commands: [
+      "docker build -t executor-prebuilt runners/DSGym/executors/container_images/longds_image",
+      "docker build -t longds-codex:latest runners/codex",
+    ],
+  },
+  {
+    key: "check",
+    commands: [
+      "python runners/codex/run_codex_longds.py --use-docker --task-limit 1 --turn-limit 1 --judge",
     ],
   },
   {
     key: "evaluation",
     commands: [
-      "cd DataMind/longds/runners/DSGym/scripts",
-      `uv run python longds.py \\
-  --dataset longds \\
-  --model openai/gpt-5.4 \\
-  --backend litellm \\
-  --output-dir ./results`,
+      "python runners/codex/run_codex_longds.py --use-docker --run-parallel 4 --judge",
     ],
   },
 ];
@@ -236,6 +257,7 @@ function QuickStart({ content }) {
               role="tabpanel"
               aria-labelledby={`quick-terminal-tab-${activeKey}`}
             >
+              <p className="quick-step-description">{content.steps[activeKey]}</p>
               {activeCommand.commands.map((command) => (
                 <pre className="quick-command" key={command}><code>{command}</code></pre>
               ))}
@@ -249,13 +271,12 @@ function QuickStart({ content }) {
             <div>
               <h3>{content.prerequisites}</h3>
               <ul className="quickstart-requirements">
-                <li>Python 3.12</li>
-                <li>Docker and Docker Compose</li>
-                <li><code>uv</code></li>
+                {content.requirements.map((requirement) => <li key={requirement}>{requirement}</li>)}
               </ul>
             </div>
           </div>
           <p>{content.description}</p>
+          <p>{content.results}</p>
           <a className="quickstart-docs" href={LONGDS_DOC_URL} target="_blank" rel="noreferrer">
             <Github size={18} aria-hidden="true" />
             {content.documentation}
@@ -622,6 +643,8 @@ const translations = {
       versions: { v1_1_lite: "LongDS v1.1 Lite", v1_1_full: "LongDS v1.1 Full", v1: "LongDS v1" },
       emptyState: "No models match the current filters.",
       domainLabel: "Score domain",
+      costNote: `Monetary costs are shown in USD, converted at US$1 = CNY ${COST_CNY_PER_USD.toFixed(2)} (${COST_FX_DATE}). Qoder costs remain in credits.`,
+      costSource: "Exchange rate source",
       columns: { rank: "Rank", model: "Model", harness: "Harness", score: "Score", cost: "Cost", org: "Org", date: "Date" },
       types: { open: "Open-source", proprietary: "Proprietary" },
     },
@@ -649,10 +672,20 @@ const translations = {
       title: "Quick Start",
       terminalLabel: "Quick start terminal",
       commandSets: "Quick start command sets",
-      tabs: ["Environment Setup", "Data", "Execution Environment", "Run Evaluation"],
+      tabs: ["Environment", "Dataset", "Configuration", "Docker Images", "Check One Turn", "Run Evaluation"],
+      steps: {
+        environment: "Run all six steps in order from longds/ in the same shell. Replace the checkout path below. If you already have a Python 3.12 environment, activate it and skip creating one.",
+        dataset: "Downloads all task versions and shared input data. Confirm dataset/task/longds_v1.1/task_list_lite.json and the corresponding data are present. The guide also includes a smaller Lite-only download.",
+        configuration: "After copying the template, edit runners/codex/config.toml: set model, model_reasoning_effort, and model_providers.longds_env.base_url / experimental_bearer_token for your Responses API endpoint. Keep model_provider = \"longds_env\" and wire_api = \"responses\". Replace the judge placeholders below with a Chat Completions endpoint and its API key; adjust JUDGE_MODEL if needed.",
+        images: "Build the shared analysis environment, then the Codex image. Docker runs the CLI and analysis packages; the host only runs the launcher and judge.",
+        check: "Run one task and one turn to check model access and judging. This uses model and judge API credits. Inspect the printed summary.json for execution or judge errors; this is not a complete Lite score.",
+        evaluation: "Defaults to v1.1 Lite: 24 complete tasks / 777 turns, with four tasks in parallel. Lower --run-parallel if needed. For v1.1 Full, add --split full; for v1, add --longds_version v1 --split full.",
+      },
       prerequisites: "Prerequisites",
-      description: "The paper experiments use DSGym, which provides Docker-based execution infrastructure for code-based data analysis.",
-      documentation: "GitHub",
+      requirements: ["Python 3.12", "Docker", "Model & judge API access"],
+      description: "Start with LongDS v1.1 Lite using Codex in Docker. The full guide also covers Claude Code, Kimi Code, Qoder, and DSGym.",
+      results: "Results: results/longds_v1.1_lite/<run_name>/summary.json. For a complete Lite score, verify selected_tasks, completed_tasks, and judged_tasks are all 24, with no failures or turn limit. Multiply task_avg_score by 100 for the percentage score.",
+      documentation: "Full setup guide",
       copy: "Copy current commands",
       copied: "Copied",
     },
@@ -710,6 +743,8 @@ const translations = {
       versions: { v1_1_lite: "LongDS v1.1 Lite", v1_1_full: "LongDS v1.1 Full", v1: "LongDS v1" },
       emptyState: "没有符合当前筛选条件的模型。",
       domainLabel: "得分领域",
+      costNote: `人民币费用按 1 美元 = ${COST_CNY_PER_USD.toFixed(2)} 元人民币换算为美元（${COST_FX_DATE}）。Qoder 费用保留 credits 单位。`,
+      costSource: "汇率来源",
       columns: { rank: "排名", model: "模型", harness: "运行框架", score: "得分", cost: "成本", org: "机构", date: "日期" },
       types: { open: "开源", proprietary: "专有" },
     },
@@ -737,10 +772,20 @@ const translations = {
       title: "快速开始",
       terminalLabel: "快速开始终端",
       commandSets: "快速开始命令组",
-      tabs: ["环境", "数据集", "执行器", "评测"],
+      tabs: ["环境", "数据集", "配置", "Docker 镜像", "单轮检查", "完整评测"],
+      steps: {
+        environment: "在同一个终端中，从 longds/ 目录依次完成六步。请替换下方仓库路径；如果已有 Python 3.12 环境，激活后跳过创建步骤。",
+        dataset: "下载所有版本的任务及共享输入数据。确认 dataset/task/longds_v1.1/task_list_lite.json 及对应数据已就绪。完整指南也提供仅下载 Lite 的方式。",
+        configuration: "复制模板后，编辑 runners/codex/config.toml：设置 model、model_reasoning_effort，以及 model_providers.longds_env 下的 base_url 和 experimental_bearer_token，连接你的 Responses API。保留 model_provider = \"longds_env\" 和 wire_api = \"responses\"。将下方裁判占位符替换为支持 Chat Completions 的端点及密钥，按需修改 JUDGE_MODEL。",
+        images: "先构建共享分析环境，再构建 Codex 镜像。CLI 和数据分析依赖在 Docker 中运行，宿主机只运行启动器和裁判。",
+        check: "运行一个任务的一轮，检查模型连接及评分是否正常。这会消耗模型和裁判 API 额度。查看终端输出的 summary.json，确认没有执行或评分错误；该结果不是完整 Lite 得分。",
+        evaluation: "默认评测 v1.1 Lite：24 个完整任务、777 轮，四个任务并行。可按需减小 --run-parallel。评测 v1.1 Full 添加 --split full；评测 v1 添加 --longds_version v1 --split full。",
+      },
       prerequisites: "前置条件",
-      description: "论文实验使用 DSGym，它为基于代码的数据分析提供基于 Docker 的执行基础设施。",
-      documentation: "GitHub",
+      requirements: ["Python 3.12", "Docker", "模型与裁判 API"],
+      description: "推荐通过 Codex Docker 运行 LongDS v1.1 Lite。完整指南还包含 Claude Code、Kimi Code、Qoder 和 DSGym 的使用方式。",
+      results: "结果位于 results/longds_v1.1_lite/<run_name>/summary.json。报告完整 Lite 得分前，确认 selected_tasks、completed_tasks、judged_tasks 均为 24，且无失败和轮次限制。task_avg_score 乘以 100 即为百分制得分。",
+      documentation: "完整配置指南",
       copy: "复制当前命令",
       copied: "已复制",
     },
@@ -981,8 +1026,8 @@ function App() {
                           </div>
                         </td>
                         <td className="cost-cell">
-                          <span className="cost-total">{item.cost}</span>
-                          {item.costPerTask && <span className="cost-per-task">{item.costPerTask}</span>}
+                          <span className="cost-total">{formatCost(item.cost)}</span>
+                          {item.costPerTask && <span className="cost-per-task">{formatCost(item.costPerTask)}</span>}
                           {item.costUnit && <span className="cost-unit">{item.costUnit}</span>}
                         </td>
                         <td className="org-cell">{item.org}</td>
@@ -997,6 +1042,12 @@ function App() {
               </tbody>
             </table>
           </div>
+          {leaderboardVersion !== "v1" && (
+            <p className="leaderboard-cost-note">
+              {t.leaderboard.costNote}{" "}
+              <a href={COST_FX_SOURCE} target="_blank" rel="noreferrer">{t.leaderboard.costSource}</a>
+            </p>
+          )}
         </section>
 
         <section className="benchmark-section" id="benchmark" aria-labelledby="benchmark-title">

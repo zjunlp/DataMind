@@ -767,6 +767,18 @@ h1 {
   border: 1px solid var(--line);
 }
 
+.leaderboard-cost-note {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.leaderboard-cost-note a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 table {
   width: 100%;
   min-width: 1180px;
@@ -1290,6 +1302,15 @@ tbody tr:first-child .score-track span {
   height: 9px;
 }
 
+.quick-step-description {
+  margin: 0 0 16px;
+  color: #c4d8ca;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
 .quick-terminal-output::-webkit-scrollbar-track {
   background: #102018;
 }
@@ -1397,6 +1418,7 @@ tbody tr:first-child .score-track span {
 }
 
 .quickstart-guide > p {
+  overflow-wrap: anywhere;
   margin: 0;
   color: rgba(255, 255, 255, 0.8);
   font-size: 15px;
